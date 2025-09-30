@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSGDLE - Devine le joueur du PSG</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="icon.svg">
+</head>
+
+<header>
+    <img src="assets/lg.png" alt="Logo PSGDLE">
+
+</header>
+
+<body>
+
+<section class="main">
+
+<div class="container">
+  <div class="box">
+    <div class="title">Devine le joueur du PSG</div>
+    <div class="subtitle">Tape n'importe quel joueur pour commencer.</div>
+  </div>
+</div>
+
+
+<div class="search-container">
+        <div class="search-wrapper">
+            <div class="search-inner">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Devine le joueur du PSG..."
+                    aria-label="Rechercher un joueur du PSG"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                
+                <button class="search-btn" type="button" aria-label="Lancer la recherche">
+                    <svg class="search-icon" viewBox="0 0 24 24" role="img">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="suggestions" class="suggestions"></div>
+        </div>
+    </div>
+
+    <div id="selectedPlayers" class="selected-players"></div>
+
+
+    <div class="container-wide">
+    <div class="box">
+        <div class="title">Indicateurs de couleur</div>
+        
+        <div class="indicators">
+            <div class="indicator-item">
+                <div class="color-box blue"></div>
+                <div class="indicator-label">Correct</div>
+            </div>
+
+            <div class="indicator-item">
+                <div class="color-box red"></div>
+                <div class="indicator-label">Incorrect</div>
+            </div>
+
+            <div class="indicator-item">
+                <div class="color-box red">
+                <svg class="arrow-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5L12 19M12 5L6 11M12 5L18 11" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                </div>
+                <div class="indicator-label">Supérieur</div>
+            </div>
+
+            <div class="indicator-item">
+                <div class="color-box red">
+                    <svg class="arrow-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 19L12 5M12 19L18 13M12 19L6 13" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="indicator-label">Inférieur</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</section>
+
+<script src="js/app.js"></script>
+</body>
+</html>

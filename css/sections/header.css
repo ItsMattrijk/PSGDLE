@@ -1,0 +1,15 @@
+header {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 10px;
+    margin-bottom: 50px;
+
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header img {
+        max-width: 150px;
+    }
+}

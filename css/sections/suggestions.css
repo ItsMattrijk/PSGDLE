@@ -1,0 +1,64 @@
+/* Style pour les suggestions */
+.suggestions {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgb(0, 8, 20);
+    border-radius: 0 0 20px 20px;
+    border: 2px solid rgba(220, 20, 60, 0.3);
+    border-top: none;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    font-family: poppins, sans-serif;
+}
+
+.suggestions.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+    z-index: 9999;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    z-index: 10000;
+}
+
+.suggestion-item:hover {
+    background: rgba(220, 20, 60, 0.1);
+    transform: translateX(5px);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    z-index: 10000;
+}
+
+.selected-players {
+    position: relative;
+    z-index: 1;
+}
+
+.selected-player {
+    position: relative;
+    z-index: 1;
+}
