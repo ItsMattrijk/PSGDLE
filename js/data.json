@@ -456,7 +456,7 @@
       "photo": "player/doue.jpg",
       "nationalite": "France",
       "age": 19,
-      "poste": "Milieu / Attaquant",
+      "poste": "Attaquant",
       "numero": 14,
       "forme_au_club": false,
       "nombre_matchs": 65,
@@ -569,7 +569,99 @@
       "montant_transfert": "0€",
       "parcours": "PSG Formation (2016-2021), PSG (2021-2024), Stade Lausanne Ouchy (2023-2024), PSG (2024), SC Braga (2024-), FC Augsbourg (2025-)",
       "taille": "1m73"
-    }
+    },
+        {
+      "id": 39,
+      "nom": "Pauleta",
+      "photo": "player/pauleta.jpg",
+      "nationalite": "Portugal",
+      "age": 52,
+      "poste": "Attaquant",
+      "numero": 9,
+      "forme_au_club": false,
+      "nombre_matchs": 211,
+      "periode_psg": "2003-2008",
+      "montant_transfert": "10M€",
+      "parcours": "Estoril (1994-1995), Salamanca (1995-1997), Deportivo La Corogne (1997-2000), Bordeaux (2000-2003), PSG (2003-2008)",
+      "taille": "1m80"
+    },
+    {
+      "id": 40,
+      "nom": "Ronaldinho",
+      "photo": "player/ronaldinho.jpg",
+      "nationalite": "Brésil",
+      "age": 45,
+      "poste": "Attaquant",
+      "numero": 21,
+      "forme_au_club": false,
+      "nombre_matchs": 95,
+      "periode_psg": "2001-2003",
+      "montant_transfert": "5M€",
+      "parcours": "Grêmio (1998-2001), PSG (2001-2003), FC Barcelone (2003-2008), AC Milan (2008-2011), Flamengo (2011-2012), Atlético Mineiro (2012-2014), Querétaro (2014-2015), Fluminense (2015)",
+      "taille": "1m82"
+    },
+        {
+      "id": 41,
+      "nom": "Raí",
+      "photo": "player/rai.jpg",
+      "nationalite": "Brésil",
+      "age": 54,
+      "poste": "Milieu",
+      "numero": 10,
+      "forme_au_club": false,
+      "nombre_matchs": 215,
+      "periode_psg": "1993-1998",
+      "montant_transfert": "5M€",
+      "parcours": "Botafogo (1987-1989), São Paulo (1989-1993), PSG (1993-1998), Palmeiras (1998-2000)",
+      "taille": "1m89"
+    },
+    {
+      "id": 42,
+      "nom": "Thiago Motta",
+      "photo": "player/motta.jpg",
+      "nationalite": "Italie",
+      "age": 42,
+      "poste": "Milieu",
+      "numero": 8,
+      "forme_au_club": false,
+      "nombre_matchs": 231,
+      "periode_psg": "2012-2018",
+      "montant_transfert": "11,5M€",
+      "parcours": "Barcelona (2001-2007), Atlético Madrid (loan 2001-2002), Genoa (2007-2008), Inter Milan (2008-2012), PSG (2012-2018)",
+      "taille": "1m87"
+    },
+    {
+      "id": 43,
+      "nom": "David Ginola",
+      "photo": "player/ginola.jpg",
+      "nationalite": "France",
+      "age": 56,
+      "poste": "Ailier",
+      "numero": 7,
+      "forme_au_club": false,
+      "nombre_matchs": 158,
+      "periode_psg": "1992-1995",
+      "montant_transfert": "Inconnu",
+      "parcours": "RC Toulon (1988-1990), Brest (1990-1992), PSG (1992-1995), Newcastle United (1995-1997), Tottenham Hotspur (1997-2000), Aston Villa (2000)",
+      "taille": "1m85"
+    },
+     {
+    "id": 52,
+    "nom": "Jay-Jay Okocha",
+    "photo": "player/okocha.jpg",
+    "nationalite": "Nigeria",
+    "age": 51,
+    "poste": "Milieu",
+    "numero": 10,
+    "forme_au_club": false,
+    "nombre_matchs": 109,
+    "periode_psg": "1998-2002",
+    "montant_transfert": "13,7M€",
+    "parcours": "Eintracht Frankfurt (1992-1996), Fenerbahce (1996-1998), PSG (1998-2002), Bolton (2002-2006)",
+    "taille": "1m75"
+  }
+
+  
 
 
   ]
