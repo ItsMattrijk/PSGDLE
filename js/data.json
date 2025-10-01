@@ -646,7 +646,7 @@
       "taille": "1m85"
     },
      {
-    "id": 52,
+    "id": 44,
     "nom": "Jay-Jay Okocha",
     "photo": "player/okocha.jpg",
     "nationalite": "Nigeria",
@@ -659,7 +659,129 @@
     "montant_transfert": "13,7M€",
     "parcours": "Eintracht Frankfurt (1992-1996), Fenerbahce (1996-1998), PSG (1998-2002), Bolton (2002-2006)",
     "taille": "1m75"
-  }
+    },
+    {
+      "id": 45,
+      "nom": "George Weah",
+      "photo": "player/weah.jpg",
+      "nationalite": "Liberia",
+      "age": 58,
+      "poste": "Attaquant",
+      "numero": 9,
+      "forme_au_club": false,
+      "nombre_matchs": 138,
+      "periode_psg": "1992-1995",
+      "montant_transfert": "6,5M€",
+      "parcours": "AS Monaco (1988-1992), PSG (1992-1995), AC Milan (1995-2000), Chelsea (2000), Manchester City (2000-2001), Marseille (2001)",
+      "taille": "1m84"
+    },
+    {
+      "id": 46,
+      "nom": "Claude Makélélé",
+      "photo": "player/makelele.jpg",
+      "nationalite": "France",
+      "age": 52,
+      "poste": "Milieu",
+      "numero": 4,
+      "forme_au_club": false,
+      "nombre_matchs": 118,
+      "periode_psg": "2008-2011",
+      "montant_transfert": "Libre",
+      "parcours": "Nantes (1991-1997), Celta Vigo (1997-2000), Real Madrid (2000-2003), Chelsea (2003-2008), PSG (2008-2011)",
+      "taille": "1m74"
+    },
+    {
+      "id": 47,
+      "nom": "Nenê",
+      "photo": "player/nene.jpg",
+      "nationalite": "Brésil",
+      "age": 44,
+      "poste": "Attaquant",
+      "numero": 10,
+      "forme_au_club": false,
+      "nombre_matchs": 112,
+      "periode_psg": "2010-2013",
+      "montant_transfert": "5,5M€",
+      "parcours": "Monaco (2007-2010), PSG (2010-2013), Al-Gharafa (2013-2015), Vasco da Gama (2015-2018)",
+      "taille": "1m79"
+    },
+    {
+      "id": 48,
+      "nom": "Bernard Lama",
+      "photo": "player/lama.jpg",
+      "nationalite": "France",
+      "age": 61,
+      "poste": "Gardien",
+      "numero": 1,
+      "forme_au_club": false,
+      "nombre_matchs": 318,
+      "periode_psg": "1992-1997, 1998-2000",
+      "montant_transfert": "Inconnu",
+      "parcours": "Laval (1982-1989), Metz (1989-1992), PSG (1992-1997), West Ham (1997-1998), Rennes (1998), PSG (1998-2000)",
+      "taille": "1m83"
+    },
+    {
+      "id": 49,
+      "nom": "Safet Sušić",
+      "photo": "player/susic.jpg",
+      "nationalite": "Bosnie-Herzégovine",
+      "age": 68,
+      "poste": "Attaquant",
+      "numero": 10,
+      "forme_au_club": false,
+      "nombre_matchs": 344,
+      "periode_psg": "1982-1991",
+      "montant_transfert": "Inconnu",
+      "parcours": "FK Sarajevo (1973-1982), PSG (1982-1991), Red Star (1991-1992)",
+      "taille": "1m81"
+    },
+    {
+      "id": 50,
+      "nom": "Luis Fernández",
+      "photo": "player/fernandez.jpg",
+      "nationalite": "France",
+      "age": 64,
+      "poste": "Milieu",
+      "numero": 6,
+      "forme_au_club": false,
+      "nombre_matchs": 273,
+      "periode_psg": "1978-1986",
+      "montant_transfert": "0€",
+      "parcours": "PSG (1978-1986), Racing Paris (1986-1989), Cannes (1989-1990)",
+      "taille": "1m78"
+    },
+    {
+      "id": 51,
+      "nom": "Jean Djorkaeff",
+      "photo": "player/djorkaeff.jpg",
+      "nationalite": "France",
+      "age": 83,
+      "poste": "Défenseur",
+      "numero": 5,
+      "forme_au_club": false,
+      "nombre_matchs": 68,
+      "periode_psg": "1970-1972",
+      "montant_transfert": "0€",
+      "parcours": "Lyon (1958-1966), Marseille (1966-1970), PSG (1970-1972)",
+      "taille": "1m73"
+    },
+    {
+      "id": 52,
+      "nom": "Mustapha Dahleb",
+      "photo": "player/dahleb.jpg",
+      "nationalite": "Algérie",
+      "age": 72,
+      "poste": "Attaquant",
+      "numero": 10,
+      "forme_au_club": false,
+      "nombre_matchs": 310,
+      "periode_psg": "1974-1984",
+      "montant_transfert": "≈ 638 000€",
+      "parcours": "Sedan (1969-1974), PSG (1974-1984), Nice (1984-1985)",
+      "taille": "1m77"
+    }
+
+
 
   
 
