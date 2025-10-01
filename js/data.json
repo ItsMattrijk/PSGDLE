@@ -432,13 +432,13 @@
       "nombre_matchs": 37,
       "periode_psg": "2025-",
       "montant_transfert": "70M€",
-      "parcours": "Dinamo Tbilisi (2017–2018), Rustavi (2018–2019), Lokomotiv Moscou (prêt 2019), Rubin Kazan (2019–2022), Dinamo Batumi (2022), Napoli (2022–2025), PSG (2025–)",
+      "parcours": "Dinamo Tbilisi (2017–2018), Rustavi (2018–2019), Lokomotiv Moscou (2019), Rubin Kazan (2019–2022), Dinamo Batumi (2022), Napoli (2022–2025), PSG (2025–)",
       "taille": "1m83"
     },
     {
       "id": 30,
       "nom": "Nuno Mendes",
-      "photo": "player/nuno_mendes.jpg",
+      "photo": "player/nunomendes.jpg",
       "nationalite": "Portugal",
       "age": 23,
       "poste": "Défenseur",
@@ -522,7 +522,7 @@
       "nombre_matchs": 7,
       "periode_psg": "2025-",
       "montant_transfert": "55M€",
-      "parcours": "Valenciennes (loan 2021-2022), Lille (2022-2025), Paris Saint-Germain (2025-)",
+      "parcours": " Lille (2021-2025), Valenciennes (2021-2022), Paris Saint-Germain (2025-)",
       "taille": "1m89"
     },
         {
@@ -537,7 +537,7 @@
       "nombre_matchs": 11,
       "periode_psg": "2019-2022",
       "montant_transfert": "0€",
-      "parcours": "FC Barcelone (2008-2019), PSG (2019-2022), PSV Eindhoven (2022-2023), PSG (2023-2025), RB Leipzig (2023-2025)",
+      "parcours": "FC Barcelone (2008-2019), PSG (2019-2022), PSV Eindhoven (2022-2023), PSG (2023-2025), RB Leipzig (2023-2025), Tottenham Hotspur (2025-)",
       "taille": "1m79"
     },
     {

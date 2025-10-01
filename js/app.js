@@ -574,3 +574,87 @@ function regenererJoueurAleatoire() {
 
     return joueurDuJour;
 }
+
+// ===== REGENERER UN JOUEUR ALÉATOIRE (CONSOLE) =====
+function regenererJoueurAleatoire() {
+    if (joueurs.length === 0) {
+        console.error("Aucun joueur chargé !");
+        return null;
+    }
+
+    const index = Math.floor(Math.random() * joueurs.length);
+    joueurDuJour = joueurs[index];
+
+    console.log("=== JOUEUR ALÉATOIRE ===");
+    console.log(`Index: ${index}/${joueurs.length}`);
+    console.log(joueurDuJour);
+
+    return joueurDuJour;
+}
+
+// ===== RACCOURCI CLAVIER SECRET =====
+let secretKeySequence = [];
+const SECRET_CODE = ['r', 'e', 's', 'e', 't']; // Tapez "reset"
+const SEQUENCE_TIMEOUT = 2000; // 2 secondes pour taper la séquence
+let sequenceTimer = null;
+
+document.addEventListener('keydown', (e) => {
+    // Ignorer si l'utilisateur tape dans l'input de recherche
+    if (e.target.tagName === 'INPUT') return;
+
+    // Ajouter la touche à la séquence
+    secretKeySequence.push(e.key.toLowerCase());
+
+    // Réinitialiser le timer
+    clearTimeout(sequenceTimer);
+    sequenceTimer = setTimeout(() => {
+        secretKeySequence = [];
+    }, SEQUENCE_TIMEOUT);
+
+    // Garder seulement les dernières touches (longueur du code secret)
+    if (secretKeySequence.length > SECRET_CODE.length) {
+        secretKeySequence.shift();
+    }
+
+    // Vérifier si le code secret est correct
+    if (secretKeySequence.length === SECRET_CODE.length) {
+        const isMatch = secretKeySequence.every((key, index) => key === SECRET_CODE[index]);
+        
+        if (isMatch) {
+            console.log("🔓 Code secret activé !");
+            
+            // Réinitialiser le jeu
+            joueursSelectionnes = [];
+            const victoryBox = document.getElementById('victory-box');
+            if (victoryBox) victoryBox.remove();
+            
+            searchInput.disabled = false;
+            searchInput.placeholder = "Chercher un joueur...";
+            
+            // Générer un nouveau joueur
+            regenererJoueurAleatoire();
+            
+            // Nettoyer l'affichage
+            selectedPlayersContainer.innerHTML = '';
+            
+            // Réinitialiser la séquence
+            secretKeySequence = [];
+            
+            console.log("🎮 Nouveau joueur généré ! Bonne chance !");
+        }
+    }
+});
+
+function removeAccents(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+// ===== RECHERCHE =====
+function searchPlayers(query) {
+    if (!query || query.length < 1) return [];
+    const normalizedQuery = removeAccents(query.toLowerCase());
+    return joueurs.filter(joueur => 
+        removeAccents(joueur.nom.toLowerCase()).includes(normalizedQuery) &&
+        !joueursSelectionnes.some(selected => selected.id === joueur.id)
+    ).slice(0, 8);
+}
