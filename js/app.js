@@ -198,7 +198,6 @@ function selectPlayer(playerId) {
 
     const comparison = compareWithDailyPlayer(player);
     
-    // Sauvegarder si on a déjà gagné pour éviter de recréer la box
     const alreadyWon = document.getElementById('victory-box') !== null;
 
     // Afficher tous les joueurs (version responsive)
@@ -468,6 +467,9 @@ function renderPlayersResponsive() {
     const victoryBox = document.getElementById('victory-box');
     const victoryHTML = victoryBox ? victoryBox.outerHTML : null;
     
+    // IMPORTANT : Bloquer le re-render si on vient juste d'ajouter un joueur
+    const isAnimating = document.querySelector('.new-player');
+    
     if (window.innerWidth <= 768) {
         displaySelectedPlayersMobile();
     } else {
@@ -513,13 +515,34 @@ document.querySelector('.search-btn').addEventListener('click', (e) => {
 });
 
 let resizeTimeout;
+let lastWidth = window.innerWidth;
+
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        adjustTextSizing();
-        renderPlayersResponsive();
+        // Ne re-render que si la largeur a vraiment changé (rotation, pas zoom)
+        const newWidth = window.innerWidth;
+        if (Math.abs(newWidth - lastWidth) > 50) {
+            lastWidth = newWidth;
+            adjustTextSizing();
+            renderPlayersResponsive();
+        }
     }, 300);
 });
+
+// Empêcher le re-render sur touch mobile
+let isRendering = false;
+
+document.addEventListener('touchstart', (e) => {
+    // Ne rien faire si on touche un élément interactif
+    if (e.target.closest('.search-container') || 
+        e.target.closest('.suggestion-item') ||
+        e.target.closest('.nav-button')) {
+        return;
+    }
+    // Empêcher tout re-render accidentel
+    e.stopPropagation();
+}, { passive: true });
 
 // ===== INITIALISATION =====
 async function initApp() {
