@@ -11,6 +11,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
   font-family: 'Poppins', sans-serif;
   scroll-behavior: smooth;
@@ -56,8 +57,7 @@ img {
     background-image: url("../assets/bgmobile2.png");
     background-size: cover;
     background-position: center;
-    /* fallback JS-based first, then prefer 100dvh when supported */
-  height: calc(var(--vh, 1vh) * 100);
-  height: 100dvh;
-  }
-}
+  background-attachment: scroll; /* pas fixed → plus stable */
+  min-height: 100vh;             /* prend toute la hauteur */
+  min-height: 100dvh;            /* correction sur mobiles modernes */
+}}
