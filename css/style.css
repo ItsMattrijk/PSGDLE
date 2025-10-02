@@ -7,6 +7,16 @@
 @import url(sections/compare.css);
 @import url(sections/victory.css);
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden; /* Empêche le scroll vertical */
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+}
+
 
 body {
       background-image: url("../assets/bg.png");
@@ -40,3 +50,9 @@ img {
     gap: 30px;
 }
 
+/* Mobile */
+@media (max-width: 768px) {
+        body {
+                background-attachment: scroll;
+        }
+}

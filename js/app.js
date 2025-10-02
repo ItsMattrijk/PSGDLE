@@ -252,6 +252,8 @@ function showVictoryBox() {
     }
 
     setInterval(updateCountdown, 1000);
+
+    saveGameState();
 }
 
 // ===== RECHERCHE =====
@@ -315,11 +317,9 @@ function selectPlayer(playerId) {
     // Mettre à jour les boutons d'indices
     updateHintButtons();
 
-    // 👉 Cacher le sous-titre dès le premier essai
-    const subtitle = document.getElementById('subtitle');
-    if (joueursSelectionnes.length === 1 && subtitle) {
-        subtitle.style.display = "none";
-    }
+
+    updateSubtitleVisibility();
+
 
     // Vérifier la victoire seulement si on n'a pas déjà gagné
     if (comparison?.isCorrectPlayer && !alreadyWon) {
@@ -327,6 +327,8 @@ function selectPlayer(playerId) {
             showVictoryBox();
         }, 3000);
     }
+
+    saveGameState();
 }
 
 // ===== AFFICHAGE =====
@@ -365,6 +367,15 @@ function adjustTextSizing() {
         }
     });
 }
+
+// ===== UTILITAIRE : gérer l'affichage du sous-titre =====
+function updateSubtitleVisibility() {
+    const subtitle = document.getElementById('subtitle');
+    if (!subtitle) return;
+    // cacher si au moins un essai, sinon remettre l'affichage par défaut
+    subtitle.style.display = (joueursSelectionnes.length > 0) ? 'none' : '';
+}
+
 
 function displaySelectedPlayers() {
     if (joueursSelectionnes.length === 0) {
@@ -662,6 +673,7 @@ async function initApp() {
     await loadPlayers();
     selectDailyPlayer();
     renderHintButtons();
+    loadGameState();
     console.log("Application prête !");
 }
 
@@ -736,6 +748,7 @@ document.addEventListener('keydown', (e) => {
             hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false };
             hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false };
             renderHintButtons();
+            updateSubtitleVisibility();
             
             secretKeySequence = [];
             
@@ -798,3 +811,50 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// ===== SAUVEGARDE DANS LOCALSTORAGE =====
+function saveGameState() {
+    const state = {
+        date: getDailySeed(), // identifiant unique du jour
+        attempts: joueursSelectionnes.map(j => j.id),
+        hasWon: document.getElementById('victory-box') !== null
+    };
+    localStorage.setItem("psgQuizState", JSON.stringify(state));
+}
+
+function loadGameState() {
+    const saved = localStorage.getItem("psgQuizState");
+    if (!saved) return;
+
+    try {
+        const state = JSON.parse(saved);
+
+        // Vérifie si c'est le même jour
+        if (state.date !== getDailySeed()) {
+            localStorage.removeItem("psgQuizState");
+            return;
+        }
+
+        // Restaurer les essais
+        state.attempts.forEach(id => {
+            const player = joueurs.find(j => j.id === id);
+            if (player) joueursSelectionnes.push(player);
+        });
+
+        renderPlayersResponsive();
+        updateHintButtons();
+        updateSubtitleVisibility();
+
+        // Restaurer la victoire si déjà gagnée
+        if (state.hasWon) {
+            showVictoryBox();
+        }
+    } catch (e) {
+        console.error("Erreur de chargement du state:", e);
+        localStorage.removeItem("psgQuizState");
+    }
+}
+
+document.body.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+}, { passive: false });
