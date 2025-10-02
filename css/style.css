@@ -51,13 +51,3 @@ img {
     gap: 30px;
 }
 
-/* Version mobile */
-@media (max-width: 768px) {
-  body {
-    background-image: url("../assets/bgmobile2.png");
-    background-size: cover;
-    background-position: center;
-  background-attachment: scroll; /* pas fixed → plus stable */
-  min-height: 100vh;             /* prend toute la hauteur */
-  min-height: 100dvh;            /* correction sur mobiles modernes */
-}}
