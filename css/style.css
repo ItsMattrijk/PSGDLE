@@ -56,5 +56,6 @@ img {
     background-image: url("../assets/bgmobile2.png");
     background-size: cover;
     background-position: center;
+    background-attachment: scroll;
   }
 }
