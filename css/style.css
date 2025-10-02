@@ -50,9 +50,11 @@ img {
     gap: 30px;
 }
 
-/* Mobile */
+/* Version mobile */
 @media (max-width: 768px) {
-        body {
-                background-attachment: scroll;
-        }
+  body {
+    background-image: url("../assets/bgmobile2.png");
+    background-size: cover;
+    background-position: center;
+  }
 }
