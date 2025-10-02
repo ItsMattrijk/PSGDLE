@@ -855,3 +855,21 @@ function loadGameState() {
     }
 }
 
+
+(function() {
+  function updateVh() {
+    // prefer visualViewport if available (gère mieux la barre d'adresse)
+    const viewH = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${viewH * 0.01}px`);
+  }
+
+  updateVh();
+  window.addEventListener('resize', updateVh);
+  window.addEventListener('orientationchange', updateVh);
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateVh);
+    // parfois utile si le navigateur change la visible area au scroll
+    window.visualViewport.addEventListener('scroll', updateVh);
+  }
+})();
