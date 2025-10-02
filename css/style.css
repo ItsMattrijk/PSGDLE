@@ -50,9 +50,15 @@ img {
 }
 
 @media (max-width: 768px) {
+  html, body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  
   body {
     background-attachment: scroll;
-    background-position: center;
+    background-position: center top;
+    background-size: cover;
+    min-height: 100vh;
   }
 }
-
