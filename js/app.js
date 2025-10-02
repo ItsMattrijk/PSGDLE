@@ -755,3 +755,46 @@ document.addEventListener("click", (e) => {
     });
   }
 });
+
+// ===== FONCTION POUR RÉVÉLER TOUS LES INDICES =====
+function revealAllHints() {
+    Object.keys(hintButtons).forEach(hintType => {
+        const config = hintButtons[hintType];
+        if (config) {
+            config.visible = true;   // rendre visible
+            config.unlocked = true;  // débloquer
+            config.revealed = true;  // révéler
+        }
+    });
+    renderHintButtons();
+    console.log("✨ Tous les indices ont été révélés !");
+}
+
+// ===== RACCOURCI CLAVIER SECRET POUR RÉVÉLER LES INDICES =====
+let secretHintSequence = [];
+const SECRET_HINT_CODE = ['h', 'i', 'n', 't']; // exemple : tape "hint"
+let hintSequenceTimer = null;
+
+document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+
+    secretHintSequence.push(e.key.toLowerCase());
+
+    clearTimeout(hintSequenceTimer);
+    hintSequenceTimer = setTimeout(() => {
+        secretHintSequence = [];
+    }, SEQUENCE_TIMEOUT);
+
+    if (secretHintSequence.length > SECRET_HINT_CODE.length) {
+        secretHintSequence.shift();
+    }
+
+    if (secretHintSequence.length === SECRET_HINT_CODE.length) {
+        const isMatch = secretHintSequence.every((key, index) => key === SECRET_HINT_CODE[index]);
+        if (isMatch) {
+            console.log("🔑 Code secret indices activé !");
+            revealAllHints();
+            secretHintSequence = [];
+        }
+    }
+});

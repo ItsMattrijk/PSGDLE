@@ -340,7 +340,7 @@
   .hint-button[data-hint="parcours"].active {
     min-width: 70%;
     max-width: 80%;
-    height: auto; /* s’adapte au contenu */
+    height: 160px;
     flex-grow: unset;
   }
 
@@ -351,7 +351,7 @@
 
 
 .box.expanded-parcours {
-    min-width: 418px;
+    min-width: 0;
 }
 
 }
