@@ -24,9 +24,7 @@ body {
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-color: black;
-
-
-    }
+}
 
 
     
@@ -49,5 +47,12 @@ img {
     align-items: center;
     flex-direction: column;
     gap: 30px;
+}
+
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+    background-position: center;
+  }
 }
 
