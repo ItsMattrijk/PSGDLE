@@ -60,7 +60,7 @@ img {
     background-attachment: scroll;
     background-position: center top;
     background-size: cover;
-    background-size: 180%;
+    background-size: 320%;
     min-height: 100svh;
   }
 }
