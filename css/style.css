@@ -12,7 +12,6 @@ html, body {
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-  overflow-y: hidden; /* Empêche le scroll vertical */
   font-family: 'Poppins', sans-serif;
   scroll-behavior: smooth;
 }
