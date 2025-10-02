@@ -323,7 +323,38 @@
   border-radius: 3px;
 }
 
+@media (max-width: 800px) {
+  .hint-buttons-container {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
 
+  .hint-button {
+    min-width: 70%;  /* largeur confortable pour le swipe */
+    max-width: 80%;
+    height: 160px;
+  }
+
+  /* bouton parcours quand actif */
+  .hint-button[data-hint="parcours"].active {
+    min-width: 70%;
+    max-width: 80%;
+    height: auto; /* s’adapte au contenu */
+    flex-grow: unset;
+  }
+
+  .hint-button[data-hint="parcours"] {
+    min-width: 70%;
+    max-width: 80%;
+}
+
+
+.box.expanded-parcours {
+    min-width: 418px;
+}
+
+}
 
 
 

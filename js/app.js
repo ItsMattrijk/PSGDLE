@@ -744,3 +744,14 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// Auto-centering du bouton "Parcours" quand il devient actif
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest('.hint-button[data-hint="parcours"]');
+  if (btn && btn.classList.contains("active")) {
+    btn.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest"
+    });
+  }
+});
