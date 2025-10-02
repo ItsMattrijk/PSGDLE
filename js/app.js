@@ -6,6 +6,13 @@ const searchInput = document.getElementById('searchInput');
 const suggestionsContainer = document.getElementById('suggestions');
 const selectedPlayersContainer = document.getElementById('selectedPlayers');
 
+// ===== SYSTÈME D'INDICES =====
+let hintButtons = {
+    montant_transfert: { unlockAt: 5, visible: false, unlocked: false, revealed: false },
+    periode_psg: { unlockAt: 9, visible: false, unlocked: false, revealed: false },
+    parcours: { unlockAt: 13, visible: false, unlocked: false, revealed: false }
+};
+
 // ===== CHARGEMENT DES DONNÉES =====
 async function loadPlayers() {
     try {
@@ -62,6 +69,10 @@ function getArrowIcon(direction) {
     return `<span class="arrow-indicator"><svg viewBox="0 0 24 24" fill="none"><path d="${path}" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
 }
 
+function removeAccents(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 // ===== LOGIQUE DU JEU =====
 function selectDailyPlayer() {
     if (joueurs.length === 0) {
@@ -74,7 +85,6 @@ function selectDailyPlayer() {
     const index = Math.floor(randomValue * joueurs.length);
     joueurDuJour = joueurs[index];
     
-    // DEV MODE - Commenter en production
     console.log('=== JOUEUR DU JOUR (DEV) ===');
     console.log(`Seed: ${seed}, Joueur: ${joueurDuJour.nom}, Index: ${index}/${joueurs.length}`);
     
@@ -100,6 +110,104 @@ function compareWithDailyPlayer(player) {
         isCorrectPlayer: player.id === joueurDuJour.id
     };
 }
+
+// ===== SYSTÈME D'INDICES =====
+function updateHintButtons() {
+    const attempts = joueursSelectionnes.length;
+    
+    if (attempts >= 1) {
+        hintButtons.montant_transfert.visible = true;
+        hintButtons.periode_psg.visible = true;
+        hintButtons.parcours.visible = true;
+    }
+    
+    if (attempts >= 5) hintButtons.montant_transfert.unlocked = true;
+    if (attempts >= 9) hintButtons.periode_psg.unlocked = true;
+    if (attempts >= 13) hintButtons.parcours.unlocked = true;
+    
+    renderHintButtons();
+}
+
+function toggleHint(hintType) {
+    const config = hintButtons[hintType];
+    if (!config || !config.unlocked) return;
+    
+    config.revealed = !config.revealed;
+    renderHintButtons();
+    
+    // Appliquer la classe à la BOX au lieu du container
+    const boxEl = document.querySelector('.box');
+    if (boxEl && hintType === 'parcours') {
+        if (config.revealed) {
+            boxEl.classList.add('expanded-parcours');
+        } else {
+            boxEl.classList.remove('expanded-parcours');
+        }
+    }
+}
+
+
+function renderHintButtons() {
+    const container = document.querySelector('.hint-buttons-container');
+    if (!container) return;
+    
+    const attempts = joueursSelectionnes.length;
+    
+    const hints = [
+        {
+            type: 'montant_transfert',
+            icon: '💰',
+            label: 'Montant du transfert',
+            value: joueurDuJour?.montant_transfert || 'N/A',
+            unlockAt: 5
+        },
+        {
+            type: 'periode_psg',
+            icon: '📅',
+            label: 'Période au PSG',
+            value: joueurDuJour?.periode_psg || 'N/A',
+            unlockAt: 9
+        },
+        {
+            type: 'parcours',
+            icon: '🏆',
+            label: 'Parcours',
+            value: joueurDuJour?.parcours || 'N/A',
+            unlockAt: 13
+        }
+    ];
+    
+    container.innerHTML = hints.map(hint => {
+        const config = hintButtons[hint.type];
+        const isVisible = config.visible;
+        const isUnlocked = config.unlocked;
+        const attemptsNeeded = hint.unlockAt - attempts;
+        
+        return `
+            <div class="hint-button ${isVisible ? 'visible' : ''} ${isUnlocked ? 'unlocked' : ''} ${config.revealed ? 'active' : ''}" 
+                 data-hint="${hint.type}"
+                 ${isUnlocked ? `onclick="toggleHint('${hint.type}')"` : ''}>
+                <div class="hint-icon">${hint.icon}</div>
+                <div class="hint-label">${hint.label}</div>
+                ${!isUnlocked ? `
+                    <div class="hint-lock">
+                        🔒
+                        <span class="hint-unlock-text">
+                            ${attemptsNeeded > 0 ? `${attemptsNeeded} essai${attemptsNeeded > 1 ? 's' : ''}` : 'Bientôt...'}
+                        </span>
+                    </div>
+                ` : `
+                    <div class="hint-value ${config.revealed ? 'revealed' : ''} ${hint.type === 'parcours' ? 'hint-value-long' : ''}">
+                        ${hint.value}
+                    </div>
+                `}
+            </div>
+        `;
+    }).join('');
+}
+
+
+
 
 // ===== VICTOIRE =====
 function showVictoryBox() {
@@ -149,8 +257,9 @@ function showVictoryBox() {
 // ===== RECHERCHE =====
 function searchPlayers(query) {
     if (!query || query.length < 1) return [];
+    const normalizedQuery = removeAccents(query.toLowerCase());
     return joueurs.filter(joueur => 
-        joueur.nom.toLowerCase().includes(query.toLowerCase()) &&
+        removeAccents(joueur.nom.toLowerCase()).includes(normalizedQuery) &&
         !joueursSelectionnes.some(selected => selected.id === joueur.id)
     ).slice(0, 8);
 }
@@ -203,6 +312,15 @@ function selectPlayer(playerId) {
     // Afficher tous les joueurs (version responsive)
     renderPlayersResponsive();
 
+    // Mettre à jour les boutons d'indices
+    updateHintButtons();
+
+    // 👉 Cacher le sous-titre dès le premier essai
+    const subtitle = document.getElementById('subtitle');
+    if (joueursSelectionnes.length === 1 && subtitle) {
+        subtitle.style.display = "none";
+    }
+
     // Vérifier la victoire seulement si on n'a pas déjà gagné
     if (comparison?.isCorrectPlayer && !alreadyWon) {
         setTimeout(() => {
@@ -228,8 +346,10 @@ function adjustTextSizing() {
             element.classList.add('text-medium');
         } else if (textLength <= 6) {
             element.classList.add('text-long');
-        } else {
+        } else if (textLength <= 15) {
             element.classList.add('text-very-long');
+        } else {
+            element.classList.add('text-extremely-long');
         }
         
         const parentCategory = element.closest('.category');
@@ -241,6 +361,7 @@ function adjustTextSizing() {
             } else if (categoryIndex === 3) {
                 element.setAttribute('data-type', 'position');
             }
+            
         }
     });
 }
@@ -467,9 +588,6 @@ function renderPlayersResponsive() {
     const victoryBox = document.getElementById('victory-box');
     const victoryHTML = victoryBox ? victoryBox.outerHTML : null;
     
-    // IMPORTANT : Bloquer le re-render si on vient juste d'ajouter un joueur
-    const isAnimating = document.querySelector('.new-player');
-    
     if (window.innerWidth <= 768) {
         displaySelectedPlayersMobile();
     } else {
@@ -520,7 +638,6 @@ let lastWidth = window.innerWidth;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        // Ne re-render que si la largeur a vraiment changé (rotation, pas zoom)
         const newWidth = window.innerWidth;
         if (Math.abs(newWidth - lastWidth) > 50) {
             lastWidth = newWidth;
@@ -530,17 +647,12 @@ window.addEventListener('resize', () => {
     }, 300);
 });
 
-// Empêcher le re-render sur touch mobile
-let isRendering = false;
-
 document.addEventListener('touchstart', (e) => {
-    // Ne rien faire si on touche un élément interactif
     if (e.target.closest('.search-container') || 
         e.target.closest('.suggestion-item') ||
         e.target.closest('.nav-button')) {
         return;
     }
-    // Empêcher tout re-render accidentel
     e.stopPropagation();
 }, { passive: true });
 
@@ -549,6 +661,7 @@ async function initApp() {
     console.log("Initialisation...");
     await loadPlayers();
     selectDailyPlayer();
+    renderHintButtons();
     console.log("Application prête !");
 }
 
@@ -568,22 +681,11 @@ function regenererJoueurAleatoire() {
     const index = Math.floor(Math.random() * joueurs.length);
     joueurDuJour = joueurs[index];
 
-    console.log("=== JOUEUR ALÉATOIRE ===");
-    console.log(`Index: ${index}/${joueurs.length}`);
-    console.log(joueurDuJour);
-
-    return joueurDuJour;
-}
-
-// ===== REGENERER UN JOUEUR ALÉATOIRE (CONSOLE) =====
-function regenererJoueurAleatoire() {
-    if (joueurs.length === 0) {
-        console.error("Aucun joueur chargé !");
-        return null;
-    }
-
-    const index = Math.floor(Math.random() * joueurs.length);
-    joueurDuJour = joueurs[index];
+    // Réinitialiser les boutons d'indices
+    hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false };
+    hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false };
+    hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false };
+    renderHintButtons();
 
     console.log("=== JOUEUR ALÉATOIRE ===");
     console.log(`Index: ${index}/${joueurs.length}`);
@@ -594,36 +696,30 @@ function regenererJoueurAleatoire() {
 
 // ===== RACCOURCI CLAVIER SECRET =====
 let secretKeySequence = [];
-const SECRET_CODE = ['r', 'e', 's', 'e', 't']; // Tapez "reset"
-const SEQUENCE_TIMEOUT = 2000; // 2 secondes pour taper la séquence
+const SECRET_CODE = ['r', 'e', 's', 'e', 't'];
+const SEQUENCE_TIMEOUT = 2000;
 let sequenceTimer = null;
 
 document.addEventListener('keydown', (e) => {
-    // Ignorer si l'utilisateur tape dans l'input de recherche
     if (e.target.tagName === 'INPUT') return;
 
-    // Ajouter la touche à la séquence
     secretKeySequence.push(e.key.toLowerCase());
 
-    // Réinitialiser le timer
     clearTimeout(sequenceTimer);
     sequenceTimer = setTimeout(() => {
         secretKeySequence = [];
     }, SEQUENCE_TIMEOUT);
 
-    // Garder seulement les dernières touches (longueur du code secret)
     if (secretKeySequence.length > SECRET_CODE.length) {
         secretKeySequence.shift();
     }
 
-    // Vérifier si le code secret est correct
     if (secretKeySequence.length === SECRET_CODE.length) {
         const isMatch = secretKeySequence.every((key, index) => key === SECRET_CODE[index]);
         
         if (isMatch) {
             console.log("🔓 Code secret activé !");
             
-            // Réinitialiser le jeu
             joueursSelectionnes = [];
             const victoryBox = document.getElementById('victory-box');
             if (victoryBox) victoryBox.remove();
@@ -631,13 +727,16 @@ document.addEventListener('keydown', (e) => {
             searchInput.disabled = false;
             searchInput.placeholder = "Chercher un joueur...";
             
-            // Générer un nouveau joueur
             regenererJoueurAleatoire();
             
-            // Nettoyer l'affichage
             selectedPlayersContainer.innerHTML = '';
             
-            // Réinitialiser la séquence
+            // Réinitialiser les boutons d'indices
+            hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false };
+            hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false };
+            hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false };
+            renderHintButtons();
+            
             secretKeySequence = [];
             
             console.log("🎮 Nouveau joueur généré ! Bonne chance !");
@@ -645,16 +744,3 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-function removeAccents(str) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-
-// ===== RECHERCHE =====
-function searchPlayers(query) {
-    if (!query || query.length < 1) return [];
-    const normalizedQuery = removeAccents(query.toLowerCase());
-    return joueurs.filter(joueur => 
-        removeAccents(joueur.nom.toLowerCase()).includes(normalizedQuery) &&
-        !joueursSelectionnes.some(selected => selected.id === joueur.id)
-    ).slice(0, 8);
-}

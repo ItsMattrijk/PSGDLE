@@ -241,7 +241,7 @@
 }
 
 .category-value[data-type="nationality"] {
-    font-size: clamp(11px, 10px, 10px);
+    font-size: clamp(9px, 10px, 10px);
 }
 
 
@@ -546,6 +546,7 @@
     .category-value.text-medium { font-size: 15px; }
     .category-value.text-long { font-size: 9px; }
     .category-value.text-very-long { font-size: 9px; }
+    .category-value.text-very-long { font-size: 9px; }
     
     .player-main-photo {
         width: clamp(50px, 15vw, 65px);
@@ -616,12 +617,12 @@
     
     .category-value.text-short { font-size: 10px; }
     .category-value.text-medium { font-size: 10px; }
-    .category-value.text-long { font-size: 7px; }
-    .category-value.text-very-long { font-size: 6.5px; }
+    .category-value.text-long { font-size: 10px; }
+    .category-value.text-very-long { font-size: 10px; }
     
     .player-main-photo {
-        width: clamp(45px, 12vw, 60px);
-        height: clamp(45px, 12vw, 60px);
+        width: clamp(60px, 12vw, 60px);
+        height: clamp(60px, 12vw, 60px);
     }
     
     .player-name-main {
@@ -660,6 +661,10 @@
         font-size: 9px;
         padding: 5px 6px;
     }
+
+    .category-value[data-type="nationality"] {
+    font-size: clamp(7px, 8px, 10px);
+}
 }
 
 /* Très petits mobiles */
@@ -684,14 +689,14 @@
         max-width: 50px;
     }
     
-    .category-value.text-short { font-size: 15px; }
-    .category-value.text-medium { font-size: 13px; }
-    .category-value.text-long { font-size: 7px; }
-    .category-value.text-very-long { font-size: 5px; }
+    .category-value.text-short { font-size: 12px; }
+    .category-value.text-medium { font-size: 12px; }
+    .category-value.text-long { font-size: 8px; }
+    .category-value.text-very-long { font-size: 8px; }
     
     .player-main-photo {
-        width: clamp(40px, 10vw, 55px);
-        height: clamp(40px, 10vw, 55px);
+        width: clamp(50px, 10vw, 55px);
+        height: clamp(50px, 10vw, 55px);
     }
     
     .player-name-main {
