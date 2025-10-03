@@ -246,18 +246,31 @@ function showVictoryBox() {
     
  selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
 
-// Scroll plus robuste pour mobile et desktop
+// Scroll amélioré pour mobile et desktop
 setTimeout(() => {
     const victoryBox = document.getElementById('victory-box');
     if (victoryBox) {
-        // Sur mobile, scroller vers le haut de la page
-        if (window.innerWidth <= 768) {
-            window.scrollTo({ top: victoryBox.offsetTop - 20, behavior: 'smooth' });
-        } else {
-            victoryBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Récupérer la position exacte de la victory box
+        const boxRect = victoryBox.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetPosition = boxRect.top + scrollTop - 20;
+        
+        // Scroll universel qui fonctionne sur tous les appareils
+        window.scrollTo({ 
+            top: targetPosition, 
+            behavior: 'smooth' 
+        });
+        
+        // Fallback pour les anciens navigateurs mobiles
+        if (window.pageYOffset === scrollTop) {
+            victoryBox.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start',
+                inline: 'nearest'
+            });
         }
     }
-}, 100);
+}, 150);
 
 setInterval(updateCountdown, 1000);
 
