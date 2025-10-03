@@ -863,54 +863,97 @@ function loadGameState() {
     }
 }
 
-// ===== RESET PAR APPUI LONG SUR LE LOGO =====
+// ===== RESET PAR APPUI LONG (3s) SUR LE LOGO — FONCTIONNE SUR MOBILE + PC =====
 const logo = document.querySelector("header img");
-let longPressTimer;
+if (logo) {
+  // Petites protections UX
+  logo.draggable = false;
+  logo.style.userSelect = 'none';
+  logo.style.webkitUserSelect = 'none';
+  logo.style.touchAction = 'manipulation'; // évite certains comportements par défaut
 
-function resetGame() {
-    console.log("📱 Reset via appui long sur le logo !");
-    
-    joueursSelectionnes = [];
-    const victoryBox = document.getElementById('victory-box');
-    if (victoryBox) victoryBox.remove();
+  // Empêche le menu contextuel quand on fait un appui long / clic droit sur le logo
+  logo.addEventListener('contextmenu', (e) => e.preventDefault());
 
-    searchInput.disabled = false;
-    searchInput.placeholder = "Chercher un joueur...";
+  const LONG_PRESS_DURATION = 3000; // ms
+  let longPressTimer = null;
+  let pointerDown = false;
+  let startX = 0, startY = 0;
 
-    regenererJoueurAleatoire();
+  function startLongPress(e) {
+    // Sur desktop, n'accepter que le bouton gauche
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
 
-    selectedPlayersContainer.innerHTML = '';
+    // Empêche le menu natif (important sur mobile)
+    if (e.cancelable) e.preventDefault();
 
-    // Réinitialiser les indices
-    hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false };
-    hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false };
-    hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false };
-    renderHintButtons();
-    updateSubtitleVisibility();
+    pointerDown = true;
+    startX = e.clientX;
+    startY = e.clientY;
 
-    console.log("🎮 Nouveau joueur généré !");
-}
+    // Capture du pointeur pour garantir les events pointerup/pointermove
+    if (logo.setPointerCapture && typeof e.pointerId !== 'undefined') {
+      try { logo.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    }
 
-function startLongPress(e) {
-    e.preventDefault(); // ⚡ Empêche l'action par défaut (menu télécharger image)
     longPressTimer = setTimeout(() => {
+      // Appelle ta fonction de reset existante
+      if (typeof resetGame === 'function') {
         resetGame();
-    }, 3000); // 3 secondes
+      } else {
+        // Au cas où resetGame n'existe pas : fallback minimal
+        joueursSelectionnes = [];
+        const victoryBox = document.getElementById('victory-box');
+        if (victoryBox) victoryBox.remove();
+        if (searchInput) {
+          searchInput.disabled = false;
+          searchInput.placeholder = "Chercher un joueur...";
+        }
+        if (typeof regenererJoueurAleatoire === 'function') regenererJoueurAleatoire();
+        if (selectedPlayersContainer) selectedPlayersContainer.innerHTML = '';
+        hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false, revealed: false };
+        hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false, revealed: false };
+        hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false, revealed: false };
+        renderHintButtons();
+        updateSubtitleVisibility();
+      }
+      cancelLongPress(); // nettoyage
+    }, LONG_PRESS_DURATION);
+  }
+
+  function cancelLongPress(e) {
+    pointerDown = false;
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
+    // Release pointer capture si disponible
+    if (e && logo.releasePointerCapture && typeof e.pointerId !== 'undefined') {
+      try { logo.releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    }
+  }
+
+  function onPointerMove(e) {
+    if (!pointerDown) return;
+    // si l'utilisateur bouge trop le doigt / souris, annule (évite faux positifs)
+    const dx = Math.abs(e.clientX - startX);
+    const dy = Math.abs(e.clientY - startY);
+    if (dx > 10 || dy > 10) cancelLongPress(e);
+  }
+
+  // Écouteurs pointer (fonctionne pour touch + mouse)
+  logo.addEventListener('pointerdown', startLongPress, { passive: false });
+  logo.addEventListener('pointerup', cancelLongPress);
+  logo.addEventListener('pointercancel', cancelLongPress);
+  logo.addEventListener('pointermove', onPointerMove);
+
+  // Fallbacks pour anciens navigateurs (rare) — on garde touch/mouse au cas où
+  logo.addEventListener('touchstart', (e) => { if (e.cancelable) e.preventDefault(); }, { passive: false });
+  logo.addEventListener('mousedown', (e) => { if (e.button === 0) { /* handled by pointerdown */ } });
+
+} else {
+  console.warn('Logo non trouvé : header img manquant. Assure-toi que <header><img ...></header> existe.');
 }
-
-function cancelLongPress() {
-    clearTimeout(longPressTimer);
-}
-
-// Mobile (touch)
-logo.addEventListener("touchstart", startLongPress, { passive: false });
-logo.addEventListener("touchend", cancelLongPress);
-logo.addEventListener("touchmove", cancelLongPress);
-
-// PC (souris)
-logo.addEventListener("mousedown", startLongPress);
-logo.addEventListener("mouseup", cancelLongPress);
-logo.addEventListener("mouseleave", cancelLongPress);
 
 
 
