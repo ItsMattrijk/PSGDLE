@@ -15,6 +15,134 @@
 
 <body>
 
+    <div class="nav-container">
+        <div class="nav-box">
+<button id="openStatsModal" class="nav-button" title="Statistiques">
+  <div class="nav-button-icon icon-stats"></div>
+</button>
+            
+        <button id="openModal" class="nav-button" title="Comment jouer ?">
+        <div class="nav-button-icon icon-but"></div>
+        </button>
+
+            
+        <button id="openAboutModal" class="nav-button" title="Questions/Réponses">
+        <div class="nav-button-icon icon-retour"></div>
+        </button>
+            
+            <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
+                <div class="nav-button-icon icon-dons"></div>
+            </a>
+            
+        </div>
+    </div>
+
+    <!-- Modal Comment Jouer -->
+    <div id="howToPlayModal" class="modal">
+        <div class="modal-content">
+<button class="modal-close" id="closeModal">&times;</button>
+
+            <div class="modal-body">
+                <h2>Comment jouer à PSGDLE ?</h2>
+                
+                <p>Chaque jour, un joueur différent du Paris Saint-Germain est à deviner. Le joueur change automatiquement toutes les 24 heures.</p>
+                
+                <div class="countdown-box">
+                    <strong>Prochain joueur disponible dans :</strong> <span id="countdown">--:--:--</span><br>
+                    <small>Fuseau horaire : Europe (minuit UTC+2)</small>
+                </div>
+                
+                <h3>Comment deviner ?</h3>
+                <p>Saisis le nom d'un joueur : ses propriétés s'afficheront immédiatement.</p>
+                <p>Les couleurs et symboles t'indiquent si ta proposition se rapproche du joueur recherché :</p>
+                
+                <ul class="legend-list">
+                    <li><span class="color-box blue"></span> <strong>Bleu :</strong>&nbsp; correspondance exacte.</li>
+                    <li><span class="color-box red"></span> <strong>Rouge :</strong>&nbsp; aucune correspondance.</li>
+                    <li><strong>⬆️ / ⬇️ :</strong>&nbsp; valeur plus haute ou plus basse.</li>
+                </ul>
+                
+                <h3>Propriétés affichées</h3>
+                <ul>
+                    <li><strong>Joueur :</strong> Nom et Prénom du joueur.</li>
+                    <li><strong>Nationalité :</strong> Sa nationalité sportive.</li>
+                    <li><strong>Âge :</strong> Son âge actuel.</li>
+                    <li><strong>Poste :</strong> Gardien, Défenseur, Milieu ou Attaquant.</li>
+                    <li><strong>Numéro :</strong> Numéro de maillot le plus porté au PSG.</li>
+                    <li><strong>Taille :</strong> Taille du joueur.</li>
+                    <li><strong>Formé au club :</strong> Indique s'il a été formé au PSG.</li>
+                    <li><strong>Matchs joués :</strong> Nombre de matchs disputés avec le PSG.</li>
+                </ul>
+                
+                <h3>Indices</h3>
+                <p>Si tu rencontres des difficultés, tu débloqueras progressivement des indices après plusieurs tentatives :</p>
+                <ul>
+                    <li><strong>Montant du transfert :</strong> Somme de son transfert au PSG (si connue, les anciens transferts pouvant être indisponibles).</li>
+                    <li><strong>Période au PSG :</strong> Années pendant lesquelles il a évolué au club.</li>
+                    <li><strong>Parcours du joueur :</strong> Clubs dans lesquels il a joué au cours de sa carrière.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal À propos -->
+<div id="aboutModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeAboutModal">&times;</button>
+    <div class="modal-body">
+      <h2>À propos de PSGDLE</h2>
+
+      <p>
+        PSGDLE est un jeu indépendant, créé par un passionné, et n’est ni affilié, 
+        ni soutenu par le Paris Saint-Germain.
+      </p>
+
+      <p>
+        Le concept s’inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, 
+        <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, 
+        tout en apportant sa touche unique dédiée aux fans du PSG.
+      </p>
+
+      <h3>Vos retours comptent !</h3>
+      <p>
+        Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
+        Envoyez-nous un message en français à : 
+        <strong>Matt21Graphics@gmail.com</strong>.  
+        J’ai hâte de recevoir vos commentaires et idées !
+      </p>
+
+      <h3>Soutenir PSGDLE</h3>
+      <p>
+        Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, 
+        vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>.  
+        Chaque soutien compte !
+      </p>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Statistiques -->
+    <div id="statsModal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="closeStatsModal">&times;</button>
+            
+            <div class="modal-body">
+                <h2>📊 Mes Statistiques</h2>
+                
+                <div id="statsContent">
+                    <!-- Contenu dynamique injecté par JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+
+
 <section class="main">
 
 <div class="container">

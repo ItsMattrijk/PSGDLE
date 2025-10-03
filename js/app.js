@@ -126,6 +126,7 @@ function updateHintButtons() {
     if (attempts >= 13) hintButtons.parcours.unlocked = true;
     
     renderHintButtons();
+    adjustMargin(); // Ajuste le margin après la mise à jour
 }
 
 function toggleHint(hintType) {
@@ -244,37 +245,39 @@ function showVictoryBox() {
         </div>
     `;
     
- selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
+    selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
 
-// Scroll amélioré pour mobile et desktop
-setTimeout(() => {
-    const victoryBox = document.getElementById('victory-box');
-    if (victoryBox) {
-        // Récupérer la position exacte de la victory box
-        const boxRect = victoryBox.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const targetPosition = boxRect.top + scrollTop - 20;
-        
-        // Scroll universel qui fonctionne sur tous les appareils
-        window.scrollTo({ 
-            top: targetPosition, 
-            behavior: 'smooth' 
-        });
-        
-        // Fallback pour les anciens navigateurs mobiles
-        if (window.pageYOffset === scrollTop) {
-            victoryBox.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start',
-                inline: 'nearest'
+    setTimeout(() => {
+        const victoryBox = document.getElementById('victory-box');
+        if (victoryBox) {
+            const boxRect = victoryBox.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = boxRect.top + scrollTop - 20;
+            
+            window.scrollTo({ 
+                top: targetPosition, 
+                behavior: 'smooth' 
             });
+            
+            if (window.pageYOffset === scrollTop) {
+                victoryBox.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start',
+                    inline: 'nearest'
+                });
+            }
         }
-    }
-}, 150);
+    }, 150);
 
-setInterval(updateCountdown, 1000);
+    setInterval(updateCountdown, 1000);
 
-    saveGameState();
+    // AJOUTER : enregistrer les stats UNE SEULE FOIS
+    updateStatsAfterGame(joueursSelectionnes.length, true);
+    
+    // Marquer que les stats ont été enregistrées
+    const state = JSON.parse(localStorage.getItem("psgQuizState"));
+    state.statsRecorded = true;
+    localStorage.setItem("psgQuizState", JSON.stringify(state));
 }
 
 // ===== RECHERCHE =====
@@ -338,17 +341,23 @@ function selectPlayer(playerId) {
     // Mettre à jour les boutons d'indices
     updateHintButtons();
 
-
     updateSubtitleVisibility();
 
+    // Scroll vers la zone des joueurs sélectionnés
+    setTimeout(() => {
+        selectedPlayersContainer.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+        });
+    }, 100);
 
     // Vérifier la victoire seulement si on n'a pas déjà gagné
-   if (comparison?.isCorrectPlayer && !alreadyWon) {
-       setTimeout(() => {
+    if (comparison?.isCorrectPlayer && !alreadyWon) {
+        setTimeout(() => {
             showVictoryBox();
         }, 3000);
     }
-
 
     saveGameState();
 }
@@ -728,118 +737,14 @@ function regenererJoueurAleatoire() {
     return joueurDuJour;
 }
 
-// ===== RACCOURCI CLAVIER SECRET =====
-let secretKeySequence = [];
-const SECRET_CODE = ['r', 'e', 's', 'e', 't'];
-const SEQUENCE_TIMEOUT = 2000;
-let sequenceTimer = null;
-
-document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT') return;
-
-    secretKeySequence.push(e.key.toLowerCase());
-
-    clearTimeout(sequenceTimer);
-    sequenceTimer = setTimeout(() => {
-        secretKeySequence = [];
-    }, SEQUENCE_TIMEOUT);
-
-    if (secretKeySequence.length > SECRET_CODE.length) {
-        secretKeySequence.shift();
-    }
-
-    if (secretKeySequence.length === SECRET_CODE.length) {
-        const isMatch = secretKeySequence.every((key, index) => key === SECRET_CODE[index]);
-        
-        if (isMatch) {
-            console.log("🔓 Code secret activé !");
-            
-            joueursSelectionnes = [];
-            const victoryBox = document.getElementById('victory-box');
-            if (victoryBox) victoryBox.remove();
-            
-            searchInput.disabled = false;
-            searchInput.placeholder = "Chercher un joueur...";
-            
-            regenererJoueurAleatoire();
-            
-            selectedPlayersContainer.innerHTML = '';
-            
-            // Réinitialiser les boutons d'indices
-            hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false };
-            hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false };
-            hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false };
-            renderHintButtons();
-            updateSubtitleVisibility();
-            
-            secretKeySequence = [];
-            
-            console.log("🎮 Nouveau joueur généré ! Bonne chance !");
-        }
-    }
-});
-
-// Auto-centering du bouton "Parcours" quand il devient actif
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest('.hint-button[data-hint="parcours"]');
-  if (btn && btn.classList.contains("active")) {
-    btn.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest"
-    });
-  }
-});
-
-// ===== FONCTION POUR RÉVÉLER TOUS LES INDICES =====
-function revealAllHints() {
-    Object.keys(hintButtons).forEach(hintType => {
-        const config = hintButtons[hintType];
-        if (config) {
-            config.visible = true;   // rendre visible
-            config.unlocked = true;  // débloquer
-            config.revealed = true;  // révéler
-        }
-    });
-    renderHintButtons();
-    console.log("✨ Tous les indices ont été révélés !");
-}
-
-// ===== RACCOURCI CLAVIER SECRET POUR RÉVÉLER LES INDICES =====
-let secretHintSequence = [];
-const SECRET_HINT_CODE = ['h', 'i', 'n', 't']; // exemple : tape "hint"
-let hintSequenceTimer = null;
-
-document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT') return;
-
-    secretHintSequence.push(e.key.toLowerCase());
-
-    clearTimeout(hintSequenceTimer);
-    hintSequenceTimer = setTimeout(() => {
-        secretHintSequence = [];
-    }, SEQUENCE_TIMEOUT);
-
-    if (secretHintSequence.length > SECRET_HINT_CODE.length) {
-        secretHintSequence.shift();
-    }
-
-    if (secretHintSequence.length === SECRET_HINT_CODE.length) {
-        const isMatch = secretHintSequence.every((key, index) => key === SECRET_HINT_CODE[index]);
-        if (isMatch) {
-            console.log("🔑 Code secret indices activé !");
-            revealAllHints();
-            secretHintSequence = [];
-        }
-    }
-});
 
 // ===== SAUVEGARDE DANS LOCALSTORAGE =====
 function saveGameState() {
     const state = {
-        date: getDailySeed(), // identifiant unique du jour
+        date: getDailySeed(),
         attempts: joueursSelectionnes.map(j => j.id),
-        hasWon: document.getElementById('victory-box') !== null
+        hasWon: document.getElementById('victory-box') !== null,
+        statsRecorded: false // AJOUTER ce flag
     };
     localStorage.setItem("psgQuizState", JSON.stringify(state));
 }
@@ -868,8 +773,45 @@ function loadGameState() {
         updateSubtitleVisibility();
 
         // Restaurer la victoire si déjà gagnée
+        // MAIS NE PAS RÉENREGISTRER LES STATS
         if (state.hasWon) {
-            showVictoryBox();
+            // Recréer la victory box sans appeler updateStatsAfterGame
+            if (document.getElementById('victory-box')) return;
+            
+            searchInput.disabled = true;
+            searchInput.placeholder = "Joueur trouvé ! Revenez demain...";
+            
+            const victoryHTML = `
+                <div class="victory-container" id="victory-box">
+                    <div class="box">
+                        <div class="title victory-title">🎉 VICTOIRE ! 🎉</div>
+                        <div class="victory-content">
+                            <img src="${getPlayerPhotoUrl(joueurDuJour)}" 
+                                 alt="${joueurDuJour.nom}" 
+                                 class="victory-photo"
+                                 onerror="this.src='https://via.placeholder.com/150x150/dc143c/ffffff?text=${joueurDuJour.nom.charAt(0)}'">
+                            <div class="victory-text">
+                                Bravo tu as trouvé <strong>${joueurDuJour.nom}</strong> !
+                            </div>
+                            <div class="victory-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Nombre d'essais :</span>
+                                    <span class="stat-value">${joueursSelectionnes.length}</span>
+                                </div>
+                                <div class="stat-item countdown-item">
+                                    <span class="stat-label">Joueur suivant dans : </span>
+                                    <span class="stat-value" id="countdown-timer">${getTimeUntilMidnight()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
+            setInterval(updateCountdown, 1000);
+            
+            // NE PAS APPELER updateStatsAfterGame() ICI
         }
     } catch (e) {
         console.error("Erreur de chargement du state:", e);
@@ -877,97 +819,611 @@ function loadGameState() {
     }
 }
 
-// ===== RESET PAR APPUI LONG (3s) SUR LE LOGO — FONCTIONNE SUR MOBILE + PC =====
-const logo = document.querySelector("header img");
-if (logo) {
-  // Petites protections UX
-  logo.draggable = false;
-  logo.style.userSelect = 'none';
-  logo.style.webkitUserSelect = 'none';
-  logo.style.touchAction = 'manipulation'; // évite certains comportements par défaut
-
-  // Empêche le menu contextuel quand on fait un appui long / clic droit sur le logo
-  logo.addEventListener('contextmenu', (e) => e.preventDefault());
-
-  const LONG_PRESS_DURATION = 3000; // ms
-  let longPressTimer = null;
-  let pointerDown = false;
-  let startX = 0, startY = 0;
-
-  function startLongPress(e) {
-    // Sur desktop, n'accepter que le bouton gauche
-    if (e.pointerType === 'mouse' && e.button !== 0) return;
-
-    // Empêche le menu natif (important sur mobile)
-    if (e.cancelable) e.preventDefault();
-
-    pointerDown = true;
-    startX = e.clientX;
-    startY = e.clientY;
-
-    // Capture du pointeur pour garantir les events pointerup/pointermove
-    if (logo.setPointerCapture && typeof e.pointerId !== 'undefined') {
-      try { logo.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+function adjustMargin() {
+    const container = document.querySelector('.container');
+    const searchContainer = document.querySelector('.search-container');
+    
+    // Vérifie si au moins un bouton d'indice est visible
+    const hasVisibleHints = Object.values(hintButtons).some(hint => hint.visible);
+    
+    if (hasVisibleHints) {
+        container.style.marginTop = '0';
+        container.style.marginBottom = '120px';
+        searchContainer.style.marginTop = '-120px';
+    } else {
+        container.style.marginTop = '-1200px';
+        container.style.marginBottom = '0';
+        searchContainer.style.marginTop = '-10px';
     }
-
-    longPressTimer = setTimeout(() => {
-      // Appelle ta fonction de reset existante
-      if (typeof resetGame === 'function') {
-        resetGame();
-      } else {
-        // Au cas où resetGame n'existe pas : fallback minimal
-        joueursSelectionnes = [];
-        const victoryBox = document.getElementById('victory-box');
-        if (victoryBox) victoryBox.remove();
-        if (searchInput) {
-          searchInput.disabled = false;
-          searchInput.placeholder = "Chercher un joueur...";
-        }
-        if (typeof regenererJoueurAleatoire === 'function') regenererJoueurAleatoire();
-        if (selectedPlayersContainer) selectedPlayersContainer.innerHTML = '';
-        hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false, revealed: false };
-        hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false, revealed: false };
-        hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false, revealed: false };
-        renderHintButtons();
-        updateSubtitleVisibility();
-      }
-      cancelLongPress(); // nettoyage
-    }, LONG_PRESS_DURATION);
-  }
-
-  function cancelLongPress(e) {
-    pointerDown = false;
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      longPressTimer = null;
-    }
-    // Release pointer capture si disponible
-    if (e && logo.releasePointerCapture && typeof e.pointerId !== 'undefined') {
-      try { logo.releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-    }
-  }
-
-  function onPointerMove(e) {
-    if (!pointerDown) return;
-    // si l'utilisateur bouge trop le doigt / souris, annule (évite faux positifs)
-    const dx = Math.abs(e.clientX - startX);
-    const dy = Math.abs(e.clientY - startY);
-    if (dx > 10 || dy > 10) cancelLongPress(e);
-  }
-
-  // Écouteurs pointer (fonctionne pour touch + mouse)
-  logo.addEventListener('pointerdown', startLongPress, { passive: false });
-  logo.addEventListener('pointerup', cancelLongPress);
-  logo.addEventListener('pointercancel', cancelLongPress);
-  logo.addEventListener('pointermove', onPointerMove);
-
-  // Fallbacks pour anciens navigateurs (rare) — on garde touch/mouse au cas où
-  logo.addEventListener('touchstart', (e) => { if (e.cancelable) e.preventDefault(); }, { passive: false });
-  logo.addEventListener('mousedown', (e) => { if (e.button === 0) { /* handled by pointerdown */ } });
-
-} else {
-  console.warn('Logo non trouvé : header img manquant. Assure-toi que <header><img ...></header> existe.');
 }
 
+// ----- Modal : ouverture/fermeture + masque la barre de recherche -----
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('howToPlayModal');
+  if (!modal) {
+    console.warn('[Modal] howToPlayModal introuvable dans le DOM');
+    return;
+  }
+
+  const openBtn = document.getElementById('openModal')
+               || document.querySelector('.nav-button[title="Comment jouer ?"]')
+               || null;
+  const closeBtn = document.getElementById('closeModal') || modal.querySelector('.modal-close');
+
+  // éléments de recherche
+  const searchContainer = document.querySelector('.search-container');
+  const searchInputEl = document.getElementById('searchInput');
+  const suggestionsEl = document.getElementById('suggestions');
+
+  function openModal() {
+    modal.style.display = 'block';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden'; // bloque le scroll arrière-plan
+    document.body.classList.add('modal-open');
+
+    // désactiver l'input pour éviter focus/clavier
+    if (searchInputEl) {
+      // mémoriser l'état précédent pour restaurer correctement
+      searchInputEl.dataset.wasDisabled = searchInputEl.disabled ? '1' : '0';
+      searchInputEl.disabled = true;
+      searchInputEl.blur();
+    }
+
+    // masquer les suggestions si elles sont visibles
+    if (suggestionsEl) {
+      suggestionsEl.style.display = 'none';
+    }
+
+    updateModalCountdown();
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
+
+    // restaurer l'input s'il n'était pas disabled avant
+    if (searchInputEl) {
+      if (searchInputEl.dataset.wasDisabled !== '1') searchInputEl.disabled = false;
+      delete searchInputEl.dataset.wasDisabled;
+    }
+
+    // restaurer l'affichage des suggestions (tu peux ajuster si tu veux vider)
+    if (suggestionsEl) {
+      suggestionsEl.style.display = '';
+    }
+  }
+
+  if (openBtn) {
+    openBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  } else {
+    console.warn('[Modal] Bouton d\'ouverture introuvable (id="openModal").');
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  } else {
+    console.warn('[Modal] Bouton de fermeture introuvable (id="closeModal" ou .modal-close).');
+  }
+
+  // ferme quand on clique sur le backdrop (la zone sombre)
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // (optionnel) ouvre automatiquement pour la démo — retire la ligne si tu veux pas auto-open
+  // openModal();
+});
+
+// Countdown spécifique à la modal (ne remplace pas d'autres fonctions updateCountdown)
+function updateModalCountdown() {
+  const now = new Date();
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+  const diff = midnight - now;
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  const countdownEl = document.getElementById('countdown');
+  if (countdownEl) {
+    countdownEl.textContent =
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+}
+setInterval(updateModalCountdown, 1000);
 
 
+document.addEventListener('DOMContentLoaded', () => {
+  const aboutModal = document.getElementById('aboutModal');
+  if (!aboutModal) return;
+
+  const openAboutBtn = document.getElementById('openAboutModal');
+  const closeAboutBtn = document.getElementById('closeAboutModal');
+
+  function openAboutModalFn() {
+    aboutModal.style.display = 'block';
+    aboutModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
+  }
+
+  function closeAboutModalFn() {
+    aboutModal.style.display = 'none';
+    aboutModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
+  }
+
+  if (openAboutBtn) {
+    openAboutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAboutModalFn();
+    });
+  }
+
+  if (closeAboutBtn) {
+    closeAboutBtn.addEventListener('click', closeAboutModalFn);
+  }
+
+  aboutModal.addEventListener('click', (e) => {
+    if (e.target === aboutModal) closeAboutModalFn();
+  });
+});
+
+// Redirige le scroll vers le contenu de la modal
+function enableModalScroll(modal) {
+  const modalBody = modal.querySelector('.modal-body');
+  if (!modalBody) return;
+
+  // Redirige le scroll de toute la modal vers le contenu
+  modal.addEventListener('wheel', (e) => {
+    if (modal.style.display !== 'block') return;
+
+    const delta = e.deltaY;
+    const atTop = modalBody.scrollTop === 0;
+    const atBottom = modalBody.scrollHeight - modalBody.scrollTop <= modalBody.clientHeight + 1;
+
+    // Bloque le scroll de la page
+    if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
+      e.preventDefault();
+    }
+
+    // Force le scroll sur le contenu interne
+    modalBody.scrollTop += delta;
+  }, { passive: false });
+}
+
+// activer pour tes 2 modals
+document.addEventListener('DOMContentLoaded', () => {
+  const howToPlayModal = document.getElementById('howToPlayModal');
+  const aboutModal = document.getElementById('aboutModal');
+
+  if (howToPlayModal) enableModalScroll(howToPlayModal);
+  if (aboutModal) enableModalScroll(aboutModal);
+});
+
+// REMPLACER VOTRE CODE ACTUEL PAR :
+document.addEventListener('DOMContentLoaded', () => {
+  const statsModal = document.getElementById('statsModal');
+  const openStatsBtn = document.getElementById('openStatsModal');
+  const closeStatsBtn = document.getElementById('closeStatsModal');
+
+  function openStatsModalFn() {
+    displayStats(); // IMPORTANT : appel ici
+    statsModal.style.display = 'block';
+    statsModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
+  }
+
+  function closeStatsModalFn() {
+    statsModal.style.display = 'none';
+    statsModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
+  }
+
+  if (openStatsBtn) {
+    openStatsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openStatsModalFn();
+    });
+  }
+
+  if (closeStatsBtn) {
+    closeStatsBtn.addEventListener('click', closeStatsModalFn);
+  }
+
+  statsModal.addEventListener('click', (e) => {
+    if (e.target === statsModal) closeStatsModalFn();
+  });
+});
+ // ===== GESTION DES STATISTIQUES =====
+        
+        function getStats() {
+            const saved = localStorage.getItem('psgQuizStats');
+            if (!saved) {
+                return {
+                    gamesPlayed: 0,
+                    gamesWon: 0,
+                    currentStreak: 0,
+                    maxStreak: 0,
+                    guessDistribution: {
+                        1: 0, 2: 0, 3: 0, 4: 0, 5: 0,
+                        6: 0, 7: 0, 8: 0, 9: 0, 10: 0,
+                        '11+': 0
+                    },
+                    lastPlayedDate: null
+                };
+            }
+            return JSON.parse(saved);
+        }
+
+        function saveStats(stats) {
+            localStorage.setItem('psgQuizStats', JSON.stringify(stats));
+        }
+
+        function updateStatsAfterGame(attempts, won, currentDate) {
+            const stats = getStats();
+            
+            stats.gamesPlayed++;
+            
+            if (won) {
+                stats.gamesWon++;
+                
+                // Distribution des essais
+                if (attempts <= 10) {
+                    stats.guessDistribution[attempts]++;
+                } else {
+                    stats.guessDistribution['11+']++;
+                }
+                
+                // Gestion des séries
+                if (stats.lastPlayedDate) {
+                    const lastDate = new Date(stats.lastPlayedDate);
+                    const today = new Date(currentDate);
+                    const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        stats.currentStreak++;
+                    } else if (diffDays > 1) {
+                        stats.currentStreak = 1;
+                    }
+                } else {
+                    stats.currentStreak = 1;
+                }
+                
+                if (stats.currentStreak > stats.maxStreak) {
+                    stats.maxStreak = stats.currentStreak;
+                }
+            } else {
+                stats.currentStreak = 0;
+            }
+            
+            stats.lastPlayedDate = currentDate;
+            saveStats(stats);
+        }
+
+        function displayStats() {
+            const stats = getStats();
+            const container = document.getElementById('statsContent');
+            
+            if (stats.gamesPlayed === 0) {
+                container.innerHTML = `
+                    <div class="empty-stats">
+                        <div class="empty-stats-icon">🎮</div>
+                        <div class="empty-stats-text">
+                            Aucune partie jouée pour le moment.<br>
+                            Lancez votre première partie pour voir vos statistiques !
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const winRate = stats.gamesPlayed > 0 
+                ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) 
+                : 0;
+            
+            const avgAttempts = calculateAverageAttempts(stats);
+            
+            container.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.gamesPlayed}</div>
+                        <div class="stat-label">Parties jouées</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${winRate}%</div>
+                        <div class="stat-label">Taux de réussite</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.currentStreak}</div>
+                        <div class="stat-label">Série actuelle</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.maxStreak}</div>
+                        <div class="stat-label">Meilleure série</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${avgAttempts}</div>
+                        <div class="stat-label">Moy. d'essais</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.gamesWon}</div>
+                        <div class="stat-label">Victoires</div>
+                    </div>
+                </div>
+                
+                <div class="distribution-section">
+                    <div class="distribution-title">📈 Distribution des essais</div>
+                    <div class="distribution-chart">
+                        ${generateDistributionChart(stats)}
+                    </div>
+                </div>
+                
+                <button class="reset-stats-btn" onclick="resetStats()">
+                    🗑️ Réinitialiser les statistiques
+                </button>
+            `;
+        }
+
+        function calculateAverageAttempts(stats) {
+            let totalAttempts = 0;
+            let totalWins = 0;
+            
+            for (let i = 1; i <= 10; i++) {
+                const count = stats.guessDistribution[i] || 0;
+                totalAttempts += i * count;
+                totalWins += count;
+            }
+            
+            const elevenPlus = stats.guessDistribution['11+'] || 0;
+            totalAttempts += 11 * elevenPlus;
+            totalWins += elevenPlus;
+            
+            return totalWins > 0 ? (totalAttempts / totalWins).toFixed(1) : '0';
+        }
+
+        function generateDistributionChart(stats) {
+            const maxCount = Math.max(...Object.values(stats.guessDistribution));
+            let html = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const count = stats.guessDistribution[i] || 0;
+                const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
+                
+                html += `
+                    <div class="chart-row">
+                        <div class="chart-label">${i} essai${i > 1 ? 's' : ''}</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar" style="width: ${percentage}%">
+                                <span class="chart-value">${count}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            const elevenPlus = stats.guessDistribution['11+'] || 0;
+            const percentageElevenPlus = maxCount > 0 ? (elevenPlus / maxCount) * 100 : 0;
+            
+            html += `
+                <div class="chart-row">
+                    <div class="chart-label">11+ essais</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar" style="width: ${percentageElevenPlus}%">
+                            <span class="chart-value">${elevenPlus}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        function resetStats() {
+            if (confirm('Êtes-vous sûr de vouloir réinitialiser toutes vos statistiques ? Cette action est irréversible.')) {
+                localStorage.removeItem('psgQuizStats');
+                displayStats();
+            }
+        }
+
+        
+
+function getStats() {
+    const saved = localStorage.getItem('psgQuizStats');
+    if (!saved) {
+        return {
+            gamesPlayed: 0,
+            gamesWon: 0,
+            currentStreak: 0,
+            maxStreak: 0,
+            guessDistribution: {
+                1: 0, 2: 0, 3: 0, 4: 0, 5: 0,
+                6: 0, 7: 0, 8: 0, 9: 0, 10: 0,
+                '11+': 0
+            },
+            lastPlayedDate: null
+        };
+    }
+    return JSON.parse(saved);
+}
+
+function saveStats(stats) {
+    localStorage.setItem('psgQuizStats', JSON.stringify(stats));
+}
+
+function calculateAverageAttempts(stats) {
+    let totalAttempts = 0;
+    let totalWins = 0;
+    
+    for (let i = 1; i <= 10; i++) {
+        const count = stats.guessDistribution[i] || 0;
+        totalAttempts += i * count;
+        totalWins += count;
+    }
+    
+    const elevenPlus = stats.guessDistribution['11+'] || 0;
+    totalAttempts += 11 * elevenPlus;
+    totalWins += elevenPlus;
+    
+    return totalWins > 0 ? (totalAttempts / totalWins).toFixed(1) : '0';
+}
+
+function generateDistributionChart(stats) {
+    const maxCount = Math.max(...Object.values(stats.guessDistribution));
+    let html = '';
+    
+    for (let i = 1; i <= 10; i++) {
+        const count = stats.guessDistribution[i] || 0;
+        const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
+        
+        html += `
+            <div class="chart-row">
+                <div class="chart-label">${i} essai${i > 1 ? 's' : ''}</div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="width: ${percentage}%">
+                        <span class="chart-value">${count}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    const elevenPlus = stats.guessDistribution['11+'] || 0;
+    const percentageElevenPlus = maxCount > 0 ? (elevenPlus / maxCount) * 100 : 0;
+    
+    html += `
+        <div class="chart-row">
+            <div class="chart-label">11+ essais</div>
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="width: ${percentageElevenPlus}%">
+                    <span class="chart-value">${elevenPlus}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return html;
+}
+
+function displayStats() {
+    const stats = getStats();
+    const container = document.getElementById('statsContent');
+    
+    if (!container) {
+        console.error('Element #statsContent introuvable');
+        return;
+    }
+    
+    if (stats.gamesPlayed === 0) {
+        container.innerHTML = `
+            <div class="empty-stats">
+                <div class="empty-stats-icon">🎮</div>
+                <div class="empty-stats-text">
+                    Aucune partie jouée pour le moment.<br>
+                    Lancez votre première partie pour voir vos statistiques !
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    const winRate = stats.gamesPlayed > 0 
+        ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) 
+        : 0;
+    
+    const avgAttempts = calculateAverageAttempts(stats);
+    
+    container.innerHTML = `
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">${stats.gamesPlayed}</div>
+                <div class="stat-label">Parties jouées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${winRate}%</div>
+                <div class="stat-label">Taux de réussite</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${stats.currentStreak}</div>
+                <div class="stat-label">Série actuelle</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${stats.maxStreak}</div>
+                <div class="stat-label">Meilleure série</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${avgAttempts}</div>
+                <div class="stat-label">Moy. d'essais</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${stats.gamesWon}</div>
+                <div class="stat-label">Victoires</div>
+            </div>
+        </div>
+        
+        <div class="distribution-section">
+            <div class="distribution-title">Distribution des essais</div>
+            <div class="distribution-chart">
+                ${generateDistributionChart(stats)}
+            </div>
+        </div>
+        
+        <button class="reset-stats-btn" onclick="resetStats()">
+            Réinitialiser les statistiques
+        </button>
+    `;
+}
+
+function resetStats() {
+    if (confirm('Êtes-vous sûr de vouloir réinitialiser toutes vos statistiques ? Cette action est irréversible.')) {
+        localStorage.removeItem('psgQuizStats');
+        displayStats();
+    }
+}
+
+function updateStatsAfterGame(attempts, won) {
+    const stats = getStats();
+    const currentDate = new Date().toISOString();
+    
+    stats.gamesPlayed++;
+    
+    if (won) {
+        stats.gamesWon++;
+        
+        if (attempts <= 10) {
+            stats.guessDistribution[attempts]++;
+        } else {
+            stats.guessDistribution['11+']++;
+        }
+        
+        if (stats.lastPlayedDate) {
+            const lastDate = new Date(stats.lastPlayedDate);
+            const today = new Date(currentDate);
+            const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) {
+                stats.currentStreak++;
+            } else if (diffDays > 1) {
+                stats.currentStreak = 1;
+            }
+        } else {
+            stats.currentStreak = 1;
+        }
+        
+        if (stats.currentStreak > stats.maxStreak) {
+            stats.maxStreak = stats.currentStreak;
+        }
+    } else {
+        stats.currentStreak = 0;
+    }
+    
+    stats.lastPlayedDate = currentDate;
+    saveStats(stats);
+}

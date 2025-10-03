@@ -1,0 +1,173 @@
+/* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(0, 102, 204, 0.1);
+            border: 1px solid rgba(0, 102, 204, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 102, 204, 0.2);
+        }
+
+
+
+        .stat-label {
+            font-size: 13px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Distribution Chart */
+        .distribution-section {
+            margin-top: 30px;
+        }
+
+        .distribution-title {
+            color: #0066cc;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .distribution-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-label {
+            min-width: 60px;
+            font-size: 14px;
+            color: #e0e0e0;
+            text-align: right;
+        }
+
+        .chart-bar-container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            height: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0066cc, #0088ff);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            min-width: 30px;
+        }
+
+        .chart-value {
+            color: #fff;
+            font-size: 13px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        /* Reset Button */
+        .reset-stats-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            background: rgba(204, 0, 0, 0.2);
+            border: 1px solid rgba(204, 0, 0, 0.5);
+            border-radius: 8px;
+            color: #ff6666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reset-stats-btn:hover {
+            background: rgba(204, 0, 0, 0.3);
+            border-color: #cc0000;
+            color: #ff4444;
+        }
+
+         /* Empty State */
+        .empty-stats {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
+        }
+
+        .empty-stats-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .empty-stats-text {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+
+            .modal-body {
+                padding: 20px 15px;
+            }
+
+            .modal-body h2 {
+                font-size: 22px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .chart-label {
+                min-width: 50px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-body h2 {
+                font-size: 20px;
+            }
+
+
+            .stat-label {
+                font-size: 11px;
+            }
+        }
+
+        /* Prevent search bar from showing */
+        body.modal-open .search-container,
+        body.modal-open .suggestions {
+            display: none !important;
+            pointer-events: none !important;
+            opacity: 0 !important;
+        }
