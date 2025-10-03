@@ -103,6 +103,7 @@
         }
 
         @media (max-width: 400px) {
+            
             .nav-box {
                 padding: 8px 10px;
                 gap: 4px;
@@ -118,6 +119,32 @@
                 height: 22px;
             }
         }
+
+        @media (max-width: 435px) {
+            
+            .nav-container {
+                max-width: 380px;
+            }
+
+        }
+
+        @media (max-width: 395px) {
+            
+            .nav-container {
+                max-width: 320px;
+            }
+
+        }
+
+            @media (max-width: 325px) {
+            
+            .nav-container {
+                max-width: 280px;
+            }
+
+        }
+
+
 
         /* Modal Styles */
         .modal {

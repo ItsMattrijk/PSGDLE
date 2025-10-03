@@ -826,14 +826,43 @@ function adjustMargin() {
     // Vérifie si au moins un bouton d'indice est visible
     const hasVisibleHints = Object.values(hintButtons).some(hint => hint.visible);
     
-    if (hasVisibleHints) {
-        container.style.marginTop = '0';
-        container.style.marginBottom = '120px';
-        searchContainer.style.marginTop = '-120px';
-    } else {
-        container.style.marginTop = '-1200px';
-        container.style.marginBottom = '0';
-        searchContainer.style.marginTop = '-10px';
+    const width = window.innerWidth;
+    
+    // TRÈS PETIT ÉCRAN (≤ 440px) - Le plus compact
+    if (width <= 440) {
+        if (hasVisibleHints) {
+            container.style.marginTop = '-120px'; // Remonté davantage
+            container.style.marginBottom = '70px';
+            searchContainer.style.marginTop = '-70px';
+        } else {
+            container.style.marginTop = '-800px';
+            container.style.marginBottom = '0';
+            searchContainer.style.marginTop = '0';
+        }
+    }
+    // MOBILE STANDARD (441px - 800px) - Moyennement compact
+    else if (width <= 800) {
+        if (hasVisibleHints) {
+            container.style.marginTop = '-80px'; // Aussi remonté un peu plus
+            container.style.marginBottom = '90px';
+            searchContainer.style.marginTop = '-90px';
+        } else {
+            container.style.marginTop = '-1000px';
+            container.style.marginBottom = '0';
+            searchContainer.style.marginTop = '0';
+        }
+    } 
+    // DESKTOP (> 800px) - Le plus spacieux
+    else {
+        if (hasVisibleHints) {
+            container.style.marginTop = '0';
+            container.style.marginBottom = '120px';
+            searchContainer.style.marginTop = '-120px';
+        } else {
+            container.style.marginTop = '-1200px';
+            container.style.marginBottom = '0';
+            searchContainer.style.marginTop = '-10px';
+        }
     }
 }
 
@@ -1006,7 +1035,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (aboutModal) enableModalScroll(aboutModal);
 });
 
-// REMPLACER VOTRE CODE ACTUEL PAR :
 document.addEventListener('DOMContentLoaded', () => {
   const statsModal = document.getElementById('statsModal');
   const openStatsBtn = document.getElementById('openStatsModal');
@@ -1426,4 +1454,149 @@ function updateStatsAfterGame(attempts, won) {
     
     stats.lastPlayedDate = currentDate;
     saveStats(stats);
+}
+
+// ===== FONCTION DE RÉINITIALISATION COMPLÈTE =====
+function resetGame() {
+    console.log("🔄 Réinitialisation du jeu...");
+    
+    // 1. Réinitialiser les joueurs sélectionnés
+    joueursSelectionnes = [];
+    
+    // 2. Supprimer la victory box si elle existe
+    const victoryBox = document.getElementById('victory-box');
+    if (victoryBox) {
+        victoryBox.remove();
+    }
+    
+    // 3. Réactiver la barre de recherche
+    if (searchInput) {
+        searchInput.disabled = false;
+        searchInput.placeholder = "Chercher un joueur...";
+        searchInput.value = '';
+    }
+    
+    // 4. Vider l'affichage des joueurs sélectionnés
+    if (selectedPlayersContainer) {
+        selectedPlayersContainer.innerHTML = '';
+    }
+    
+    // 5. Réinitialiser les boutons d'indices
+    hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false, revealed: false };
+    hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false, revealed: false };
+    hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false, revealed: false };
+    renderHintButtons();
+    
+    // 6. Retirer la classe expanded-parcours si elle existe
+    const boxEl = document.querySelector('.box');
+    if (boxEl) {
+        boxEl.classList.remove('expanded-parcours');
+    }
+    
+    // 7. Réafficher le sous-titre
+    updateSubtitleVisibility();
+    
+    // 8. Ajuster les marges
+    adjustMargin();
+    
+    // 9. Masquer les suggestions
+    hideSuggestions();
+    
+    // 10. Supprimer l'état de jeu sauvegardé
+    localStorage.removeItem("psgQuizState");
+    
+    // 11. Générer un nouveau joueur du jour (OPTIONNEL - uniquement pour dev/test)
+    // Si tu veux garder le joueur du jour actuel, commente ces 2 lignes
+    regenererJoueurAleatoire();
+    
+    console.log("✅ Jeu réinitialisé !");
+    console.log("Nouveau joueur:", joueurDuJour?.nom);
+}
+
+// ===== RACCOURCI CLAVIER POUR RESET =====
+let resetKeySequence = [];
+const RESET_CODE = ['r', 'e', 's', 'e', 't'];
+const RESET_SEQUENCE_TIMEOUT = 2000;
+let resetSequenceTimer = null;
+
+document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+
+    resetKeySequence.push(e.key.toLowerCase());
+
+    clearTimeout(resetSequenceTimer);
+    resetSequenceTimer = setTimeout(() => {
+        resetKeySequence = [];
+    }, RESET_SEQUENCE_TIMEOUT);
+
+    if (resetKeySequence.length > RESET_CODE.length) {
+        resetKeySequence.shift();
+    }
+
+    if (resetKeySequence.length === RESET_CODE.length) {
+        const isMatch = resetKeySequence.every((key, index) => key === RESET_CODE[index]);
+        
+        if (isMatch) {
+            console.log("🔓 Code secret activé !");
+            resetGame();
+            resetKeySequence = [];
+        }
+    }
+});
+
+// ===== APPUI LONG SUR LE LOGO (3s) pour RESET =====
+const logo = document.querySelector("header img");
+if (logo) {
+    logo.draggable = false;
+    logo.style.userSelect = 'none';
+    logo.style.webkitUserSelect = 'none';
+    logo.style.touchAction = 'manipulation';
+    logo.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    const LONG_PRESS_DURATION = 3000;
+    let longPressTimer = null;
+    let pointerDown = false;
+    let startX = 0, startY = 0;
+
+    function startLongPress(e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        if (e.cancelable) e.preventDefault();
+
+        pointerDown = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        if (logo.setPointerCapture && typeof e.pointerId !== 'undefined') {
+            try { logo.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+
+        longPressTimer = setTimeout(() => {
+            resetGame(); // Appelle la fonction de reset
+            cancelLongPress();
+        }, LONG_PRESS_DURATION);
+    }
+
+    function cancelLongPress(e) {
+        pointerDown = false;
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+        if (e && logo.releasePointerCapture && typeof e.pointerId !== 'undefined') {
+            try { logo.releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+    }
+
+    function onPointerMove(e) {
+        if (!pointerDown) return;
+        const dx = Math.abs(e.clientX - startX);
+        const dy = Math.abs(e.clientY - startY);
+        if (dx > 10 || dy > 10) cancelLongPress(e);
+    }
+
+    logo.addEventListener('pointerdown', startLongPress, { passive: false });
+    logo.addEventListener('pointerup', cancelLongPress);
+    logo.addEventListener('pointercancel', cancelLongPress);
+    logo.addEventListener('pointermove', onPointerMove);
+    logo.addEventListener('touchstart', (e) => { if (e.cancelable) e.preventDefault(); }, { passive: false });
 }

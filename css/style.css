@@ -65,4 +65,57 @@ img {
     background-size: 320%;
     min-height: 100svh;
   }
+
+  
+}
+
+@media (max-width: 1440px) {
+
+.main {
+margin-top: 80px;
+
+  }
+  
+}
+
+@media (max-width: 1024px) {
+
+.main {
+margin-top: 80px;
+
+  }
+  
+}
+
+@media (max-width: 790px) {
+
+.main {
+margin-top: 120px;
+
+  }
+  
+}
+
+@media (max-width: 390px) {
+
+.main {
+margin-top: 120px;
+
+  }
+  
+}
+
+@media (max-width: 385px) {
+
+.main {
+margin-top: 150px;
+
+  }
+  
+}
+
+@media (min-width: 438px) and (max-width: 480px) {
+  .main {
+    margin-top: 100px;
+  }
 }
