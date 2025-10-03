@@ -244,14 +244,22 @@ function showVictoryBox() {
         </div>
     `;
     
-    selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
+ selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
 
+// Scroll plus robuste pour mobile et desktop
+setTimeout(() => {
     const victoryBox = document.getElementById('victory-box');
     if (victoryBox) {
-        victoryBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Sur mobile, scroller vers le haut de la page
+        if (window.innerWidth <= 768) {
+            window.scrollTo({ top: victoryBox.offsetTop - 20, behavior: 'smooth' });
+        } else {
+            victoryBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
+}, 100);
 
-    setInterval(updateCountdown, 1000);
+setInterval(updateCountdown, 1000);
 
     saveGameState();
 }
@@ -856,20 +864,5 @@ function loadGameState() {
 }
 
 
-(function() {
-  function updateVh() {
-    // prefer visualViewport if available (gère mieux la barre d'adresse)
-    const viewH = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
-    document.documentElement.style.setProperty('--vh', `${viewH * 0.01}px`);
-  }
 
-  updateVh();
-  window.addEventListener('resize', updateVh);
-  window.addEventListener('orientationchange', updateVh);
 
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', updateVh);
-    // parfois utile si le navigateur change la visible area au scroll
-    window.visualViewport.addEventListener('scroll', updateVh);
-  }
-})();
