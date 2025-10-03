@@ -176,6 +176,7 @@
     transform: scale(1) translateY(0);
 }
 
+
 /* Bouton débloqué (cliquable) */
 .hint-button.unlocked {
     cursor: pointer;
