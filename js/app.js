@@ -330,26 +330,12 @@ function selectPlayer(playerId) {
 
 
     // Vérifier la victoire seulement si on n'a pas déjà gagné
-   // if (comparison?.isCorrectPlayer && !alreadyWon) {
-       // setTimeout(() => {
-         //   showVictoryBox();
-       // }, 3000);
-   // }
-
-    // Scroll vers la box victoire
-setTimeout(() => {
-    const victoryBox = document.getElementById('victory-box');
-    if (victoryBox) {
-        if (window.innerWidth <= 768) {
-            // Sur mobile, scroll immédiat pour ne pas retarder l'affichage
-            window.scrollTo({ top: victoryBox.offsetTop - 20, behavior: 'auto' });
-        } else {
-            // Sur PC, scroll smooth
-            victoryBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+   if (comparison?.isCorrectPlayer && !alreadyWon) {
+       setTimeout(() => {
+            showVictoryBox();
+        }, 3000);
     }
-}, 100);
-
+
 
     saveGameState();
 }
