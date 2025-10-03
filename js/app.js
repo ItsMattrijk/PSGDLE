@@ -209,19 +209,14 @@ function renderHintButtons() {
 
 
 
-
 // ===== VICTOIRE =====
 function showVictoryBox() {
     // Éviter de créer plusieurs fois la box
     if (document.getElementById('victory-box')) return;
     
-    // Désactive la recherche et ferme le clavier mobile
     searchInput.disabled = true;
     searchInput.placeholder = "Joueur trouvé ! Revenez demain...";
-    if (document.activeElement) {
-        document.activeElement.blur(); // force la fermeture du clavier
-    }
-
+    
     const victoryHTML = `
         <div class="victory-container" id="victory-box">
             <div class="box">
@@ -249,26 +244,25 @@ function showVictoryBox() {
         </div>
     `;
     
-    selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
+ selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
 
-    // Scroll robuste pour mobile et PC
-    setTimeout(() => {
-        const victoryBox = document.getElementById('victory-box');
-        if (victoryBox) {
-            const targetTop = victoryBox.getBoundingClientRect().top + window.scrollY - 20;
-            (document.scrollingElement || document.documentElement).scrollTo({
-                top: targetTop,
-                behavior: "smooth"
-            });
+// Scroll plus robuste pour mobile et desktop
+setTimeout(() => {
+    const victoryBox = document.getElementById('victory-box');
+    if (victoryBox) {
+        // Sur mobile, scroller vers le haut de la page
+        if (window.innerWidth <= 768) {
+            window.scrollTo({ top: victoryBox.offsetTop - 20, behavior: 'smooth' });
+        } else {
+            victoryBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }, 200);
+    }
+}, 100);
 
-    setInterval(updateCountdown, 1000);
+setInterval(updateCountdown, 1000);
 
     saveGameState();
 }
-
-
 
 // ===== RECHERCHE =====
 function searchPlayers(query) {
