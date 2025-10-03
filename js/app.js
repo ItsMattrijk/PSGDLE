@@ -217,6 +217,9 @@ function showVictoryBox() {
     
     searchInput.disabled = true;
     searchInput.placeholder = "Joueur trouvé ! Revenez demain...";
+
+    incrementGlobalSuccessCount();
+    updateSuccessMessage();
     
     const victoryHTML = `
         <div class="victory-container" id="victory-box">
@@ -705,6 +708,7 @@ async function initApp() {
     selectDailyPlayer();
     renderHintButtons();
     loadGameState();
+    updateSuccessMessage();
     console.log("Application prête !");
 }
 
@@ -1600,3 +1604,32 @@ if (logo) {
     logo.addEventListener('pointermove', onPointerMove);
     logo.addEventListener('touchstart', (e) => { if (e.cancelable) e.preventDefault(); }, { passive: false });
 }
+
+// ===== SYSTÈME DE COMPTEUR GLOBAL =====
+function getGlobalSuccessCount() {
+    const saved = localStorage.getItem('psgGlobalSuccess');
+    if (!saved) {
+        return {
+            count: 0,
+            date: getDailySeed()
+        };
+    }
+    return JSON.parse(saved);
+}
+
+function incrementGlobalSuccessCount() {
+    const data = getGlobalSuccessCount();
+    const currentSeed = getDailySeed();
+    
+    // Réinitialiser le compteur si c'est un nouveau jour
+    if (data.date !== currentSeed) {
+        data.count = 1;
+        data.date = currentSeed;
+    } else {
+        data.count++;
+    }
+    
+    localStorage.setItem('psgGlobalSuccess', JSON.stringify(data));
+    return data.count;
+}
+
