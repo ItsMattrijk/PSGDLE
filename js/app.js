@@ -863,6 +863,49 @@ function loadGameState() {
     }
 }
 
+// ===== RESET PAR APPUI LONG SUR LE LOGO =====
+const logo = document.querySelector("header img");
+let longPressTimer;
+
+function resetGame() {
+    console.log("📱 Reset via appui long sur le logo !");
+    
+    joueursSelectionnes = [];
+    const victoryBox = document.getElementById('victory-box');
+    if (victoryBox) victoryBox.remove();
+
+    searchInput.disabled = false;
+    searchInput.placeholder = "Chercher un joueur...";
+
+    regenererJoueurAleatoire();
+
+    selectedPlayersContainer.innerHTML = '';
+
+    // Réinitialiser les indices
+    hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false };
+    hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false };
+    hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false };
+    renderHintButtons();
+    updateSubtitleVisibility();
+
+    console.log("🎮 Nouveau joueur généré !");
+}
+
+// Gestion de l’appui long (3 secondes)
+function startLongPress() {
+    longPressTimer = setTimeout(() => {
+        resetGame();
+    }, 3000); // 3 secondes
+}
+
+function cancelLongPress() {
+    clearTimeout(longPressTimer);
+}
+
+// Mobile (touch)
+logo.addEventListener("touchstart", startLongPress);
+logo.addEventListener("touchend", cancelLongPress);
+logo.addEventListener("touchmove", cancelLongPress);
 
 
 
