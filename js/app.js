@@ -891,8 +891,8 @@ function resetGame() {
     console.log("🎮 Nouveau joueur généré !");
 }
 
-// Gestion de l’appui long (3 secondes)
-function startLongPress() {
+function startLongPress(e) {
+    e.preventDefault(); // ⚡ Empêche l'action par défaut (menu télécharger image)
     longPressTimer = setTimeout(() => {
         resetGame();
     }, 3000); // 3 secondes
@@ -903,9 +903,14 @@ function cancelLongPress() {
 }
 
 // Mobile (touch)
-logo.addEventListener("touchstart", startLongPress);
+logo.addEventListener("touchstart", startLongPress, { passive: false });
 logo.addEventListener("touchend", cancelLongPress);
 logo.addEventListener("touchmove", cancelLongPress);
+
+// PC (souris)
+logo.addEventListener("mousedown", startLongPress);
+logo.addEventListener("mouseup", cancelLongPress);
+logo.addEventListener("mouseleave", cancelLongPress);
 
 
 
