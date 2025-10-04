@@ -6,6 +6,8 @@ const searchInput = document.getElementById('searchInput');
 const suggestionsContainer = document.getElementById('suggestions');
 const selectedPlayersContainer = document.getElementById('selectedPlayers');
 
+
+
 // ===== SYSTÈME D'INDICES =====
 let hintButtons = {
     montant_transfert: { unlockAt: 5, visible: false, unlocked: false, revealed: false },
@@ -84,9 +86,6 @@ function selectDailyPlayer() {
     const randomValue = seededRandom(seed);
     const index = Math.floor(randomValue * joueurs.length);
     joueurDuJour = joueurs[index];
-    
-    console.log('=== JOUEUR DU JOUR (DEV) ===');
-    console.log(`Seed: ${seed}, Joueur: ${joueurDuJour.nom}, Index: ${index}/${joueurs.length}`);
     
     return joueurDuJour;
 }
@@ -217,9 +216,6 @@ function showVictoryBox() {
     
     searchInput.disabled = true;
     searchInput.placeholder = "Joueur trouvé ! Revenez demain...";
-
-    incrementGlobalSuccessCount();
-    updateSuccessMessage();
     
     const victoryHTML = `
         <div class="victory-container" id="victory-box">
@@ -248,39 +244,49 @@ function showVictoryBox() {
         </div>
     `;
     
-    selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
+ selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
 
-    setTimeout(() => {
-        const victoryBox = document.getElementById('victory-box');
-        if (victoryBox) {
-            const boxRect = victoryBox.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const targetPosition = boxRect.top + scrollTop - 20;
-            
-            window.scrollTo({ 
-                top: targetPosition, 
-                behavior: 'smooth' 
+// Scroll amélioré pour mobile et desktop
+setTimeout(() => {
+    const victoryBox = document.getElementById('victory-box');
+    if (victoryBox) {
+        // Récupérer la position exacte de la victory box
+        const boxRect = victoryBox.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetPosition = boxRect.top + scrollTop - 20;
+        
+        // Scroll universel qui fonctionne sur tous les appareils
+        window.scrollTo({ 
+            top: targetPosition, 
+            behavior: 'smooth' 
+        });
+        
+        // Fallback pour les anciens navigateurs mobiles
+        if (window.pageYOffset === scrollTop) {
+            victoryBox.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start',
+                inline: 'nearest'
             });
-            
-            if (window.pageYOffset === scrollTop) {
-                victoryBox.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start',
-                    inline: 'nearest'
-                });
-            }
         }
-    }, 150);
+    }
+}, 150);
 
-    setInterval(updateCountdown, 1000);
+setInterval(updateCountdown, 1000);
 
-    // AJOUTER : enregistrer les stats UNE SEULE FOIS
-    updateStatsAfterGame(joueursSelectionnes.length, true);
+    saveGameState();
+
+      // AJOUTER : enregistrer les stats UNE SEULE FOIS
+updateStatsAfterGame(joueursSelectionnes.length, true);
+
     
+
     // Marquer que les stats ont été enregistrées
-    const state = JSON.parse(localStorage.getItem("psgQuizState"));
-    state.statsRecorded = true;
-    localStorage.setItem("psgQuizState", JSON.stringify(state));
+const state = JSON.parse(localStorage.getItem("psgQuizState"));
+state.statsRecorded = true;
+localStorage.setItem("psgQuizState", JSON.stringify(state));
+
+    
 }
 
 // ===== RECHERCHE =====
@@ -708,9 +714,9 @@ async function initApp() {
     selectDailyPlayer();
     renderHintButtons();
     loadGameState();
-    updateSuccessMessage();
     console.log("Application prête !");
 }
+
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
@@ -776,7 +782,7 @@ function loadGameState() {
         updateHintButtons();
         updateSubtitleVisibility();
 
-        // Restaurer la victoire si déjà gagnée
+// Restaurer la victoire si déjà gagnée
         // MAIS NE PAS RÉENREGISTRER LES STATS
         if (state.hasWon) {
             // Recréer la victory box sans appeler updateStatsAfterGame
@@ -815,9 +821,33 @@ function loadGameState() {
             selectedPlayersContainer.insertAdjacentHTML('afterend', victoryHTML);
             setInterval(updateCountdown, 1000);
             
+            // Scroll vers la victory box après chargement
+            setTimeout(() => {
+                const victoryBox = document.getElementById('victory-box');
+                if (victoryBox) {
+                    const boxRect = victoryBox.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const targetPosition = boxRect.top + scrollTop - 20;
+                    
+                    window.scrollTo({ 
+                        top: targetPosition, 
+                        behavior: 'smooth' 
+                    });
+                    
+                    if (window.pageYOffset === scrollTop) {
+                        victoryBox.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                    }
+                }
+            }, 150);
+            
             // NE PAS APPELER updateStatsAfterGame() ICI
         }
-    } catch (e) {
+        }
+     catch (e) {
         console.error("Erreur de chargement du state:", e);
         localStorage.removeItem("psgQuizState");
     }
@@ -835,7 +865,7 @@ function adjustMargin() {
     // TRÈS PETIT ÉCRAN (≤ 440px) - Le plus compact
     if (width <= 440) {
         if (hasVisibleHints) {
-            container.style.marginTop = '-120px'; // Remonté davantage
+            container.style.marginTop = '-100px'; // Remonté davantage
             container.style.marginBottom = '70px';
             searchContainer.style.marginTop = '-70px';
         } else {
@@ -844,6 +874,19 @@ function adjustMargin() {
             searchContainer.style.marginTop = '0';
         }
     }
+
+        else if (width <= 480 && width > 438) {
+        if (hasVisibleHints) {
+            container.style.marginTop = '0px';
+            container.style.marginBottom = '900px';
+            searchContainer.style.marginTop = '-90px';
+        } else {
+            container.style.marginTop = '-1000px';
+            container.style.marginBottom = '0';
+            searchContainer.style.marginTop = '0';
+        }
+    } 
+
     // MOBILE STANDARD (441px - 800px) - Moyennement compact
     else if (width <= 800) {
         if (hasVisibleHints) {
@@ -1458,178 +1501,5 @@ function updateStatsAfterGame(attempts, won) {
     
     stats.lastPlayedDate = currentDate;
     saveStats(stats);
-}
-
-// ===== FONCTION DE RÉINITIALISATION COMPLÈTE =====
-function resetGame() {
-    console.log("🔄 Réinitialisation du jeu...");
-    
-    // 1. Réinitialiser les joueurs sélectionnés
-    joueursSelectionnes = [];
-    
-    // 2. Supprimer la victory box si elle existe
-    const victoryBox = document.getElementById('victory-box');
-    if (victoryBox) {
-        victoryBox.remove();
-    }
-    
-    // 3. Réactiver la barre de recherche
-    if (searchInput) {
-        searchInput.disabled = false;
-        searchInput.placeholder = "Chercher un joueur...";
-        searchInput.value = '';
-    }
-    
-    // 4. Vider l'affichage des joueurs sélectionnés
-    if (selectedPlayersContainer) {
-        selectedPlayersContainer.innerHTML = '';
-    }
-    
-    // 5. Réinitialiser les boutons d'indices
-    hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false, revealed: false };
-    hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false, revealed: false };
-    hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false, revealed: false };
-    renderHintButtons();
-    
-    // 6. Retirer la classe expanded-parcours si elle existe
-    const boxEl = document.querySelector('.box');
-    if (boxEl) {
-        boxEl.classList.remove('expanded-parcours');
-    }
-    
-    // 7. Réafficher le sous-titre
-    updateSubtitleVisibility();
-    
-    // 8. Ajuster les marges
-    adjustMargin();
-    
-    // 9. Masquer les suggestions
-    hideSuggestions();
-    
-    // 10. Supprimer l'état de jeu sauvegardé
-    localStorage.removeItem("psgQuizState");
-    
-    // 11. Générer un nouveau joueur du jour (OPTIONNEL - uniquement pour dev/test)
-    // Si tu veux garder le joueur du jour actuel, commente ces 2 lignes
-    regenererJoueurAleatoire();
-    
-    console.log("✅ Jeu réinitialisé !");
-    console.log("Nouveau joueur:", joueurDuJour?.nom);
-}
-
-// ===== RACCOURCI CLAVIER POUR RESET =====
-let resetKeySequence = [];
-const RESET_CODE = ['r', 'e', 's', 'e', 't'];
-const RESET_SEQUENCE_TIMEOUT = 2000;
-let resetSequenceTimer = null;
-
-document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT') return;
-
-    resetKeySequence.push(e.key.toLowerCase());
-
-    clearTimeout(resetSequenceTimer);
-    resetSequenceTimer = setTimeout(() => {
-        resetKeySequence = [];
-    }, RESET_SEQUENCE_TIMEOUT);
-
-    if (resetKeySequence.length > RESET_CODE.length) {
-        resetKeySequence.shift();
-    }
-
-    if (resetKeySequence.length === RESET_CODE.length) {
-        const isMatch = resetKeySequence.every((key, index) => key === RESET_CODE[index]);
-        
-        if (isMatch) {
-            console.log("🔓 Code secret activé !");
-            resetGame();
-            resetKeySequence = [];
-        }
-    }
-});
-
-// ===== APPUI LONG SUR LE LOGO (3s) pour RESET =====
-const logo = document.querySelector("header img");
-if (logo) {
-    logo.draggable = false;
-    logo.style.userSelect = 'none';
-    logo.style.webkitUserSelect = 'none';
-    logo.style.touchAction = 'manipulation';
-    logo.addEventListener('contextmenu', (e) => e.preventDefault());
-
-    const LONG_PRESS_DURATION = 3000;
-    let longPressTimer = null;
-    let pointerDown = false;
-    let startX = 0, startY = 0;
-
-    function startLongPress(e) {
-        if (e.pointerType === 'mouse' && e.button !== 0) return;
-        if (e.cancelable) e.preventDefault();
-
-        pointerDown = true;
-        startX = e.clientX;
-        startY = e.clientY;
-
-        if (logo.setPointerCapture && typeof e.pointerId !== 'undefined') {
-            try { logo.setPointerCapture(e.pointerId); } catch (err) {}
-        }
-
-        longPressTimer = setTimeout(() => {
-            resetGame(); // Appelle la fonction de reset
-            cancelLongPress();
-        }, LONG_PRESS_DURATION);
-    }
-
-    function cancelLongPress(e) {
-        pointerDown = false;
-        if (longPressTimer) {
-            clearTimeout(longPressTimer);
-            longPressTimer = null;
-        }
-        if (e && logo.releasePointerCapture && typeof e.pointerId !== 'undefined') {
-            try { logo.releasePointerCapture(e.pointerId); } catch (err) {}
-        }
-    }
-
-    function onPointerMove(e) {
-        if (!pointerDown) return;
-        const dx = Math.abs(e.clientX - startX);
-        const dy = Math.abs(e.clientY - startY);
-        if (dx > 10 || dy > 10) cancelLongPress(e);
-    }
-
-    logo.addEventListener('pointerdown', startLongPress, { passive: false });
-    logo.addEventListener('pointerup', cancelLongPress);
-    logo.addEventListener('pointercancel', cancelLongPress);
-    logo.addEventListener('pointermove', onPointerMove);
-    logo.addEventListener('touchstart', (e) => { if (e.cancelable) e.preventDefault(); }, { passive: false });
-}
-
-// ===== SYSTÈME DE COMPTEUR GLOBAL =====
-function getGlobalSuccessCount() {
-    const saved = localStorage.getItem('psgGlobalSuccess');
-    if (!saved) {
-        return {
-            count: 0,
-            date: getDailySeed()
-        };
-    }
-    return JSON.parse(saved);
-}
-
-function incrementGlobalSuccessCount() {
-    const data = getGlobalSuccessCount();
-    const currentSeed = getDailySeed();
-    
-    // Réinitialiser le compteur si c'est un nouveau jour
-    if (data.date !== currentSeed) {
-        data.count = 1;
-        data.date = currentSeed;
-    } else {
-        data.count++;
-    }
-    
-    localStorage.setItem('psgGlobalSuccess', JSON.stringify(data));
-    return data.count;
 }
 

@@ -10,10 +10,10 @@
     position: relative;
 }
 
-/* Container principal - pas de scroll horizontal */
+/* Container principal */
 .players-container {
     width: 100%;
-    overflow: hidden; /* Empêche tout scroll horizontal */
+    overflow: hidden;
     position: relative;
 }
 
@@ -25,7 +25,7 @@
 
 /* Container de pagination pour mobile */
 .players-paginated {
-    display: none; /* Caché par défaut */
+    display: none;
     width: 100%;
 }
 
@@ -220,19 +220,19 @@
 
 /* Classes spécifiques pour différentes longueurs de texte */
 .category-value.text-short {
-    font-size: 16px; /* Texte court */
+    font-size: 16px;
 }
 
 .category-value.text-medium {
-    font-size: 15px; /* Texte moyen */
+    font-size: 15px;
 }
 
 .category-value.text-long {
-    font-size: 3px; /* Texte long - très petit */
+    font-size: 3px;
 }
 
 .category-value.text-very-long {
-    font-size: 3px; /* Texte très long - minimal */
+    font-size: 3px;
 }
 
 /* Ajustement spécifique pour certains types de données */
@@ -301,12 +301,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 16px; /* Hauteur fixe pour forcer 2 lignes max */
+    height: 16px;
     min-height: 16px;
     max-height: 16px;
 }
 
-/* Ajout d'un span pour le prénom et le nom */
+
 .player-name-main .first-name {
     font-size: 6px;
     line-height: 1;
@@ -332,7 +332,7 @@
     text-overflow: ellipsis;
 }
 
-/* Ajustement automatique de la taille pour les noms très longs */
+
 .player-name-main .last-name.long-name {
     font-size: 3px;
 }
@@ -388,7 +388,7 @@
 }
 
 
-/* Desktop - garde l'affichage normal */
+
 @media (min-width: 1025px) {
     .selected-players {
         width: 160%;
@@ -500,7 +500,7 @@
 /* Mobile */
 @media (max-width: 768px) {
     body {
-        overflow-x: hidden; /* Empêche le scroll horizontal sur toute la page */
+        overflow-x: hidden;
     }
     
     .selected-players {
@@ -869,17 +869,17 @@
   .carousel-track {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    width: max-content; /* largeur calculée automatiquement */
+    width: max-content;
   }
 
   .categories-header,
   .player-categories {
-    display: contents; /* garde la grille mais hérite du track */
+    display: contents;
   }
 
   .category-header-item,
   .category {
-    min-width: calc(100vw / 4); /* affiche 4 colonnes max par écran */
+    min-width: calc(100vw / 4);
   }
 }
 
@@ -937,9 +937,7 @@
   .selected-player.new-player .category:nth-child(8) { animation-delay: 1.75s; }
 }
 
-/* Mobile - Animation plus rapide et translation réduite */
-/* Mobile - Animation avec même durée que PC (2.1s) */
-/* Animation pour mobile - ciblage sur player-categories */
+
 @media (max-width: 768px) {
   .player-categories.new-player .category {
     opacity: 0;
@@ -962,23 +960,23 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-bottom: 14px; /* espace pour la scrollbar */
+  padding-bottom: 14px;
 }
 
 /* Container scrollable */
 .carousel-container {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* scroll fluide iOS */
+  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   padding-bottom: 6px;
 }
 
 /* Masquer scrollbar native */
 .carousel-container::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
 }
 .carousel-container {
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 /* Scroll hint */
@@ -1008,7 +1006,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 25%; /* largeur dynamique via JS */
+  width: 25%;
   background: linear-gradient(90deg, #E30613, #FF4D4D);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.4);

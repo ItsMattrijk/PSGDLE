@@ -116,7 +116,7 @@ margin-top: 150px;
 
 @media (min-width: 438px) and (max-width: 480px) {
   .main {
-    margin-top: 100px;
+    margin-top: 10px;
   }
 }
 

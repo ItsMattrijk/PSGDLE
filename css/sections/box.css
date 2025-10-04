@@ -14,7 +14,7 @@
     padding: 2.5rem 2rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
-    transition: all 0.4s ease; /* <--- permet d’animer la croissance */
+    transition: all 0.4s ease;
     font-family: 'Poppins', sans-serif;
     -webkit-box-shadow: 0px 0px 101px 17px rgba(0, 65, 112, 0.489);
     -moz-box-shadow: 0px 0px 101px 17px rgba(0, 65, 112, 0.489);
@@ -223,7 +223,7 @@
     font-size: 0.8rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.6);
-    margin-bottom: auto; /* pousse le cadenas en bas */
+    margin-bottom: auto;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: color 0.3s ease;
@@ -235,7 +235,7 @@
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Zone cadenas (toujours en bas et centré) */
+/* Zone cadenas  */
 .hint-lock {
     display: flex;
     flex-direction: column;
@@ -250,7 +250,7 @@
     font-weight: 500;
 }
 
-/* Valeur de l'indice (cachée par défaut) */
+/* Valeur de l'indice */
 .hint-value {
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.9);
@@ -284,18 +284,18 @@
 
     /* === Styles spécifiques pour l'indice "Parcours" === */
 .hint-button[data-hint="parcours"] {
-    min-width: 100px;   /* même largeur que les autres par défaut */
+    min-width: 100px;   
     max-width: 100px;
-    height: 160px;      /* même hauteur que les autres */
-    transition: all 0.4s ease; /* permet l'animation */
-    overflow: hidden;   /* masque le contenu tant que fermé */
+    height: 160px;     
+    transition: all 0.4s ease;
+    overflow: hidden;
 }
 
 /* Quand l'indice est révélé, on agrandit la box */
 .hint-button[data-hint="parcours"].active {
     min-width: 220px;
     max-width: 260px;
-    height: auto; /* permet à la box de s'adapter */
+    height: auto;
     flex-grow: 1;
 }
 
@@ -305,7 +305,7 @@
     text-align: left;
     white-space: normal;
     word-break: break-word;
-    max-height: 0;       /* fermé par défaut */
+    max-height: 0;      
     opacity: 0;
     overflow-y: hidden;
     line-height: 1.4;
@@ -314,9 +314,9 @@
 
 /* Quand révélé */
 .hint-value-long.revealed {
-    max-height: 250px;   /* se déploie avec animation */
+    max-height: 250px; 
     opacity: 1;
-    overflow-y: auto;    /* scroll seulement si trop long */
+    overflow-y: auto;  
 }
 
 /* Scroll stylisé */
@@ -336,7 +336,7 @@
   }
 
   .hint-button {
-    min-width: 70%;  /* largeur confortable pour le swipe */
+    min-width: 70%; 
     max-width: 80%;
     height: 160px;
   }
