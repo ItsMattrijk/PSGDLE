@@ -1119,24 +1119,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
  // ===== GESTION DES STATISTIQUES =====
         
-        function getStats() {
-            const saved = localStorage.getItem('psgQuizStats');
-            if (!saved) {
-                return {
-                    gamesPlayed: 0,
-                    gamesWon: 0,
-                    currentStreak: 0,
-                    maxStreak: 0,
-                    guessDistribution: {
-                        1: 0, 2: 0, 3: 0, 4: 0, 5: 0,
-                        6: 0, 7: 0, 8: 0, 9: 0, 10: 0,
-                        '11+': 0
-                    },
-                    lastPlayedDate: null
-                };
-            }
-            return JSON.parse(saved);
-        }
+function getStats() {
+    const saved = localStorage.getItem('psgQuizStats');
+    if (!saved) {
+        return {
+            gamesPlayed: 0,
+            gamesWon: 0,
+            currentStreak: 0,
+            maxStreak: 0,
+            guessDistribution: {
+                1: 0, 2: 0, 3: 0, 4: 0, 5: 0,
+                6: 0, 7: 0, 8: 0, 9: 0, 10: 0,
+                '11+': 0
+            },
+            allAttempts: [], // NOUVEAU : stocke tous les nombres d'essais
+            lastPlayedDate: null
+        };
+    }
+    return JSON.parse(saved);
+}
+
 
         function saveStats(stats) {
             localStorage.setItem('psgQuizStats', JSON.stringify(stats));
@@ -1154,8 +1156,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (attempts <= 10) {
                     stats.guessDistribution[attempts]++;
                 } else {
-                    stats.guessDistribution['11+']++;
+                    // enregistrer vraiment le nombre exact d’essais
+                    if (!stats.guessDistribution[attempts]) {
+                        stats.guessDistribution[attempts] = 0;
+                    }
+                    stats.guessDistribution[attempts]++;
                 }
+
                 
                 // Gestion des séries
                 if (stats.lastPlayedDate) {
@@ -1247,23 +1254,30 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        function calculateAverageAttempts(stats) {
-            let totalAttempts = 0;
-            let totalWins = 0;
-            
-            for (let i = 1; i <= 10; i++) {
-                const count = stats.guessDistribution[i] || 0;
-                totalAttempts += i * count;
-                totalWins += count;
-            }
-            
-            const elevenPlus = stats.guessDistribution['11+'] || 0;
-            totalAttempts += 11 * elevenPlus;
-            totalWins += elevenPlus;
-            
-            return totalWins > 0 ? (totalAttempts / totalWins).toFixed(1) : '0';
-        }
-
+function calculateAverageAttempts(stats) {
+    // Utilise le nouveau système avec les valeurs exactes
+    if (stats.allAttempts && stats.allAttempts.length > 0) {
+        const sum = stats.allAttempts.reduce((acc, val) => acc + val, 0);
+        return (sum / stats.allAttempts.length).toFixed(1);
+    }
+    
+    // Fallback : ancienne méthode si allAttempts n'existe pas
+    // (pour compatibilité avec anciennes données)
+    let totalAttempts = 0;
+    let totalWins = 0;
+    
+    for (let i = 1; i <= 10; i++) {
+        const count = stats.guessDistribution[i] || 0;
+        totalAttempts += i * count;
+        totalWins += count;
+    }
+    
+    const elevenPlus = stats.guessDistribution['11+'] || 0;
+    totalAttempts += 11 * elevenPlus;
+    totalWins += elevenPlus;
+    
+    return totalWins > 0 ? (totalAttempts / totalWins).toFixed(1) : '0';
+}
         function generateDistributionChart(stats) {
             const maxCount = Math.max(...Object.values(stats.guessDistribution));
             let html = '';
@@ -1323,17 +1337,38 @@ function getStats() {
                 6: 0, 7: 0, 8: 0, 9: 0, 10: 0,
                 '11+': 0
             },
+            allAttempts: [],  // ← AJOUTE CETTE LIGNE !
             lastPlayedDate: null
         };
     }
-    return JSON.parse(saved);
+    
+    const stats = JSON.parse(saved);
+    
+    // Migration : ajoute allAttempts si inexistant
+    if (!stats.allAttempts) {
+        stats.allAttempts = [];
+    }
+    
+    return stats;
 }
-
 function saveStats(stats) {
     localStorage.setItem('psgQuizStats', JSON.stringify(stats));
 }
 
 function calculateAverageAttempts(stats) {
+    console.log('🔍 calculateAverageAttempts appelée avec:', stats.allAttempts);
+    
+    // Utilise le nouveau système avec les valeurs exactes
+    if (stats.allAttempts && stats.allAttempts.length > 0) {
+        const sum = stats.allAttempts.reduce((acc, val) => acc + val, 0);
+        const result = (sum / stats.allAttempts.length).toFixed(1);
+        console.log('✅ Utilise allAttempts - Somme:', sum, 'Moyenne:', result);
+        return result;
+    }
+    
+    console.log('⚠️ Utilise ancienne méthode');
+    
+    // Fallback : ancienne méthode si allAttempts n'existe pas
     let totalAttempts = 0;
     let totalWins = 0;
     
@@ -1472,12 +1507,20 @@ function updateStatsAfterGame(attempts, won) {
     if (won) {
         stats.gamesWon++;
         
+        // AJOUT CRITIQUE : Stocke le nombre exact d'essais
+        if (!stats.allAttempts) {
+            stats.allAttempts = [];
+        }
+        stats.allAttempts.push(attempts);
+        
+        // Distribution des essais (pour l'affichage du graphique)
         if (attempts <= 10) {
             stats.guessDistribution[attempts]++;
         } else {
             stats.guessDistribution['11+']++;
         }
         
+        // Gestion des séries
         if (stats.lastPlayedDate) {
             const lastDate = new Date(stats.lastPlayedDate);
             const today = new Date(currentDate);
@@ -1502,4 +1545,3 @@ function updateStatsAfterGame(attempts, won) {
     stats.lastPlayedDate = currentDate;
     saveStats(stats);
 }
-
