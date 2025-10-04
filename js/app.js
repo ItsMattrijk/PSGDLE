@@ -256,8 +256,10 @@ setTimeout(() => {
         const targetPosition = boxRect.top + scrollTop - 20;
         
         // Scroll universel qui fonctionne sur tous les appareils
-        safeScrollTo(victoryBox);
-
+        window.scrollTo({ 
+            top: targetPosition, 
+            behavior: 'smooth' 
+        });
         
         // Fallback pour les anciens navigateurs mobiles
         if (window.pageYOffset === scrollTop) {
@@ -352,8 +354,11 @@ function selectPlayer(playerId) {
 
     // Scroll vers la zone des joueurs sélectionnés
     setTimeout(() => {
-safeScrollTo(selectedPlayersContainer);
-
+        selectedPlayersContainer.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+        });
     }, 100);
 
     // Vérifier la victoire seulement si on n'a pas déjà gagné
@@ -1541,30 +1546,3 @@ function updateStatsAfterGame(attempts, won) {
     saveStats(stats);
 }
 
-function safeScrollTo(element) {
-    if (!element) return;
-
-    // Fermer le clavier sur mobile
-    if (document.activeElement) {
-        document.activeElement.blur();
-    }
-
-    // Essai avec smooth scroll
-    element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "nearest"
-    });
-
-    // Vérification après 400ms : si ça n’a pas bougé, on force le scroll
-    setTimeout(() => {
-        const rect = element.getBoundingClientRect();
-        const visible = rect.top >= 0 && rect.bottom <= window.innerHeight;
-        if (!visible) {
-            window.scrollTo({
-                top: rect.top + window.scrollY - 20,
-                behavior: "auto"
-            });
-        }
-    }, 400);
-}
