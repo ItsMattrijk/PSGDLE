@@ -8,6 +8,9 @@
 @import url(sections/victory.css);
 @import url(sections/menu.css);
 @import url(sections/stats.css);
+@import url(sections/selectmode.css);
+@import url(sections/mode2.css);
+
 
 html, body {
   margin: 0;

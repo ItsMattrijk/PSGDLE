@@ -26,11 +26,30 @@
 
 <body>
 
+    <!-- SELECTEUR DE MODE -->
+<div class="mode-selector-wrapper">
+    <div class="mode-selector">
+        <button class="mode-tab active" data-mode="wordle">
+            <span class="emoji">🎮</span>
+            <span>PSGDLE</span>
+        </button>
+        <button class="mode-tab" data-mode="xi">
+            <span class="emoji">⚽</span>
+            <span>LE XI</span>
+            <span class="badge">NOUVEAU</span>
+        </button>
+    </div>
+</div>
+
+<section class="mode-content active" id="wordle-mode">
+
     <div class="nav-container">
         <div class="nav-box">
 <button id="openStatsModal" class="nav-button" title="Statistiques">
   <div class="nav-button-icon icon-stats"></div>
 </button>
+
+
             
         <button id="openModal" class="nav-button" title="Comment jouer ?">
         <div class="nav-button-icon icon-but"></div>
@@ -238,7 +257,225 @@
 </div>
 
 </section>
+</section>
+
+<section class="mode-content" id="xi-mode">
+
+
+ <div class="nav-container">
+        <div class="nav-box">
+
+        <button id="openStatsXIModal" class="nav-button" title="Statistiques">
+        <div class="nav-button-icon icon-stats"></div>
+        </button>
+
+
+            
+        <button id="openLeXIModal" class="nav-button" title="Comment jouer ?">
+        <div class="nav-button-icon icon-but"></div>
+        </button>
+
+            
+        <button id="openQAModal" class="nav-button" title="Questions/Réponses">
+        <div class="nav-button-icon icon-retour"></div>
+        </button>
+
+            
+            <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
+                <div class="nav-button-icon icon-dons"></div>
+            </a>
+            
+        </div>
+    </div>
+
+
+
+<!-- Modal Le XI -->
+<div id="leXIModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeLeXIModal">&times;</button>
+
+    <div class="modal-body">
+      <h2>⚽ Le XI – Mode de jeu #2</h2>
+
+      <h3>🎯 Objectif</h3>
+      <p>Reconstitue la composition exacte (11 titulaires) d’un match historique du PSG.<br>
+      Une nouvelle composition est proposée chaque jour.</p>
+
+      <h3>🎮 Déroulement du jeu</h3>
+      <p><strong>1️⃣ Lancement</strong></p>
+      <p>Un match est sélectionné (exemples : PSG – Real Madrid 1993, PSG – Barça 2017).<br>
+      Le terrain s’affiche avec les 11 postes de la formation réelle, ainsi que le nom du match et sa date pour le contexte.</p>
+
+      <p><strong>2️⃣ Placement des joueurs</strong></p>
+      <p>Clique sur un poste vide pour ouvrir la barre de recherche.<br>
+      Tape un nom : des suggestions apparaissent automatiquement (nom + poste).<br>
+      Seuls les joueurs non encore placés sont proposés.<br>
+      Clique sur un joueur pour le placer sur le terrain.</p>
+
+      <p><strong>3️⃣ Validation</strong></p>
+      <p>Une fois les 11 postes remplis, clique sur « Valider la composition ». Le système compare ta proposition avec la composition réelle :</p>
+      <ul>
+        <li>✅ <strong>Vert :</strong> bon joueur au bon poste</li>
+        <li>🟠 <strong>Orange :</strong> bon joueur, mauvais poste</li>
+        <li>❌ <strong>Rouge :</strong> joueur incorrect</li>
+      </ul>
+      <p>Tu peux ensuite ajuster ta composition et valider à nouveau.</p>
+
+      <h3>🧩 Indices automatiques</h3>
+      <p>À chaque tentative de validation, des indices sont révélés pour les joueurs restants :</p>
+      <ul>
+        <li>1️⃣ Taille</li>
+        <li>2️⃣ Numéro</li>
+        <li>3️⃣ Nationalité</li>
+      </ul>
+
+      <h3>⚙️ Règles du jeu</h3>
+      <ul>
+        <li>Un joueur ne peut être placé qu’une seule fois.</li>
+        <li>La validation est possible uniquement avec 11 joueurs placés.</li>
+        <li>Tu peux déplacer un joueur en maintenant un clic long.</li>
+        <li>Les postes affichés sont indicatifs : libre à toi de placer qui tu veux où tu veux.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Questions/Réponses -->
+<div id="qaModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeQAModal">&times;</button>
+    <div class="modal-body">
+      <h2>À propos de PSGDLE</h2>
+
+      <p>
+        PSGDLE est un jeu indépendant, créé par un passionné, et n’est ni affilié, 
+        ni soutenu par le Paris Saint-Germain.
+      </p>
+
+      <p>
+        Le concept s’inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, 
+        <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, 
+        tout en apportant sa touche unique dédiée aux fans du PSG.
+      </p>
+
+      <h3>Vos retours comptent !</h3>
+      <p>
+        Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
+        Envoyez-nous un message en français à : 
+        <strong>Matt21Graphics@gmail.com</strong>.  
+        J’ai hâte de recevoir vos commentaires et idées !
+      </p>
+
+      <h3>Soutenir PSGDLE</h3>
+      <p>
+        Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, 
+        vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>.  
+        &nbsp;<br><br>Chaque soutien compte !
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<!-- === PSGDLE XI - STATS MODAL (namespaced) === -->
+<div id="statsXIModal" class="psgdle-xi-stats-modal" aria-hidden="true" style="display:none;">
+  <div class="psgdle-xi-modal-content" role="dialog" aria-modal="true" aria-labelledby="psgdle-xi-title">
+    <div class="psgdle-xi-modal-header">
+      <h2 id="psgdle-xi-title" class="psgdle-xi-modal-title">📊 Mes Statistiques</h2>
+      <button id="closeStatsXIModal" class="psgdle-xi-close-btn" aria-label="Fermer">✖</button>
+    </div>
+
+    <div class="psgdle-xi-modal-body">
+      <div class="psgdle-xi-stats-grid">
+        <div class="psgdle-xi-stat-card">
+          <div class="psgdle-xi-stat-value" id="stat-streak">-</div>
+          <div class="psgdle-xi-stat-label">🔥 Série actuelle</div>
+        </div>
+        <div class="psgdle-xi-stat-card">
+          <div class="psgdle-xi-stat-value" id="stat-wins">-</div>
+          <div class="psgdle-xi-stat-label">🏆 Total victoires</div>
+        </div>
+        <div class="psgdle-xi-stat-card">
+          <div class="psgdle-xi-stat-value" id="stat-avg">-</div>
+          <div class="psgdle-xi-stat-label">⚽ Moy. tentatives</div>
+        </div>
+        <div class="psgdle-xi-stat-card">
+          <div class="psgdle-xi-stat-value" id="stat-rate">-</div>
+          <div class="psgdle-xi-stat-label">📈 Taux de réussite</div>
+        </div>
+        <div class="psgdle-xi-stat-card">
+          <div class="psgdle-xi-stat-value" id="stat-best">-</div>
+          <div class="psgdle-xi-stat-label">🧩 Meilleur score</div>
+        </div>
+        <div class="psgdle-xi-stat-card">
+          <div class="psgdle-xi-stat-value" id="stat-top">-</div>
+          <div class="psgdle-xi-stat-label">🎯 Joueurs favoris</div>
+        </div>
+      </div>
+
+      <button id="shareStatsXIBtn" class="psgdle-xi-share-btn">Partager mes stats 📤</button>
+      <button id="resetStatsXIBtn" class="psgdle-xi-reset-btn">Réinitialiser les stats</button>
+    </div>
+  </div>
+</div>
+<!-- === FIN STATS MODAL === -->
+
+
+
+
+ <!-- Mode XI -->
+    <section class="mode-content active" id="xi-mode">
+        <div class="xi-container">
+            <!-- En-tête du match -->
+            <div class="match-header">
+                <!-- Rempli dynamiquement par JS -->
+            </div>
+
+            <!-- Terrain -->
+            <div class="field-wrapper">
+                <div class="field">
+                    <!-- Généré dynamiquement par JS -->
+                </div>
+
+                <div class="validate-btn">
+                    <button id="validateBtn" disabled>
+                        Valider la composition (0/11)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de recherche de joueur -->
+    <div id="playerSearchModal" class="search-modal">
+        <div class="search-modal-content">
+            <div class="search-modal-header">
+                <div class="search-modal-title">Rechercher un joueur</div>
+                <button id="closeSearchModal" class="search-modal-close">&times;</button>
+            </div>
+
+            <div class="search-input-wrapper">
+                <input 
+                    type="text" 
+                    id="playerSearchInput" 
+                    class="player-search-input"
+                    placeholder="Tapez le nom d'un joueur..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <div id="searchSuggestions" class="search-suggestions">
+                <!-- Suggestions générées par JS -->
+            </div>
+        </div>
+    </div>
+
+</section>
 
 <script src="js/app.js"></script>
+<script src="js/switch.js"></script>
+<script src="js/ximode.js"></script>
 </body>
 </html>

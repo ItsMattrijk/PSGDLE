@@ -1,0 +1,178 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "opponent": "FC Barcelone",
+      "score": "4-0",
+      "date": "14 février 2017",
+      "competition": "1/8 aller • UEFA Champions League • Parc des Princes",
+      "formation": "4-2-3-1",
+      "lineup": {
+        "GK": [75],
+        "DEF": [81, 19, 3, 83],
+        "MIL": [53, 14],
+        "ATT": [84, 27, 18],
+        "ST": [16]
+      }
+    },
+    {
+      "id": 2,
+      "opponent": "Real Madrid",
+      "score": "3-0",
+      "date": "18 septembre 2019",
+      "competition": "Phase de groupes • UEFA Champions League • Parc des Princes",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [24],
+        "DEF": [82, 19, 15, 83],
+        "MIL": [3, 85, 14],
+        "ATT": [18, 87, 86]
+      }
+    },
+    {
+      "id": 3,
+      "opponent": "Bayern Munich",
+      "score": "3-0",
+      "date": "27 septembre 2017",
+      "competition": "Phase de groupes • UEFA Champions League • Parc des Princes",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [54],
+        "DEF": [81, 15, 3, 69],
+        "MIL": [53, 42, 14],
+        "ATT": [12, 16, 11 ]
+      }
+    },
+    {
+      "id": 4,
+      "opponent": "Chelsea",
+      "score": "2-1",
+      "date": "17 février 2015",
+      "competition": "1/8 aller • UEFA Champions League • Parc des Princes",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [88],
+        "DEF": [61, 15, 3, 64],
+        "MIL": [14, 26, 27],
+        "ATT": [16, 17, 89]
+      }
+    },
+    {
+      "id": 5,
+      "opponent": "Manchester United",
+      "score": "2-0",
+      "date": "6 mars 2019",
+      "competition": "1/8 retour • UEFA Champions League • Parc des Princes",
+      "formation": "4-2-3-1",
+      "lineup": {
+        "GK": [79],
+        "DEF": [82, 19, 15, 90],
+        "MIL": [3, 14],
+        "ATT": [18, 84, 69],
+        "ST": [11]
+      }
+    },
+    {
+      "id": 6,
+      "opponent": "Inter Milan",
+      "score": "5-0",
+      "date": "31 mai 2025",
+      "competition": "Finale • UEFA Champions League • Allianz Arena",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [1],
+        "DEF": [30, 33, 3, 2],
+        "MIL": [8, 7, 32],
+        "ATT": [29, 9, 31]
+      }
+    },
+    {
+      "id": 7,
+      "opponent": "Manchester City",
+      "score": "2-0",
+      "date": "28 septembre 2021",
+      "competition": "Phase de groupes • UEFA Champions League • Parc des Princes",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [1],
+        "DEF": [30, 19, 3, 2],
+        "MIL": [91, 14, 85],
+        "ATT": [12, 11, 13]
+      }
+    },
+  {
+      "id": 8,
+      "opponent": "Chelsea",
+      "score": "2-2",
+      "date": "11 mars 2014",
+      "competition": "1/8 aller • UEFA Champions League • Stamford Bridge",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [88],
+        "DEF": [61, 15, 26, 3],
+        "MIL": [27, 42, 14],
+        "ATT": [28, 17, 16]
+      }
+    }
+
+
+  ],
+  "formations": {
+    "4-3-3": {
+      "name": "4-3-3",
+      "structure": [
+        {"line": "ATT", "positions": ["ATT-G", "ATT-C", "ATT-D"]},
+        {"line": "MIL", "positions": ["MIL-G", "MIL-C", "MIL-D"]},
+        {"line": "DEF", "positions": ["DEF-G", "DEF-CG", "DEF-CD", "DEF-D"]},
+        {"line": "GK", "positions": ["GK"]}
+      ]
+    },
+    "4-4-2": {
+      "name": "4-4-2",
+      "structure": [
+        {"line": "ATT", "positions": ["ATT-G", "ATT-D"]},
+        {"line": "MIL", "positions": ["MIL-G", "MIL-CG", "MIL-CD", "MIL-D"]},
+        {"line": "DEF", "positions": ["DEF-G", "DEF-CG", "DEF-CD", "DEF-D"]},
+        {"line": "GK", "positions": ["GK"]}
+      ]
+    },
+    "3-5-2": {
+      "name": "3-5-2",
+      "structure": [
+        {"line": "ATT", "positions": ["ATT-G", "ATT-D"]},
+        {"line": "MIL", "positions": ["MIL-G", "MIL-CG", "MIL-C", "MIL-CD", "MIL-D"]},
+        {"line": "DEF", "positions": ["DEF-G", "DEF-C", "DEF-D"]},
+        {"line": "GK", "positions": ["GK"]}
+      ]
+    },
+    "4-2-3-1": {
+      "name": "4-2-3-1",
+      "structure": [
+        {"line": "ST", "positions": ["ST"]},
+        {"line": "ATT", "positions": ["ATT-G", "ATT-C", "ATT-D"]},
+        {"line": "MIL", "positions": ["MIL-G", "MIL-D"]},
+        {"line": "DEF", "positions": ["DEF-G", "DEF-CG", "DEF-CD", "DEF-D"]},
+        {"line": "GK", "positions": ["GK"]}
+      ]
+    },
+    "3-4-3": {
+      "name": "3-4-3",
+      "structure": [
+        {"line": "ATT", "positions": ["ATT-G", "ATT-C", "ATT-D"]},
+        {"line": "MIL", "positions": ["MIL-G", "MIL-CG", "MIL-CD", "MIL-D"]},
+        {"line": "DEF", "positions": ["DEF-G", "DEF-C", "DEF-D"]},
+        {"line": "GK", "positions": ["GK"]}
+      ]
+    },
+       "4-4-1-1": {
+      "name": "4-4-1-1",
+      "structure": [
+        {"line": "ST", "positions": ["ST"]},
+        {"line": "ATT", "positions": ["ATT-C"]},
+        {"line": "MIL", "positions": ["MIL-G", "MIL-CG", "MIL-CD", "MIL-D"]},
+        {"line": "DEF", "positions": ["DEF-G", "DEF-CG", "DEF-CD", "DEF-D"]},
+        {"line": "GK", "positions": ["GK"]}
+      ]
+    }
+  }
+}
