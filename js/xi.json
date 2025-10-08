@@ -40,7 +40,7 @@
         "GK": [54],
         "DEF": [81, 15, 3, 69],
         "MIL": [53, 42, 14],
-        "ATT": [12, 16, 11 ]
+        "ATT": [12, 16, 11]
       }
     },
     {
@@ -113,7 +113,208 @@
         "MIL": [27, 42, 14],
         "ATT": [28, 17, 16]
       }
+    },
+    {
+    "id": 9,
+    "opponent": "Rapid Vienne",
+    "score": "1-0",
+    "date": "8 mai 1996",
+    "competition": "Finale • Coupe des coupes • Stade Roi Baudouin",
+    "formation": "4-3-1-2",
+    "lineup": {
+      "GK": [48],
+      "DEF": [95, 92, 94, 93],
+      "MIL": [97, 96, 98],
+      "MOC": [41],
+      "ATT": [74, 99]
+  }
+},
+  {
+      "id": 10,
+      "opponent": "Stade Rennais",
+      "score": "1-0",
+      "date": "11 février 2022",
+      "competition": "Journée 24 • Ligue 1 • Parc des Princes",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [24],
+        "DEF": [82, 19, 3, 2],
+        "MIL": [14, 70, 84],
+        "ATT": [11, 13, 36]
+      }
+    },
+      {
+      "id": 11,
+      "opponent": "Olympique de Marseille",
+      "score": "5-1",
+      "date": "11 février 2022",
+      "competition": "Journée 27 • Ligue 1 • Vélodrome",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [75],
+        "DEF": [81, 15, 3, 83],
+        "MIL": [27, 53, 14],
+        "ATT": [28, 16, 77]
+      }
+    },
+    {
+      "id": 12,
+      "opponent": "Les Herbiers",
+      "score": "2-0",
+      "date": "8 mai 2018",
+      "competition": "Finale • Coupe de France • Stade de France",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [75],
+        "DEF": [100, 15, 3, 69],
+        "MIL": [84, 53, 66],
+        "ATT": [18, 16, 11]
+      }
+    },
+    {
+    "id": 13,
+    "opponent": "Lille",
+    "score": "7-1",
+    "date": "21 août 2022",
+    "competition": "Ligue 1 • Stade Pierre-Mauroy",
+    "formation": "3-4-2-1",
+    "lineup": {
+      "GK": [1],
+      "DEF": [19, 3, 25],
+      "MIL": [30, 14, 7, 2],
+      "MOC": [12, 13],
+      "ATT": [11]
     }
+  },
+  {
+  "id": 14,
+  "opponent": "Barcelona",
+  "score": "2-2",
+  "date": "2 octobre 2013",
+  "competition": "1/4 aller • UEFA Champions League • Parc des Princes",
+  "formation": "4-4-2",
+  "lineup": {
+    "GK": [88],
+    "DEF": [61, 15, 63, 102],
+    "MID": [28, 27, 60, 77],
+    "ATT": [89, 17]
+  }
+},
+{
+  "id": 15,
+  "opponent": "FC Barcelone",
+  "score": "4-1",
+  "date": "16 février 2021",
+  "competition": "1/8 aller • UEFA Champions League • Camp Nou",
+  "formation": "4-2-3-1",
+  "lineup": {
+    "GK": [24],
+    "DEF": [81, 19, 3, 106],
+    "MID": [85, 70],
+    "ATT": [11, 14, 103],
+    "ST": [87]
+  }
+},
+{
+  "id": 16,
+  "opponent": "Troyes",
+  "score": "9-0",
+  "date": "13 mars 2016",
+  "competition": "Journée 30 • Ligue 1  • Stade de l’Aube",
+  "formation": "4-3-3",
+  "lineup": {
+    "GK": [75],
+    "DEF": [81, 26, 15, 64],
+    "MID": [28, 105, 53],
+    "ATT": [16, 17, 18]
+  }
+},
+  {
+  "id": 17,
+  "opponent": "Olympiacos",
+  "score": "4-1",
+  "date": "17 Septembre 2013",
+  "competition": "Phase de groupe • UEFA Champions League • Stadio Georgios Karaiskakis",
+  "formation": "4-4-2",
+  "lineup": {
+    "GK": [88],
+    "DEF": [61, 15, 3, 64],
+    "MID": [27, 14, 42, 77],
+    "ATT": [16, 17]
+  }
+},
+{
+  "id": 18,
+  "opponent": "Valenciennes",
+  "score": "2-1",
+  "date": "21 août 2011",
+  "competition": "Journée 3 • Ligue 1 • Parc des Princes",
+  "formation": "4-2-3-1",
+  "lineup": {
+    "GK": [88],
+    "DEF": [110, 109, 107, 108],
+    "MID": [111, 115, 27],
+    "ATT": [114, 113, 112]
+  }
+},
+    {
+    "id": 19,
+    "opponent": "Juevntus",
+    "score": "2-1",
+    "date": "2 Novembre 2024",
+    "competition": "Phase de groupes • UEFA Champions League • Allianz Stadium",
+    "formation": "4-3-1-2",
+    "lineup": {
+      "GK": [1],
+      "DEF": [82, 3, 25, 2],
+      "MIL": [7, 14, 8],
+      "MOC": [65],
+      "ATT": [11, 13]
+  }
+},
+    {
+      "id": 20,
+      "opponent": "Atalanta",
+      "score": "2-1",
+      "date": "12 août 2020",
+      "competition": "1/4 • UEFA Champions League • Estádio da Luz",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [24],
+        "DEF": [82, 19, 15, 90],
+        "MIL": [85, 3, 91],
+        "ATT": [12, 87, 86]
+      }
+    },
+        {
+      "id": 21,
+      "opponent": "AS Monaco",
+      "score": "7-1",
+      "date": "15 avril 2018",
+      "competition": "Journée 33 • Ligue 1 • Parc des Princes",
+      "formation": "4-3-3",
+      "lineup": {
+        "GK": [54],
+        "DEF": [100, 15, 3, 69],
+        "MIL": [84, 53, 66],
+        "ATT": [28, 16, 18]
+      }
+    },
+      {
+    "id": 22,
+    "opponent": "Barcelona",
+    "score": "2-2",
+    "date": "2 avril 2013",
+    "competition": "1/4 Aller • UEFA Champions League • Parc des princes",
+    "formation": "4-4-2",
+    "lineup": {
+      "GK": [88],
+      "DEF": [61, 15, 63, 62],
+      "MID": [28, 60, 27, 77],
+      "ATT": [89, 17]
+  }
+}
+
 
 
   ],
@@ -173,6 +374,44 @@
         {"line": "DEF", "positions": ["DEF-G", "DEF-CG", "DEF-CD", "DEF-D"]},
         {"line": "GK", "positions": ["GK"]}
       ]
-    }
+    },
+
+  "4-3-1-2": {
+  "name": "4-3-1-2",
+  "structure": [
+    {"line": "ATT", "positions": ["ATT-G", "ATT-D"]},
+    {"line": "MOC", "positions": ["MOC"]},
+    {"line": "MIL", "positions": ["MIL-G", "MIL-C", "MIL-D"]},
+    {"line": "DEF", "positions": ["DEF-G", "DEF-CG", "DEF-CD", "DEF-D"]},
+    {"line": "GK", "positions": ["GK"]}
+  ]
+},
+
+"3-4-1-2": {
+  "name": "3-4-1-2",
+  "structure": [
+    {"line": "ATT", "positions": ["ATT-G", "ATT-D"]},
+    {"line": "MOC", "positions": ["MOC"]},
+    {"line": "MIL", "positions": ["MIL-G", "MIL-CG", "MIL-CD", "MIL-D"]},
+    {"line": "DEF", "positions": ["DEF-G", "DEF-C", "DEF-D"]},
+    {"line": "GK", "positions": ["GK"]}
+  ]
+},
+
+"3-4-2-1": {
+  "name": "3-4-2-1",
+  "structure": [
+    {"line": "ST", "positions": ["ST"]},
+    {"line": "ATT", "positions": ["ATT-G", "ATT-D"]},
+    {"line": "MIL", "positions": ["MIL-G", "MIL-CG", "MIL-CD", "MIL-D"]},
+    {"line": "DEF", "positions": ["DEF-G", "DEF-C", "DEF-D"]},
+    {"line": "GK", "positions": ["GK"]}
+  ]
+}
+
+
+
+
+
   }
 }
