@@ -171,21 +171,7 @@
         "ATT": [18, 16, 11]
       }
     },
-    {
-    "id": 13,
-    "opponent": "Lille",
-    "score": "7-1",
-    "date": "21 août 2022",
-    "competition": "Ligue 1 • Stade Pierre-Mauroy",
-    "formation": "3-4-2-1",
-    "lineup": {
-      "GK": [1],
-      "DEF": [19, 3, 25],
-      "MIL": [30, 14, 7, 2],
-      "MOC": [12, 13],
-      "ATT": [11]
-    }
-  },
+
   {
   "id": 14,
   "opponent": "Barcelona",
@@ -220,7 +206,7 @@
   "opponent": "Troyes",
   "score": "9-0",
   "date": "13 mars 2016",
-  "competition": "Journée 30 • Ligue 1  • Stade de l’Aube",
+  "competition": "Journée 30 • Ligue 1  • Stade de l'Aube",
   "formation": "4-3-3",
   "lineup": {
     "GK": [75],
