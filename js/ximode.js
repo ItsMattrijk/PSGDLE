@@ -527,46 +527,58 @@ refreshCard(position) {
         }
     }
 
-    checkComposition() {
-        const results = {
-            correct: 0,
-            misplaced: 0,
-            incorrect: 0,
-            total: 0,
-            details: {}
-        };
+   checkComposition() {
+    const results = {
+        correct: 0,
+        misplaced: 0,
+        incorrect: 0,
+        total: 0,
+        details: {}
+    };
 
-        // Récupérer tous les IDs du XI titulaire (toutes lignes confondues)
-        const allCorrectIds = Object.values(this.currentMatch.lineup).flat();
+    // Récupérer tous les IDs du XI titulaire (toutes lignes confondues)
+    const allCorrectIds = Object.values(this.currentMatch.lineup).flat();
 
-        Object.entries(this.currentMatch.lineup).forEach(([lineType, correctPlayerIds]) => {
-            correctPlayerIds.forEach((correctId, index) => {
-                results.total++;
+    // Mapping pour normaliser MID → MIL
+    const normalizeLineType = (lineType) => {
+        return lineType === 'MID' ? 'MIL' : lineType;
+    };
 
-                const lineStructure = this.currentFormation.structure.find(l => 
-                    l.line === lineType
-                );
-                const position = lineStructure.positions[index];
-                const placedId = this.playerPlacements[position];
+    Object.entries(this.currentMatch.lineup).forEach(([lineType, correctPlayerIds]) => {
+        correctPlayerIds.forEach((correctId, index) => {
+            results.total++;
 
-                if (placedId === correctId) {
-                    // Joueur correct à la bonne position
-                    results.correct++;
-                    results.details[position] = 'correct';
-                } else if (allCorrectIds.includes(placedId)) {
-                    // Joueur fait partie du XI mais mal placé (peu importe la ligne)
-                    results.misplaced++;
-                    results.details[position] = 'misplaced';
-                } else {
-                    // Joueur ne fait pas partie du XI
-                    results.incorrect++;
-                    results.details[position] = 'incorrect';
-                }
-            });
+            // Normaliser le nom de la ligne
+            const normalizedLineType = normalizeLineType(lineType);
+            
+            const lineStructure = this.currentFormation.structure.find(l => 
+                l.line === normalizedLineType
+            );
+
+            // Vérification de sécurité
+            if (!lineStructure) {
+                console.error(`❌ Structure introuvable pour la ligne: ${lineType} → ${normalizedLineType}`);
+                return;
+            }
+
+            const position = lineStructure.positions[index];
+            const placedId = this.playerPlacements[position];
+
+            if (placedId === correctId) {
+                results.correct++;
+                results.details[position] = 'correct';
+            } else if (allCorrectIds.includes(placedId)) {
+                results.misplaced++;
+                results.details[position] = 'misplaced';
+            } else {
+                results.incorrect++;
+                results.details[position] = 'incorrect';
+            }
         });
+    });
 
-        return results;
-    }
+    return results;
+}
 
     displayValidationResults(results) {
         Object.entries(results.details).forEach(([position, status]) => {
@@ -698,21 +710,40 @@ refreshCard(position) {
     this.showHintNotification('Indice 3/3 : Nationalités révélées ! 🌍');
 }
 
-    getCorrectPlayerIdForPosition(position) {
-        // Trouver quelle ligne (GK, DEF, MIL, ATT)
-        const lineStructure = this.currentFormation.structure.find(line => 
-            line.positions.includes(position)
-        );
-        
-        if (!lineStructure) return null;
-        
-        // Trouver l'index de la position dans cette ligne
-        const positionIndex = lineStructure.positions.indexOf(position);
-        
-        // Récupérer l'ID du joueur correct
-        return this.currentMatch.lineup[lineStructure.line][positionIndex];
+   getCorrectPlayerIdForPosition(position) {
+    // Trouver quelle ligne dans la structure (GK, DEF, MIL, ATT, ST, MOC)
+    const lineStructure = this.currentFormation.structure.find(line => 
+        line.positions.includes(position)
+    );
+    
+    if (!lineStructure) return null;
+    
+    // Trouver l'index de la position dans cette ligne
+    const positionIndex = lineStructure.positions.indexOf(position);
+    
+    // 🔧 CORRECTION : Chercher d'abord avec le nom de la ligne de la structure
+    // Si ça ne marche pas, essayer l'inverse (MIL ↔ MID)
+    let correctPlayerIds = this.currentMatch.lineup[lineStructure.line];
+    
+    // Si pas trouvé et que c'est MIL, essayer avec MID
+    if (!correctPlayerIds && lineStructure.line === 'MIL') {
+        correctPlayerIds = this.currentMatch.lineup['MID'];
     }
-
+    
+    // Si pas trouvé et que c'est MID, essayer avec MIL (au cas où)
+    if (!correctPlayerIds && lineStructure.line === 'MID') {
+        correctPlayerIds = this.currentMatch.lineup['MIL'];
+    }
+    
+    // Vérification de sécurité
+    if (!correctPlayerIds) {
+        console.error(`❌ Impossible de trouver les joueurs pour la ligne: ${lineStructure.line}`);
+        return null;
+    }
+    
+    // Récupérer l'ID du joueur correct à cet index
+    return correctPlayerIds[positionIndex];
+}
     showHintNotification(message) {
         // Créer une notification temporaire
         const notification = document.createElement('div');
