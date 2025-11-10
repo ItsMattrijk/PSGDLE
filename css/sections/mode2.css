@@ -1250,3 +1250,60 @@ body.modal-open .suggestions {
     background: rgba(0, 65, 112, 0.3);
     transform: scale(1.02);
 }
+
+/* Feedback visuel pour le drag mobile */
+.player-card.dragging {
+    opacity: 0.3;
+    transform: scale(0.95);
+    box-shadow: 0 10px 30px rgba(0, 102, 204, 0.5);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+/* Fantôme qui suit le doigt */
+.drag-ghost {
+    width: 90px;
+    min-width: 90px;
+    background: linear-gradient(145deg, rgba(0, 8, 20, 0.95), rgba(0, 30, 60, 0.85));
+    border: 2px solid rgba(0, 120, 255, 0.6) !important;
+    border-radius: 12px;
+    padding: 0.8rem 0.5rem;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 15px 40px rgba(0, 120, 255, 0.6);
+    pointer-events: none;
+    z-index: 10000;
+    opacity: 0.9;
+    transform: scale(1.15) rotate(3deg);
+}
+
+/* Animation shake pour indiquer qu'une carte est déplaçable */
+.player-card.shakeable {
+    animation: shakeHint 0.5s ease-in-out;
+}
+
+@keyframes shakeHint {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-3px) rotate(-2deg); }
+    75% { transform: translateX(3px) rotate(2deg); }
+}
+
+/* Empêcher la sélection de texte pendant le drag */
+.player-card {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Animation de survol pour mobile */
+.player-card.drag-over {
+    border-color: rgba(0, 255, 127, 0.8) !important;
+    background: rgba(0, 255, 127, 0.15) !important;
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0, 255, 127, 0.5) !important;
+}
