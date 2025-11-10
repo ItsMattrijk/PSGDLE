@@ -309,11 +309,43 @@ createPlayerCard(position) {
     let isDragging = false;
     let draggedPosition = null;
     let touchStartX, touchStartY;
+    let ghostElement = null;
+    let currentTouchX, currentTouchY;
+
+    const createGhost = () => {
+        ghostElement = card.cloneNode(true);
+        ghostElement.classList.add('drag-ghost');
+        ghostElement.style.position = 'fixed';
+        ghostElement.style.pointerEvents = 'none';
+        ghostElement.style.zIndex = '10000';
+        ghostElement.style.opacity = '0.8';
+        ghostElement.style.transform = 'scale(1.1)';
+        ghostElement.style.transition = 'none';
+        document.body.appendChild(ghostElement);
+        return ghostElement;
+    };
+
+    const updateGhostPosition = (x, y) => {
+        if (ghostElement) {
+            const rect = card.getBoundingClientRect();
+            ghostElement.style.left = (x - rect.width / 2) + 'px';
+            ghostElement.style.top = (y - rect.height / 2) + 'px';
+        }
+    };
+
+    const removeGhost = () => {
+        if (ghostElement) {
+            ghostElement.remove();
+            ghostElement = null;
+        }
+    };
 
     card.addEventListener("touchstart", (e) => {
-        // Empêcher le comportement par défaut
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
+        
+        // Animation shake pour indiquer que c'est déplaçable
+        card.classList.add("shakeable");
         
         // Démarrer le timer de long press
         touchTimer = setTimeout(() => {
@@ -321,6 +353,11 @@ createPlayerCard(position) {
             draggedPosition = position;
             card.dataset.isDragging = 'true';
             card.classList.add("dragging");
+            card.classList.remove("shakeable");
+            
+            // Créer le fantôme
+            createGhost();
+            updateGhostPosition(touchStartX, touchStartY);
             
             // Feedback haptique si disponible
             if (navigator.vibrate) {
@@ -328,7 +365,7 @@ createPlayerCard(position) {
             }
             
             console.log('🔵 Long press détecté sur', position);
-        }, 500); // 500ms pour activer le drag
+        }, 400); // 400ms pour activer le drag
     }, { passive: false });
 
     card.addEventListener("touchmove", (e) => {
@@ -336,14 +373,32 @@ createPlayerCard(position) {
             // Empêcher le scroll pendant le drag
             e.preventDefault();
             
-            // Optionnel : Suivre visuellement le doigt
             const touch = e.touches[0];
-            const moveX = Math.abs(touch.clientX - touchStartX);
-            const moveY = Math.abs(touch.clientY - touchStartY);
+            currentTouchX = touch.clientX;
+            currentTouchY = touch.clientY;
             
-            // Si le doigt bouge beaucoup, on considère que c'est un drag
-            if (moveX > 10 || moveY > 10) {
-                card.style.opacity = '0.5';
+            // Mettre à jour la position du fantôme
+            updateGhostPosition(currentTouchX, currentTouchY);
+            
+            // Trouver l'élément sous le doigt
+            if (ghostElement) {
+                ghostElement.style.display = 'none';
+            }
+            const elementBelow = document.elementFromPoint(currentTouchX, currentTouchY);
+            if (ghostElement) {
+                ghostElement.style.display = '';
+            }
+            
+            const targetCard = elementBelow?.closest('.player-card');
+            
+            // Retirer drag-over de toutes les cartes
+            document.querySelectorAll('.player-card.drag-over').forEach(c => {
+                c.classList.remove('drag-over');
+            });
+            
+            // Ajouter drag-over à la carte cible
+            if (targetCard && targetCard !== card) {
+                targetCard.classList.add('drag-over');
             }
         } else {
             // Si on bouge avant le long press, annuler
@@ -353,16 +408,23 @@ createPlayerCard(position) {
             
             if (moveX > 10 || moveY > 10) {
                 clearTimeout(touchTimer);
+                card.classList.remove("shakeable");
             }
         }
     }, { passive: false });
 
     card.addEventListener("touchend", (e) => {
         clearTimeout(touchTimer);
+        card.classList.remove("shakeable");
         
         if (isDragging) {
             // Trouver la carte sous le doigt
             const touch = e.changedTouches[0];
+            
+            // Cacher temporairement le fantôme pour elementFromPoint
+            if (ghostElement) {
+                ghostElement.style.display = 'none';
+            }
             const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
             const targetCard = elementBelow?.closest('.player-card');
             
@@ -379,23 +441,31 @@ createPlayerCard(position) {
                 }
             }
             
+            // Retirer drag-over de toutes les cartes
+            document.querySelectorAll('.player-card.drag-over').forEach(c => {
+                c.classList.remove('drag-over');
+            });
+            
             // Réinitialiser
             card.classList.remove("dragging");
-            card.style.opacity = '';
+            removeGhost();
             isDragging = false;
             draggedPosition = null;
             
             // Retirer le flag après un court délai pour éviter le click
             setTimeout(() => {
                 delete card.dataset.isDragging;
-            }, 100);
+            }, 150);
         }
     });
 
     card.addEventListener("touchcancel", () => {
         clearTimeout(touchTimer);
-        card.classList.remove("dragging");
-        card.style.opacity = '';
+        card.classList.remove("dragging", "shakeable");
+        document.querySelectorAll('.player-card.drag-over').forEach(c => {
+            c.classList.remove('drag-over');
+        });
+        removeGhost();
         isDragging = false;
         draggedPosition = null;
         delete card.dataset.isDragging;
@@ -403,7 +473,6 @@ createPlayerCard(position) {
 
     return card;
 }
-
 
     getEmojiForPosition(pos) {
         const emojis = {
