@@ -1225,3 +1225,28 @@ body.modal-open .suggestions {
     pointer-events: none !important;
     opacity: 0 !important;
 }
+
+/* Feedback visuel pour le drag mobile */
+.player-card.dragging {
+    opacity: 0.6;
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 102, 204, 0.5);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+/* Empêcher la sélection de texte pendant le drag */
+.player-card {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Animation de survol pour mobile */
+.player-card.drag-over {
+    border-color: rgba(0, 123, 255, 0.8);
+    background: rgba(0, 65, 112, 0.3);
+    transform: scale(1.02);
+}
