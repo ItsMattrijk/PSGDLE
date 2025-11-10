@@ -449,14 +449,35 @@ card.addEventListener("touchend", (e) => {
                 ghostElement.style.display = '';
             }
             
-            // Chercher la carte parente
-            if (elementBelow) {
-                if (elementBelow.classList.contains('player-card')) {
-                    targetCard = elementBelow;
-                } else {
-                    targetCard = elementBelow.closest('.player-card');
+// Chercher la carte parente ou la carte la plus proche
+if (elementBelow) {
+    if (elementBelow.classList.contains('player-card')) {
+        targetCard = elementBelow;
+    } else {
+        targetCard = elementBelow.closest('.player-card');
+        
+        // Si pas trouvé avec closest, chercher dans les enfants de field-line
+        if (!targetCard && elementBelow.classList.contains('field-line')) {
+            const cards = elementBelow.querySelectorAll('.player-card');
+            let minDistance = Infinity;
+            
+            cards.forEach(c => {
+                const rect = c.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const distance = Math.sqrt(
+                    Math.pow(currentTouchX - centerX, 2) + 
+                    Math.pow(currentTouchY - centerY, 2)
+                );
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    targetCard = c;
                 }
-            }
+            });
+        }
+    }
+}
             console.log('🎯 Carte cible:', targetCard?.dataset.position);
         }
         
