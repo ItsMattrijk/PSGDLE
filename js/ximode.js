@@ -250,7 +250,7 @@ refreshCard(position) {
         console.log('✅ Terrain généré:', this.currentMatch.formation);
     }
 
- createPlayerCard(position) {
+createPlayerCard(position) {
     const card = document.createElement('div');
     card.className = 'player-card empty';
     card.dataset.position = position;
@@ -263,9 +263,16 @@ refreshCard(position) {
         <div class="player-avatar">${emoji}</div>
     `;
 
-    card.addEventListener('click', () => this.selectPosition(card));
+    // ===== DESKTOP : Click simple =====
+    card.addEventListener('click', (e) => {
+        // Ignorer le click si on est en mode drag mobile
+        if (card.dataset.isDragging === 'true') {
+            return;
+        }
+        this.selectPosition(card);
+    });
 
-    // ===== Drag & Drop Desktop =====
+    // ===== DESKTOP : Drag & Drop =====
     card.setAttribute("draggable", true);
 
     card.addEventListener("dragstart", (e) => {
@@ -297,23 +304,104 @@ refreshCard(position) {
         }
     });
 
-    // ===== Mobile Long Press =====
+    // ===== MOBILE : Touch Drag & Drop =====
     let touchTimer;
+    let isDragging = false;
+    let draggedPosition = null;
+    let touchStartX, touchStartY;
+
     card.addEventListener("touchstart", (e) => {
+        // Empêcher le comportement par défaut
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        
+        // Démarrer le timer de long press
         touchTimer = setTimeout(() => {
+            isDragging = true;
+            draggedPosition = position;
+            card.dataset.isDragging = 'true';
             card.classList.add("dragging");
-            card.dataset.longPress = "true";
-        }, 500);
+            
+            // Feedback haptique si disponible
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            console.log('🔵 Long press détecté sur', position);
+        }, 500); // 500ms pour activer le drag
+    }, { passive: false });
+
+    card.addEventListener("touchmove", (e) => {
+        if (isDragging) {
+            // Empêcher le scroll pendant le drag
+            e.preventDefault();
+            
+            // Optionnel : Suivre visuellement le doigt
+            const touch = e.touches[0];
+            const moveX = Math.abs(touch.clientX - touchStartX);
+            const moveY = Math.abs(touch.clientY - touchStartY);
+            
+            // Si le doigt bouge beaucoup, on considère que c'est un drag
+            if (moveX > 10 || moveY > 10) {
+                card.style.opacity = '0.5';
+            }
+        } else {
+            // Si on bouge avant le long press, annuler
+            const touch = e.touches[0];
+            const moveX = Math.abs(touch.clientX - touchStartX);
+            const moveY = Math.abs(touch.clientY - touchStartY);
+            
+            if (moveX > 10 || moveY > 10) {
+                clearTimeout(touchTimer);
+            }
+        }
+    }, { passive: false });
+
+    card.addEventListener("touchend", (e) => {
+        clearTimeout(touchTimer);
+        
+        if (isDragging) {
+            // Trouver la carte sous le doigt
+            const touch = e.changedTouches[0];
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            const targetCard = elementBelow?.closest('.player-card');
+            
+            if (targetCard && targetCard !== card) {
+                const toPosition = targetCard.dataset.position;
+                console.log('🔄 Drop de', draggedPosition, 'vers', toPosition);
+                
+                // Échanger les joueurs
+                this.swapPlayers(draggedPosition, toPosition);
+                
+                // Feedback haptique
+                if (navigator.vibrate) {
+                    navigator.vibrate(30);
+                }
+            }
+            
+            // Réinitialiser
+            card.classList.remove("dragging");
+            card.style.opacity = '';
+            isDragging = false;
+            draggedPosition = null;
+            
+            // Retirer le flag après un court délai pour éviter le click
+            setTimeout(() => {
+                delete card.dataset.isDragging;
+            }, 100);
+        }
     });
 
-    card.addEventListener("touchend", () => {
+    card.addEventListener("touchcancel", () => {
         clearTimeout(touchTimer);
         card.classList.remove("dragging");
-        delete card.dataset.longPress;
+        card.style.opacity = '';
+        isDragging = false;
+        draggedPosition = null;
+        delete card.dataset.isDragging;
     });
 
     return card;
-
 }
 
 
