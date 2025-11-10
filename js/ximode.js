@@ -415,74 +415,83 @@ createPlayerCard(position) {
         }
     }, { passive: false });
 
-    card.addEventListener("touchend", (e) => {
-        clearTimeout(touchTimer);
-        card.classList.remove("shakeable");
+card.addEventListener("touchend", (e) => {
+    clearTimeout(touchTimer);
+    card.classList.remove("shakeable");
+    
+    if (isDragging) {
+        e.preventDefault();
         
-        if (isDragging) {
-            e.preventDefault(); // Empêcher le comportement par défaut
-            
-            // Utiliser la dernière position enregistrée pendant touchmove
-            let targetCard = null;
-            
-            if (currentTouchX && currentTouchY) {
-                // Cacher temporairement le fantôme
-                if (ghostElement) {
-                    ghostElement.style.display = 'none';
-                }
-                
-                // Chercher l'élément sous les dernières coordonnées connues
-                const elementBelow = document.elementFromPoint(currentTouchX, currentTouchY);
-                console.log('🎯 Element trouvé:', elementBelow?.className);
-                
-                // Remettre le fantôme
-                if (ghostElement) {
-                    ghostElement.style.display = '';
-                }
-                
-                // Chercher la carte parente
-                targetCard = elementBelow?.closest('.player-card');
-                console.log('🎯 Carte cible:', targetCard?.dataset.position);
-            }
-            
-            if (targetCard && targetCard !== card) {
-                const toPosition = targetCard.dataset.position;
-                console.log('🔄 Drop de', draggedPosition, 'vers', toPosition);
-                
-                // Échanger les joueurs
-                this.swapPlayers(draggedPosition, toPosition);
-                
-                // Feedback haptique de succès
-                if (navigator.vibrate) {
-                    navigator.vibrate([30, 50, 30]);
-                }
-            } else {
-                console.log('❌ Aucune cible valide trouvée');
-                // Feedback haptique d'échec
-                if (navigator.vibrate) {
-                    navigator.vibrate(100);
-                }
-            }
-            
-            // Retirer drag-over de toutes les cartes
-            document.querySelectorAll('.player-card.drag-over').forEach(c => {
-                c.classList.remove('drag-over');
-            });
-            
-            // Réinitialiser
-            card.classList.remove("dragging");
-            removeGhost();
-            isDragging = false;
-            draggedPosition = null;
-            currentTouchX = null;
-            currentTouchY = null;
-            
-            // Retirer le flag après un court délai pour éviter le click
-            setTimeout(() => {
-                delete card.dataset.isDragging;
-            }, 150);
+        let targetCard = null;
+        
+        // Utiliser changedTouches pour obtenir la dernière position
+        const lastTouch = e.changedTouches[0];
+        if (lastTouch) {
+            currentTouchX = lastTouch.clientX;
+            currentTouchY = lastTouch.clientY;
         }
-    });
+        
+        if (currentTouchX && currentTouchY) {
+            // Cacher temporairement le fantôme ET la carte source
+            if (ghostElement) {
+                ghostElement.style.display = 'none';
+            }
+            const originalDisplay = card.style.display;
+            card.style.display = 'none';
+            
+            // Chercher l'élément sous le doigt
+            const elementBelow = document.elementFromPoint(currentTouchX, currentTouchY);
+            console.log('🎯 Element trouvé:', elementBelow?.className);
+            
+            // Restaurer l'affichage
+            card.style.display = originalDisplay;
+            if (ghostElement) {
+                ghostElement.style.display = '';
+            }
+            
+            // Chercher la carte parente
+            if (elementBelow) {
+                if (elementBelow.classList.contains('player-card')) {
+                    targetCard = elementBelow;
+                } else {
+                    targetCard = elementBelow.closest('.player-card');
+                }
+            }
+            console.log('🎯 Carte cible:', targetCard?.dataset.position);
+        }
+        
+        if (targetCard && targetCard !== card && targetCard.dataset.position) {
+            const toPosition = targetCard.dataset.position;
+            console.log('🔄 Drop de', draggedPosition, 'vers', toPosition);
+            
+            this.swapPlayers(draggedPosition, toPosition);
+            
+            if (navigator.vibrate) {
+                navigator.vibrate([30, 50, 30]);
+            }
+        } else {
+            console.log('❌ Aucune cible valide trouvée');
+            if (navigator.vibrate) {
+                navigator.vibrate(100);
+            }
+        }
+        
+        document.querySelectorAll('.player-card.drag-over').forEach(c => {
+            c.classList.remove('drag-over');
+        });
+        
+        card.classList.remove("dragging");
+        removeGhost();
+        isDragging = false;
+        draggedPosition = null;
+        currentTouchX = null;
+        currentTouchY = null;
+        
+        setTimeout(() => {
+            delete card.dataset.isDragging;
+        }, 150);
+    }
+});
 
     card.addEventListener("touchcancel", () => {
         clearTimeout(touchTimer);
