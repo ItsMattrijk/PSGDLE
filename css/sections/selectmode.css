@@ -1,87 +1,145 @@
-        /* ========== SELECTEUR DE MODE ========== */
-        .mode-selector-wrapper {
-            max-width: 500px;
-            margin: 1.5rem auto;
-            padding: 0 1rem;
-        }
+/* ========== SELECTEUR DE MODE ========== */
+.mode-selector-wrapper {
+    max-width: 500px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+}
 
-        .mode-selector {
-            background: rgba(0, 8, 20, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            padding: 6px;
-            display: flex;
-            gap: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0px 0px 50px 8px rgba(0, 65, 112, 0.3);
-        }
+.mode-selector {
+    background: rgba(0, 8, 20, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 6px;
+    display: flex;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0px 0px 50px 8px rgba(0, 65, 112, 0.3);
+}
 
-        .mode-tab {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            background: transparent;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            position: relative;
-            font-family: 'Poppins', sans-serif;
-        }
+.mode-tab {
+    flex: 1;
+    padding: 14px 12px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    min-width: 0;
+}
 
-        .mode-tab:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.8);
-        }
+.mode-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+}
 
-        .mode-tab.active {
-            background: linear-gradient(135deg, #004170 0%, #0066b3 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 65, 112, 0.5);
-        }
+.mode-tab.active {
+    background: linear-gradient(135deg, #004170 0%, #0066b3 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 65, 112, 0.5);
+}
 
-        .mode-tab .emoji {
-            font-size: 1.3em;
-        }
+.mode-tab .emoji {
+    font-size: 1.2em;
+    flex-shrink: 0;
+}
 
-        .mode-tab .badge {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            background: #fbbf24;
-            color: #92400e;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.65em;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
-        }
+.mode-tab .badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #fbbf24;
+    color: #92400e;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.65em;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+}
 
-        
+/* Containers de contenu */
+.mode-content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
 
-        /* Containers de contenu */
-        .mode-content {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
+.mode-content.active {
+    display: block;
+}
 
-        .mode-content.active {
-            display: block;
-        }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+/* ========== RESPONSIVE ========== */
+
+/* Tablettes et petits écrans */
+@media (max-width: 640px) {
+    .mode-selector-wrapper {
+        padding: 0 0.5rem;
+    }
+    
+    .mode-tab {
+        padding: 12px 8px;
+        font-size: 0.85rem;
+        gap: 4px;
+        flex-direction: column;
+    }
+    
+    .mode-tab .emoji {
+        font-size: 1.1em;
+    }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+    .mode-selector {
+        padding: 4px;
+        gap: 4px;
+    }
+    
+    .mode-tab {
+        padding: 10px 6px;
+        font-size: 0.75rem;
+        border-radius: 10px;
+    }
+    
+    .mode-tab .emoji {
+        font-size: 1em;
+    }
+    
+    .mode-tab .badge {
+        padding: 2px 6px;
+        font-size: 0.6em;
+        top: -4px;
+        right: -4px;
+    }
+}
+
+/* Très très petits écrans - on garde tout, juste plus petit */
+@media (max-width: 380px) {
+    .mode-tab {
+        padding: 8px 4px;
+        font-size: 0.7rem;
+        gap: 3px;
+    }
+    
+    .mode-tab .emoji {
+        font-size: 0.9em;
+    }
+}

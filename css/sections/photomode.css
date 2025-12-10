@@ -1,0 +1,263 @@
+/* ========== MODE PHOTO MYSTÈRE ========== */
+
+.photo-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 0 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 130px;
+}
+
+/* Compteur de tentatives */
+.attempts-counter {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: rgba(0, 65, 112, 0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 120, 255, 0.3);
+}
+
+#current-attempt {
+    color: #4a9eff;
+    font-size: 1.4rem;
+}
+
+/* Container de la photo floue */
+.photo-blur-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.blur-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Ratio 1:1 */
+    background: rgba(0, 8, 20, 0.95);
+    border-radius: 16px;
+    border: 2px solid rgba(0, 120, 255, 0.3);
+    overflow: hidden;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.mystery-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover;
+    object-position: center;
+    filter: blur(50px);
+    transition: filter 0.5s ease;
+    display: block;
+    box-shadow: none !important;
+    cursor: default !important;
+}
+
+/* Niveaux de flou progressifs */
+.mystery-image.blur-level-1 { filter: blur(50px); }
+.mystery-image.blur-level-2 { filter: blur(40px); }
+.mystery-image.blur-level-3 { filter: blur(30px); }
+.mystery-image.blur-level-4 { filter: blur(20px); }
+.mystery-image.blur-level-5 { filter: blur(10px); }
+.mystery-image.blur-level-6 { filter: blur(3px); }
+.mystery-image.blur-level-revealed {
+    filter: blur(0) !important;
+    transition: none !important; /* Désactive la transition pour éviter les conflits */
+}
+
+
+
+
+/* Historique des tentatives */
+.attempts-history {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.attempt-item {
+    background: rgba(0, 8, 20, 0.95);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid;
+    transition: all 0.3s ease;
+    animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.attempt-item.correct {
+    border-color: #10b981;
+    background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.2));
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.attempt-item.incorrect {
+    border-color: #E30613;
+    background: linear-gradient(145deg, rgba(227, 6, 19, 0.15), rgba(185, 5, 15, 0.2));
+}
+
+.attempt-player-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.attempt-number {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-right: auto;
+    margin-left: 1rem;
+}
+
+.attempt-status {
+    font-size: 1.5rem;
+}
+
+/* Box de victoire spécifique au mode Photo */
+.photo-victory-container {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 2rem;
+    animation: victorySlideIn 0.6s ease-out;
+}
+
+.photo-victory-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.photo-victory-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #004170;
+    box-shadow: 0 8px 24px rgba(0, 65, 112, 0.5);
+    animation: photoZoom 0.5s ease-out;
+}
+
+@keyframes photoZoom {
+    from {
+        transform: scale(0) rotate(-10deg);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.photo-victory-text {
+    font-size: 1.1rem;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.photo-victory-text strong {
+    color: #4a9eff;
+    font-weight: 700;
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+    .photo-game-container {
+        gap: 20px;
+        padding: 0 0.5rem;
+        margin-top: 130px;
+    }
+
+    .attempts-counter {
+        font-size: 1rem;
+        padding: 0.6rem;
+    }
+
+    #current-attempt {
+        font-size: 1.2rem;
+    }
+
+    .photo-blur-container {
+        max-width: 100%;
+    }
+
+    .attempt-item {
+        padding: 0.8rem 1rem;
+    }
+
+    .attempt-player-name {
+        font-size: 1rem;
+    }
+
+    .attempt-number {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+    }
+
+    .photo-victory-image {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .attempts-counter {
+        font-size: 0.9rem;
+    }
+
+    .attempt-player-name {
+        font-size: 0.9rem;
+    }
+
+    .attempt-status {
+        font-size: 1.2rem;
+    }
+
+    .photo-victory-image {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Animation de déflouage */
+@keyframes deblur {
+    from {
+        filter: blur(var(--blur-from));
+    }
+    to {
+        filter: blur(var(--blur-to));
+    }
+}
+
+.mystery-image.animating {
+    animation: deblur 0.8s ease;
+}

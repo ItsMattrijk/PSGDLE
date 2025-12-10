@@ -202,21 +202,30 @@ refreshCard(position) {
     }
 
     selectDailyMatch() {
-        const today = this.getTodayDate();
-        const seed = parseInt(today.split('-').join(''), 10);
-
-        function seededRandom(seed) {
-            const x = Math.sin(seed) * 10000;
-            return x - Math.floor(x);
+     const today = this.getTodayDate();
+    
+        // Meilleur générateur pseudo-aléatoire avec seed
+        function seededRandom(seedStr) {
+            let hash = 0;
+            for (let i = 0; i < seedStr.length; i++) {
+                hash = ((hash << 5) - hash) + seedStr.charCodeAt(i);
+                hash = hash & hash; // Convertit en entier 32-bit
+            }
+            
+            // Mulberry32 - générateur de qualité
+            let t = hash + 0x6D2B79F5;
+            t = Math.imul(t ^ t >>> 15, t | 1);
+            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
         }
 
-        const randomIndex = Math.floor(seededRandom(seed) * this.matchesData.matches.length);
+        const randomIndex = Math.floor(seededRandom(today) * this.matchesData.matches.length);
         this.currentMatch = this.matchesData.matches[randomIndex];
         this.currentMatch.id = `match_${today}`;
         this.currentFormation = this.matchesData.formations[this.currentMatch.formation];
 
         console.log('🎯 Match aléatoire du jour (identique pour tous):', this.currentMatch);
-    }
+}
 
     displayMatchInfo() {
         const matchHeader = document.querySelector('.match-header');

@@ -42,7 +42,7 @@
         // Restauration du mode au chargement
         window.addEventListener('DOMContentLoaded', () => {
             const savedMode = localStorage.getItem(STORAGE_KEY);
-            if (savedMode && (savedMode === 'wordle' || savedMode === 'xi')) {
+            if (savedMode && (savedMode === 'wordle' || savedMode === 'xi' || savedMode === 'photo')) {
                 switchMode(savedMode);
             } else {
                 switchMode('wordle'); // Mode par défaut

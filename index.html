@@ -31,11 +31,15 @@
     <div class="mode-selector">
         <button class="mode-tab active" data-mode="wordle">
             <span class="emoji">🎮</span>
-            <span>PSGDLE</span>
+            <span>CLASSIQUE</span>
         </button>
         <button class="mode-tab" data-mode="xi">
             <span class="emoji">⚽</span>
             <span>LE XI</span>
+        </button>
+        <button class="mode-tab" data-mode="photo">
+            <span class="emoji">📸</span>
+            <span>PHOTOMYSTERE</span>
             <span class="badge">NOUVEAU</span>
         </button>
     </div>
@@ -474,8 +478,155 @@
 
 </section>
 
+
+<!-- Mode Photo Mystère -->
+<section class="mode-content" id="photo-mode">
+    
+    <div class="nav-container">
+        <div class="nav-box">
+            <button id="openStatsPhotoModal" class="nav-button" title="Statistiques">
+                <div class="nav-button-icon icon-stats"></div>
+            </button>
+
+            <button id="openPhotoModal" class="nav-button" title="Comment jouer ?">
+                <div class="nav-button-icon icon-but"></div>
+            </button>
+
+            <button id="openQAPhotoModal" class="nav-button" title="Questions/Réponses">
+                <div class="nav-button-icon icon-retour"></div>
+            </button>
+            
+            <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
+                <div class="nav-button-icon icon-dons"></div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal Comment Jouer Photo -->
+    <div id="photoHowToModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="closePhotoModal">&times;</button>
+            <div class="modal-body">
+                <h2>📸 Comment jouer au Mode Photo ?</h2>
+                
+                <p>Chaque jour, devine l'identité d'un joueur du PSG à partir de sa photo floue !</p>
+                
+                <div class="countdown-box">
+                    <strong>Prochain joueur disponible dans :</strong> <span id="countdown-photo">--:--:--</span><br>
+                    <small>Fuseau horaire : Europe (minuit UTC+2)</small>
+                </div>
+                
+                <h3>🎯 Principe du jeu</h3>
+                <ul>
+                    <li>Une photo de joueur est affichée avec un <strong>flou intense</strong></li>
+                    <li>Tu as <strong>6 tentatives</strong> pour deviner le joueur</li>
+                    <li>À chaque mauvaise réponse, la photo se <strong>défloute progressivement</strong></li>
+                    <li>Plus tu devines vite, meilleur est ton score !</li>
+                </ul>
+                
+                <h3>🔍 Niveaux de flou</h3>
+                <ul>
+                    <li><strong>Essai 1 :</strong> Flou maximum (très difficile)</li>
+                    <li><strong>Essai 2-3 :</strong> Flou important</li>
+                    <li><strong>Essai 4-5 :</strong> Flou modéré</li>
+                    <li><strong>Essai 6 :</strong> Flou léger (presque visible)</li>
+                </ul>
+                
+                <h3>💡 Astuces</h3>
+                <p>Observe attentivement :</p>
+                <ul>
+                    <li>La couleur de la peau</li>
+                    <li>La forme du visage</li>
+                    <li>La couleur des cheveux</li>
+                    <li>Le maillot (couleur, sponsor)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Questions/Réponses Photo -->
+    <div id="qaPhotoModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeQAPhotoModal">&times;</button>
+            <div class="modal-body">
+                <h2>À propos de PSGDLE</h2>
+                <p>PSGDLE est un jeu indépendant, créé par un passionné, et n'est ni affilié, ni soutenu par le Paris Saint-Germain.</p>
+                <p>Le concept s'inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, tout en apportant sa touche unique dédiée aux fans du PSG.</p>
+                <h3>Vos retours comptent !</h3>
+                <p>Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
+                Envoyez-nous un message en français à : <strong>Matt21Graphics@gmail.com</strong>. J'ai hâte de recevoir vos commentaires et idées !</p>
+                <h3>Soutenir PSGDLE</h3>
+                <p>Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>. &nbsp;<br><br>Chaque soutien compte !</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Statistiques Photo -->
+    <div id="statsPhotoModal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="closeStatsPhotoModal">&times;</button>
+            <div class="modal-body">
+                <h2>📊 Mes Statistiques - Mode Photo</h2>
+                <div id="statsPhotoContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenu principal du mode Photo -->
+    <div class="photo-game-container">
+        <div class="container">
+            <div class="box">
+                <div class="title">Devine le joueur du PSG</div>
+                <div class="subtitle" id="photo-subtitle">Qui se cache derrière cette photo ?</div>
+                
+                <!-- Compteur de tentatives -->
+                <div class="attempts-counter">
+                    Tentative : <span id="current-attempt">0</span> / <span id="max-attempts">6</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone de la photo floue -->
+        <div class="photo-blur-container">
+            <div class="blur-wrapper">
+                <img id="mystery-photo" src="" alt="Photo mystère" class="mystery-image">
+            </div>
+        </div>
+
+        <!-- Barre de recherche -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <div class="search-inner">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="photoSearchInput"
+                        placeholder="Entre le nom d'un joueur..."
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button class="search-btn" type="button">
+                        <svg class="search-icon" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="photo-suggestions" class="suggestions"></div>
+            </div>
+        </div>
+
+        <!-- Historique des tentatives -->
+        <div class="attempts-history" id="attempts-history">
+            <!-- Les tentatives s'afficheront ici -->
+        </div>
+
+    </div>
+</section>
+
 <script src="js/app.js"></script>
 <script src="js/switch.js"></script>
 <script src="js/ximode.js"></script>
+<script src="js/photomode.js"></script>
 </body>
 </html>
