@@ -1,3 +1,6 @@
+
+
+
 // ========== PSGDLE PHOTO MYSTÈRE - SYSTÈME COMPLET ==========
 
 class PSGDLEPhotoGame {
@@ -62,8 +65,11 @@ class PSGDLEPhotoGame {
     }
 
     selectDailyPlayer() {
-        const today = this.getTodayDate();
-        const seed = parseInt(today.split('-').join(''), 10);
+    const today = this.getTodayDate();
+    const baseSeed = parseInt(today.split('-').join(''), 10);
+
+    // Décale volontairement le seed pour éviter d'avoir le même joueur que le mode normal
+    const seed = baseSeed + 1234;
 
         function seededRandom(seed) {
             const x = Math.sin(seed) * 10000;
@@ -752,3 +758,4 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
         }
     });
 });
+
