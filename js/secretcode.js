@@ -69,7 +69,7 @@ class SecretCodeDetector {
     }
     
     getActiveMode() {
-        const classicMode = document.getElementById('classic-mode');
+        const classicMode = document.getElementById('wordle-mode');
         const photoMode = document.getElementById('photo-mode');
         const xiMode = document.getElementById('xi-mode');
         
@@ -83,66 +83,66 @@ class SecretCodeDetector {
         return null;
     }
     
-    resetClassicMode() {
-        console.log('🔄 Réinitialisation du mode Classique...');
-        
-        // Supprimer la sauvegarde du jour
-        localStorage.removeItem('psgQuizState');
-        
-        // Réinitialiser les variables du jeu
-        if (typeof joueursSelectionnes !== 'undefined') {
-            joueursSelectionnes.length = 0;
-        }
-        
-        // Supprimer la victory box si elle existe
-        const victoryBox = document.getElementById('victory-box');
-        if (victoryBox) {
-            victoryBox.remove();
-        }
-        
-        // Réinitialiser les boutons d'indices
-        if (typeof hintButtons !== 'undefined') {
-            hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false, revealed: false };
-            hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false, revealed: false };
-            hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false, revealed: false };
-            if (typeof renderHintButtons === 'function') {
-                renderHintButtons();
-            }
-        }
-        
-        // Réactiver la recherche
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.disabled = false;
-            searchInput.placeholder = "Rechercher un joueur...";
-            searchInput.value = '';
-        }
-        
-        // Effacer l'historique des joueurs sélectionnés
-        const selectedPlayersContainer = document.getElementById('selectedPlayers');
-        if (selectedPlayersContainer) {
-            selectedPlayersContainer.innerHTML = '';
-        }
-        
-        // Réafficher le sous-titre
-        const subtitle = document.getElementById('subtitle');
-        if (subtitle) {
-            subtitle.style.display = '';
-        }
-        
-        // Générer un nouveau joueur aléatoire
-        if (typeof regenererJoueurAleatoire === 'function') {
-            regenererJoueurAleatoire();
-        }
-        
-        // Ajuster les marges
-        if (typeof adjustMargin === 'function') {
-            adjustMargin();
-        }
-        
-        this.showNotification('Mode Classique réinitialisé ! 🎯', 'success');
+resetClassicMode() {
+    console.log('🔄 Réinitialisation du mode Classique...');
+    
+    localStorage.removeItem('psgQuizState');
+    
+    if (typeof window.joueursSelectionnes !== 'undefined') {
+        window.joueursSelectionnes.length = 0;
     }
     
+    const victoryBox = document.getElementById('victory-box');
+    if (victoryBox) {
+        victoryBox.remove();
+    }
+    
+    // ✅ NOUVEAU : Effacer l'historique
+    const selectedPlayersContainer = document.getElementById('selectedPlayers');
+    if (selectedPlayersContainer) {
+        selectedPlayersContainer.innerHTML = '';
+    }
+    
+    // Réinitialiser les boutons d'indices
+    if (typeof window.hintButtons !== 'undefined') {
+        window.hintButtons.montant_transfert = { unlockAt: 5, visible: false, unlocked: false, revealed: false };
+        window.hintButtons.periode_psg = { unlockAt: 9, visible: false, unlocked: false, revealed: false };
+        window.hintButtons.parcours = { unlockAt: 13, visible: false, unlocked: false, revealed: false };
+        if (typeof window.renderHintButtons === 'function') {
+            window.renderHintButtons();
+        }
+    }
+    
+    // ✅ NOUVEAU : Vider le container des hints
+    const hintsContainer = document.querySelector('.hint-buttons-container');
+    if (hintsContainer) {
+        hintsContainer.innerHTML = '';
+        hintsContainer.style.minHeight = '0';
+        hintsContainer.style.padding = '0';
+    }
+    
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.disabled = false;
+        searchInput.placeholder = "Rechercher un joueur...";
+        searchInput.value = '';
+    }
+    
+    const subtitle = document.getElementById('subtitle');
+    if (subtitle) {
+        subtitle.style.display = '';
+    }
+    
+    if (typeof window.regenererJoueurAleatoire === 'function') {
+        window.regenererJoueurAleatoire();
+    }
+    
+    if (typeof window.adjustMargin === 'function') {
+        window.adjustMargin();
+    }
+    
+    this.showNotification('Mode Classique réinitialisé ! 🎯', 'success');
+}
     resetPhotoMode() {
         console.log('🔄 Réinitialisation du mode Photo...');
         
@@ -354,6 +354,6 @@ let secretDetector;
 
 document.addEventListener('DOMContentLoaded', () => {
     secretDetector = new SecretCodeDetector();
-    console.log('🔐 Système de code secret initialisé');
+    console.log('🔍 Système de code secret initialisé');
     console.log('💡 Tape "PSGDLE" n\'importe où pour activer le mode illimité !');
 });
