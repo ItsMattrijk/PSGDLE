@@ -228,6 +228,15 @@ margin-top: 150px;
     .promo-game-name {
         font-size: 0.85rem;
     }
+
+    .promo-box-container {
+    max-width: 500px;
+    width: 100%;
+    margin: 40px auto;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards 0.4s;
+    margin-top: -190px;
+}
 }
 
 @media (max-width: 480px) {
