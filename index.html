@@ -1,640 +1,1083 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0E254GVZMB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-0E254GVZMB');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0E254GVZMB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0E254GVZMB');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSGDLE - Devine le joueur du PSG</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="icon.svg">
+
+    <style>
+        /* ===== PAGE D'ACCUEIL ===== */
+        #homepage {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px 60px;
+            gap: 0;
+        }
+
+        .homepage-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .homepage-logo {
+            max-width: 200px;
+            height: auto;
+            filter: drop-shadow(0 0 40px rgba(0, 65, 112, 0.8));
+            cursor: default;
+        }
+
+        .homepage-tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+
+        .tagline-white { color: #ffffff; }
+        .tagline-psg   { color: #dc143c; }
+
+        /* Boutons de mode */
+        .homepage-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .game-button {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 24px;
+            background: rgb(0, 8, 20);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            text-align: left;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            -webkit-box-shadow: 0px 0px 60px 10px rgba(0, 65, 112, 0.35);
+            box-shadow: 0px 0px 60px 10px rgba(0, 65, 112, 0.35);
+        }
+
+        .game-button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 77, 155, 0.7), transparent);
+            border-radius: 14px 14px 0 0;
+        }
+
+        .game-button:hover {
+            border-color: rgba(0, 123, 255, 0.45);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0px 0px 80px 15px rgba(0, 65, 112, 0.5),
+                        0 8px 30px rgba(0,0,0,0.4);
+        }
+
+        .game-button:active {
+            transform: translateY(-1px) scale(1.005);
+        }
+
+        .game-button-icon {
+            font-size: 2.2rem;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 65, 112, 0.25);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 100, 200, 0.25);
+            flex-shrink: 0;
+        }
+
+        .game-button-content {
+            flex: 1;
+        }
+
+        .game-button-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .game-button-subtitle {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.55);
+            font-weight: 400;
+        }
+
+        .game-button-arrow {
+            color: rgba(255,255,255,0.25);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .game-button:hover .game-button-arrow {
+            color: rgba(255,255,255,0.7);
+            transform: translateX(4px);
+        }
+
+        /* Box "Autres jeux" */
+        .autres-jeux-box {
+            width: 100%;
+            max-width: 520px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            padding: 18px 24px 22px;
+            text-align: center;
+            background: linear-gradient(135deg, #00205b 0%, #004170 40%, #001a4a 70%, #00102e 100%);
+            border: 1px solid rgba(220, 20, 60, 0.4);
+            box-shadow: 0 0 30px rgba(220, 20, 60, 0.2), 0 6px 24px rgba(0,0,0,0.5);
+        }
+
+        .autres-jeux-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-conic-gradient(
+                from 0deg at 50% 50%,
+                rgba(255,255,255,0.04) 0deg,
+                rgba(255,255,255,0.04) 1deg,
+                transparent 1deg,
+                transparent 8deg
+            );
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .autres-jeux-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 40%, rgba(220,20,60,0.12) 0%, transparent 65%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .autres-jeux-box > * { position: relative; z-index: 1; }
+
+        .autres-jeux-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+
+        .autres-jeux-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.75);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .autres-jeux-grid {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .autre-jeu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            gap: 6px;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .autre-jeu-item:hover {
+            transform: translateY(-4px) scale(1.08);
+            filter: drop-shadow(0 4px 12px rgba(220,20,60,0.5));
+        }
+
+        .autre-jeu-item img {
+            width: 54px;
+            height: 54px;
+            object-fit: contain;
+            border-radius: 0;
+            border: none;
+            background: none;
+            box-shadow: none;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+            cursor: pointer;
+        }
+
+        .autre-jeu-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .autre-jeu-sub {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.3;
+            max-width: 80px;
+            text-align: center;
+        }
+
+        /* ===== GAME MODES (hidden by default) ===== */
+        .game-section {
+            display: none;
+        }
+
+        .game-section.active {
+            display: block;
+        }
+
+        /* Back button inside game sections */
+        .back-to-home-btn {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            z-index: 9990;
+            background: rgb(0, 8, 20);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            padding: 8px 14px;
+            color: rgba(255,255,255,0.7);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+
+        .back-to-home-btn:hover {
+            background: rgba(0, 65, 112, 0.4);
+            border-color: rgba(0,123,255,0.5);
+            color: #fff;
+        }
+
+        /* Responsive homepage */
+        @media (max-width: 600px) {
+            .homepage-tagline { font-size: 1.1rem; }
+            .game-button { padding: 14px 18px; gap: 14px; }
+            .game-button-icon { width: 44px; height: 44px; font-size: 1.8rem; }
+            .game-button-title { font-size: 0.95rem; }
+            .homepage-logo { max-width: 150px; }
+        }
+
+        @media (max-width: 400px) {
+            .homepage-tagline { font-size: 0.95rem; letter-spacing: 1px; }
+            .game-button-subtitle { font-size: 0.75rem; }
+        }
+        /* Logo dans les sections de jeu */
+        .game-section-logo {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0 0;
+        }
+        .game-section-logo-img {
+            max-width: 110px;
+            height: auto;
+            filter: drop-shadow(0 0 30px rgba(0, 65, 112, 0.8));
+            cursor: pointer;
+            box-shadow: none !important;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+        }
+        .game-section-logo-img:hover {
+            transform: scale(1.12);
+            filter: drop-shadow(0 0 45px rgba(0, 100, 200, 1));
+        }
+        .game-section-logo-img:active {
+            transform: scale(1.05);
+        }
+
+    </style>
 </head>
-
-
-
-<header>
-    <img src="assets/lg.png" alt="Logo PSGDLE">
-
-</header>
 
 <body>
 
+<!-- ===== PAGE D'ACCUEIL ===== -->
+<div id="homepage">
+
+    <div class="homepage-logo-container">
+        <img src="assets/lg.png" alt="Logo PSGDLE" class="homepage-logo">
+        <p class="homepage-tagline">
+            <span class="tagline-white">Devine les joueurs du </span><span class="tagline-psg">PSG</span>
+        </p>
+    </div>
+
+    <div class="homepage-menu">
+
+        <button class="game-button" onclick="showGameMode('wordle')">
+            <div class="game-button-icon">🎮</div>
+            <div class="game-button-content">
+                <div class="game-button-title">Classique</div>
+                <div class="game-button-subtitle">Devinez le joueur mystère du jour</div>
+            </div>
+            <div class="game-button-arrow">›</div>
+        </button>
+
+        <button class="game-button" onclick="showGameMode('xi')">
+            <div class="game-button-icon">⚽</div>
+            <div class="game-button-content">
+                <div class="game-button-title">Le XI</div>
+                <div class="game-button-subtitle">Reconstituez la composition d'un match historique</div>
+            </div>
+            <div class="game-button-arrow">›</div>
+        </button>
+
+        <button class="game-button" onclick="showGameMode('photo')">
+            <div class="game-button-icon">📸</div>
+            <div class="game-button-content">
+                <div class="game-button-title">Photo Mystère</div>
+                <div class="game-button-subtitle">Identifiez le joueur derrière la photo floue</div>
+            </div>
+            <div class="game-button-arrow">›</div>
+        </button>
+
+    </div>
+
+    <!-- BOX AUTRES JEUX -->
+    <div class="autres-jeux-box">
+        <div class="autres-jeux-title">Tu en veux plus ?</div>
+        <div class="autres-jeux-subtitle">Joue à nos autres jeux :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/DragonBallDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/DragonBallDLE/assets/img/db.webp" alt="DragonBallDLE">
+                <div class="autre-jeu-name">DragonBallDLE</div>
+                <div class="autre-jeu-sub">Dragon Ball</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ===== SECTION JEU - MODE CLASSIQUE ===== -->
+<div id="section-wordle" class="game-section">
+
+    <div class="game-section-logo">
+        <img src="assets/lg.png" alt="PSGDLE" class="game-section-logo-img" onclick="showHome()" title="Retour à l'accueil">
+    </div>
+
+
     <!-- SELECTEUR DE MODE -->
-<div class="mode-selector-wrapper">
-    <div class="mode-selector">
-        <button class="mode-tab active" data-mode="wordle">
-            <span class="emoji">🎮</span>
-            <span>CLASSIQUE</span>
-        </button>
-        <button class="mode-tab" data-mode="xi">
-            <span class="emoji">⚽</span>
-            <span>LE XI</span>
-        </button>
-        <button class="mode-tab" data-mode="photo">
-            <span class="emoji">📸</span>
-            <span>PHOTOMYSTERE</span>
-            <span class="badge">NOUVEAU</span>
-        </button>
-    </div>
-</div>
-
-<section class="mode-content active" id="wordle-mode">
-
-    <div class="nav-container">
-        <div class="nav-box">
-<button id="openStatsModal" class="nav-button" title="Statistiques">
-  <div class="nav-button-icon icon-stats"></div>
-</button>
-
-
-            
-        <button id="openModal" class="nav-button" title="Comment jouer ?">
-        <div class="nav-button-icon icon-but"></div>
-        </button>
-
-            
-        <button id="openAboutModal" class="nav-button" title="Questions/Réponses">
-        <div class="nav-button-icon icon-retour"></div>
-        </button>
-            
-            <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
-                <div class="nav-button-icon icon-dons"></div>
-            </a>
-            
+    <div class="mode-selector-wrapper">
+        <div class="mode-selector">
+            <button class="mode-tab active" data-mode="wordle" onclick="switchModeTab('wordle')">
+                <span class="emoji">🎮</span>
+                <span>CLASSIQUE</span>
+            </button>
+            <button class="mode-tab" data-mode="xi" onclick="switchModeTab('xi')">
+                <span class="emoji">⚽</span>
+                <span>LE XI</span>
+            </button>
+            <button class="mode-tab" data-mode="photo" onclick="switchModeTab('photo')">
+                <span class="emoji">📸</span>
+                <span>PHOTOMYSTERE</span>
+            </button>
         </div>
     </div>
 
-    <!-- Modal Comment Jouer -->
-    <div id="howToPlayModal" class="modal">
-        <div class="modal-content">
-<button class="modal-close" id="closeModal">&times;</button>
+    <section class="mode-content active" id="wordle-mode">
 
-            <div class="modal-body">
-                <h2>Comment jouer à PSGDLE ?</h2>
-                
-                <p>Chaque jour, un joueur différent du Paris Saint-Germain est à deviner. Le joueur change automatiquement toutes les 24 heures.</p>
-                
-                <div class="countdown-box">
-                    <strong>Prochain joueur disponible dans :</strong> <span id="countdown">--:--:--</span><br>
-                    <small>Fuseau horaire : Europe (minuit UTC+2)</small>
-                </div>
-                
-                <h3>Comment deviner ?</h3>
-                <p>Saisis le nom d'un joueur : ses propriétés s'afficheront immédiatement.</p>
-                <p>Les couleurs et symboles t'indiquent si ta proposition se rapproche du joueur recherché :</p>
-                
-                <ul class="legend-list">
-                    <li><span class="color-box blue"></span> <strong>Bleu :</strong>&nbsp; correspondance exacte.</li>
-                    <li><span class="color-box red"></span> <strong>Rouge :</strong>&nbsp; aucune correspondance.</li>
-                    <li><strong>⬆️ / ⬇️ :</strong>&nbsp; valeur plus haute ou plus basse.</li>
-                </ul>
-                
-                <h3>Propriétés affichées</h3>
-                <ul>
-                    <li><strong>Joueur :</strong> Nom et Prénom du joueur.</li>
-                    <li><strong>Nationalité :</strong> Sa nationalité sportive.</li>
-                    <li><strong>Âge :</strong> Son âge actuel.</li>
-                    <li><strong>Poste :</strong> Gardien, Défenseur, Milieu ou Attaquant.</li>
-                    <li><strong>Numéro :</strong> Numéro de maillot le plus porté au PSG.</li>
-                    <li><strong>Taille :</strong> Taille du joueur.</li>
-                    <li><strong>Formé au club :</strong> Indique s'il a été formé au PSG.</li>
-                    <li><strong>Matchs joués :</strong> Nombre de matchs disputés avec le PSG.</li>
-                </ul>
-                
-                <h3>Indices</h3>
-                <p>Si tu rencontres des difficultés, tu débloqueras progressivement des indices après plusieurs tentatives :</p>
-                <ul>
-                    <li><strong>Montant du transfert :</strong> Somme de son transfert au PSG (si connue, les anciens transferts pouvant être indisponibles).</li>
-                    <li><strong>Période au PSG :</strong> Années pendant lesquelles il a évolué au club.</li>
-                    <li><strong>Parcours du joueur :</strong> Clubs dans lesquels il a joué au cours de sa carrière.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal À propos -->
-<div id="aboutModal" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" id="closeAboutModal">&times;</button>
-    <div class="modal-body">
-      <h2>À propos de PSGDLE</h2>
-
-      <p>
-        PSGDLE est un jeu indépendant, créé par un passionné, et n’est ni affilié, 
-        ni soutenu par le Paris Saint-Germain.
-      </p>
-
-      <p>
-        Le concept s’inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, 
-        <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, 
-        tout en apportant sa touche unique dédiée aux fans du PSG.
-      </p>
-
-      <h3>Vos retours comptent !</h3>
-      <p>
-        Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
-        Envoyez-nous un message en français à : 
-        <strong>Matt21Graphics@gmail.com</strong>.  
-        J’ai hâte de recevoir vos commentaires et idées !
-      </p>
-
-      <h3>Soutenir PSGDLE</h3>
-      <p>
-        Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, 
-        vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>.  
-        &nbsp;<br><br>Chaque soutien compte !
-      </p>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- Modal Statistiques -->
-    <div id="statsModal" class="modal" aria-hidden="true">
-        <div class="modal-content">
-            <button class="modal-close" id="closeStatsModal">&times;</button>
-            
-            <div class="modal-body">
-                <h2>📊 Mes Statistiques</h2>
-                
-                <div id="statsContent">
-                    <!-- Contenu dynamique injecté par JS -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    </div>
-  </div>
-</div>
-
-
-
-
-<section class="main">
-
-<div class="container">
-  <div class="box">
-    <div class="title">Devine le joueur du PSG</div>
-        <!-- Container pour les 3 boutons d'indices -->
-    <div class="hint-buttons-container">
-        <!-- Les boutons seront générés dynamiquement par JavaScript -->
-    </div>
-<div class="subtitle" id="subtitle">Tape n'importe quel joueur pour commencer.</div>
-
-
-  </div>
-</div>
-
-
-<div class="search-container">
-        <div class="search-wrapper">
-            <div class="search-inner">
-                <input 
-                    type="text" 
-                    class="search-input" 
-                    id="searchInput"
-                    placeholder="Devine le joueur du PSG..."
-                    aria-label="Rechercher un joueur du PSG"
-                    autocomplete="off"
-                    spellcheck="false"
-                >
-                
-                <button class="search-btn" type="button" aria-label="Lancer la recherche">
-                    <svg class="search-icon" viewBox="0 0 24 24" role="img">
-                        <circle cx="11" cy="11" r="8"/>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
+        <div class="nav-container">
+            <div class="nav-box">
+                <button id="openStatsModal" class="nav-button" title="Statistiques">
+                    <div class="nav-button-icon icon-stats"></div>
                 </button>
-            </div>
-            
-            <div id="suggestions" class="suggestions"></div>
-        </div>
-    </div>
-
-    <div id="selectedPlayers" class="selected-players"></div>
-
-
-    <div class="container-wide">
-    <div class="box">
-        <div class="title">Indicateurs de couleur</div>
-        
-        <div class="indicators">
-            <div class="indicator-item">
-                <div class="color-box blue"></div>
-                <div class="indicator-label">Correct</div>
-            </div>
-
-            <div class="indicator-item">
-                <div class="color-box red"></div>
-                <div class="indicator-label">Incorrect</div>
-            </div>
-
-            <div class="indicator-item">
-                <div class="color-box red">
-                <svg class="arrow-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 5L12 19M12 5L6 11M12 5L18 11" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-
-                </div>
-                <div class="indicator-label">Supérieur</div>
-            </div>
-
-            <div class="indicator-item">
-                <div class="color-box red">
-                    <svg class="arrow-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 19L12 5M12 19L18 13M12 19L6 13" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="indicator-label">Inférieur</div>
+                <button id="openModal" class="nav-button" title="Comment jouer ?">
+                    <div class="nav-button-icon icon-but"></div>
+                </button>
+                <button id="openAboutModal" class="nav-button" title="Questions/Réponses">
+                    <div class="nav-button-icon icon-retour"></div>
+                </button>
+                <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
+                    <div class="nav-button-icon icon-dons"></div>
+                </a>
             </div>
         </div>
-    </div>
-</div>
 
-</section>
-
-
-</section>
-
-<section class="mode-content" id="xi-mode">
-
-
- <div class="nav-container">
-        <div class="nav-box">
-
-        <button id="openStatsXIModal" class="nav-button" title="Statistiques">
-        <div class="nav-button-icon icon-stats"></div>
-        </button>
-
-
-            
-        <button id="openLeXIModal" class="nav-button" title="Comment jouer ?">
-        <div class="nav-button-icon icon-but"></div>
-        </button>
-
-            
-        <button id="openQAModal" class="nav-button" title="Questions/Réponses">
-        <div class="nav-button-icon icon-retour"></div>
-        </button>
-
-            
-            <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
-                <div class="nav-button-icon icon-dons"></div>
-            </a>
-            
-        </div>
-    </div>
-
-
-
-<!-- Modal Le XI -->
-<div id="leXIModal" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" id="closeLeXIModal">&times;</button>
-
-    <div class="modal-body">
-      <h2>⚽ Le XI – Mode de jeu #2</h2>
-
-      <h3>🎯 Objectif</h3>
-      <p>Reconstitue la composition exacte (11 titulaires) d’un match historique du PSG.<br>
-      Une nouvelle composition est proposée chaque jour.</p>
-
-      <h3>🎮 Déroulement du jeu</h3>
-      <p><strong>1️⃣ Lancement</strong></p>
-      <p>Un match est sélectionné (exemples : PSG – Real Madrid 1993, PSG – Barça 2017).<br>
-      Le terrain s’affiche avec les 11 postes de la formation réelle, ainsi que le nom du match et sa date pour le contexte.</p>
-
-      <p><strong>2️⃣ Placement des joueurs</strong></p>
-      <p>Clique sur un poste vide pour ouvrir la barre de recherche.<br>
-      Tape un nom : des suggestions apparaissent automatiquement (nom + poste).<br>
-      Seuls les joueurs non encore placés sont proposés.<br>
-      Clique sur un joueur pour le placer sur le terrain.</p>
-
-      <p><strong>3️⃣ Validation</strong></p>
-      <p>Une fois les 11 postes remplis, clique sur « Valider la composition ». Le système compare ta proposition avec la composition réelle :</p>
-      <ul>
-        <li>✅ <strong>Vert :</strong> bon joueur au bon poste</li>
-        <li>🟠 <strong>Orange :</strong> bon joueur, mauvais poste</li>
-        <li>❌ <strong>Rouge :</strong> joueur incorrect</li>
-      </ul>
-      <p>Tu peux ensuite ajuster ta composition et valider à nouveau.</p>
-
-      <h3>🧩 Indices automatiques</h3>
-      <p>À chaque tentative de validation, des indices sont révélés pour les joueurs restants :</p>
-      <ul>
-        <li>1️⃣ Taille</li>
-        <li>2️⃣ Numéro</li>
-        <li>3️⃣ Nationalité</li>
-      </ul>
-
-      <h3>⚙️ Règles du jeu</h3>
-      <ul>
-        <li>Un joueur ne peut être placé qu’une seule fois.</li>
-        <li>La validation est possible uniquement avec 11 joueurs placés.</li>
-        <li>Tu peux déplacer un joueur en maintenant un clic long.</li>
-        <li>Les postes affichés sont indicatifs : libre à toi de placer qui tu veux où tu veux.</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal Questions/Réponses -->
-<div id="qaModal" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" id="closeQAModal">&times;</button>
-    <div class="modal-body">
-      <h2>À propos de PSGDLE</h2>
-
-      <p>
-        PSGDLE est un jeu indépendant, créé par un passionné, et n’est ni affilié, 
-        ni soutenu par le Paris Saint-Germain.
-      </p>
-
-      <p>
-        Le concept s’inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, 
-        <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, 
-        tout en apportant sa touche unique dédiée aux fans du PSG.
-      </p>
-
-      <h3>Vos retours comptent !</h3>
-      <p>
-        Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
-        Envoyez-nous un message en français à : 
-        <strong>Matt21Graphics@gmail.com</strong>.  
-        J’ai hâte de recevoir vos commentaires et idées !
-      </p>
-
-      <h3>Soutenir PSGDLE</h3>
-      <p>
-        Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, 
-        vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>.  
-        &nbsp;<br><br>Chaque soutien compte !
-      </p>
-    </div>
-  </div>
-</div>
-
-
-<!-- === PSGDLE XI - STATS MODAL (namespaced) === -->
-<div id="statsXIModal" class="psgdle-xi-stats-modal" aria-hidden="true" style="display:none;">
-  <div class="psgdle-xi-modal-content" role="dialog" aria-modal="true" aria-labelledby="psgdle-xi-title">
-    <div class="psgdle-xi-modal-header">
-      <h2 id="psgdle-xi-title" class="psgdle-xi-modal-title">📊 Mes Statistiques</h2>
-      <button id="closeStatsXIModal" class="psgdle-xi-close-btn" aria-label="Fermer">✖</button>
-    </div>
-
-    <div class="psgdle-xi-modal-body">
-      <div class="psgdle-xi-stats-grid">
-        <div class="psgdle-xi-stat-card">
-          <div class="psgdle-xi-stat-value" id="stat-streak">-</div>
-          <div class="psgdle-xi-stat-label">🔥 Série actuelle</div>
-        </div>
-        <div class="psgdle-xi-stat-card">
-          <div class="psgdle-xi-stat-value" id="stat-wins">-</div>
-          <div class="psgdle-xi-stat-label">🏆 Total victoires</div>
-        </div>
-        <div class="psgdle-xi-stat-card">
-          <div class="psgdle-xi-stat-value" id="stat-avg">-</div>
-          <div class="psgdle-xi-stat-label">⚽ Moy. tentatives</div>
-        </div>
-        <div class="psgdle-xi-stat-card">
-          <div class="psgdle-xi-stat-value" id="stat-rate">-</div>
-          <div class="psgdle-xi-stat-label">📈 Taux de réussite</div>
-        </div>
-        <div class="psgdle-xi-stat-card">
-          <div class="psgdle-xi-stat-value" id="stat-best">-</div>
-          <div class="psgdle-xi-stat-label">🧩 Meilleur score</div>
-        </div>
-        <div class="psgdle-xi-stat-card">
-          <div class="psgdle-xi-stat-value" id="stat-top">-</div>
-          <div class="psgdle-xi-stat-label">🎯 Joueurs favoris</div>
-        </div>
-      </div>
-
-      <button id="shareStatsXIBtn" class="psgdle-xi-share-btn">Partager mes stats 📤</button>
-      <button id="resetStatsXIBtn" class="psgdle-xi-reset-btn">Réinitialiser les stats</button>
-    </div>
-  </div>
-</div>
-<!-- === FIN STATS MODAL === -->
-
-
-
-
- <!-- Mode XI -->
-    <section class="mode-content active" id="xi-mode">
-        <div class="xi-container">
-            <!-- En-tête du match -->
-            <div class="match-header">
-                <!-- Rempli dynamiquement par JS -->
-            </div>
-
-            <!-- Terrain -->
-            <div class="field-wrapper">
-                <div class="field">
-                    <!-- Généré dynamiquement par JS -->
-                </div>
-
-                <div class="validate-btn">
-                    <button id="validateBtn" disabled>
-                        Valider la composition (0/11)
-                    </button>
+        <!-- Modal Comment Jouer -->
+        <div id="howToPlayModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeModal">&times;</button>
+                <div class="modal-body">
+                    <h2>Comment jouer à PSGDLE ?</h2>
+                    <p>Chaque jour, un joueur différent du Paris Saint-Germain est à deviner. Le joueur change automatiquement toutes les 24 heures.</p>
+                    <div class="countdown-box">
+                        <strong>Prochain joueur disponible dans :</strong> <span id="countdown">--:--:--</span><br>
+                        <small>Fuseau horaire : Europe (minuit UTC+2)</small>
+                    </div>
+                    <h3>Comment deviner ?</h3>
+                    <p>Saisis le nom d'un joueur : ses propriétés s'afficheront immédiatement.</p>
+                    <p>Les couleurs et symboles t'indiquent si ta proposition se rapproche du joueur recherché :</p>
+                    <ul class="legend-list">
+                        <li><span class="color-box blue"></span> <strong>Bleu :</strong>&nbsp; correspondance exacte.</li>
+                        <li><span class="color-box red"></span> <strong>Rouge :</strong>&nbsp; aucune correspondance.</li>
+                        <li><strong>⬆️ / ⬇️ :</strong>&nbsp; valeur plus haute ou plus basse.</li>
+                    </ul>
+                    <h3>Propriétés affichées</h3>
+                    <ul>
+                        <li><strong>Joueur :</strong> Nom et Prénom du joueur.</li>
+                        <li><strong>Nationalité :</strong> Sa nationalité sportive.</li>
+                        <li><strong>Âge :</strong> Son âge actuel.</li>
+                        <li><strong>Poste :</strong> Gardien, Défenseur, Milieu ou Attaquant.</li>
+                        <li><strong>Numéro :</strong> Numéro de maillot le plus porté au PSG.</li>
+                        <li><strong>Taille :</strong> Taille du joueur.</li>
+                        <li><strong>Formé au club :</strong> Indique s'il a été formé au PSG.</li>
+                        <li><strong>Matchs joués :</strong> Nombre de matchs disputés avec le PSG.</li>
+                    </ul>
+                    <h3>Indices</h3>
+                    <p>Si tu rencontres des difficultés, tu débloqueras progressivement des indices après plusieurs tentatives :</p>
+                    <ul>
+                        <li><strong>Montant du transfert :</strong> Somme de son transfert au PSG.</li>
+                        <li><strong>Période au PSG :</strong> Années pendant lesquelles il a évolué au club.</li>
+                        <li><strong>Parcours du joueur :</strong> Clubs dans lesquels il a joué au cours de sa carrière.</li>
+                    </ul>
                 </div>
             </div>
         </div>
+
+        <!-- Modal À propos -->
+        <div id="aboutModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeAboutModal">&times;</button>
+                <div class="modal-body">
+                    <h2>À propos de PSGDLE</h2>
+                    <p>PSGDLE est un jeu indépendant, créé par un passionné, et n'est ni affilié, ni soutenu par le Paris Saint-Germain.</p>
+                    <p>Le concept s'inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, tout en apportant sa touche unique dédiée aux fans du PSG.</p>
+                    <h3>Vos retours comptent !</h3>
+                    <p>Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
+                    Envoyez-nous un message en français à : <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="94f7fbfae0f5f7e0d4e4e7f3f0f8f1baf2e6">[email&#160;protected]</a></strong>. J'ai hâte de recevoir vos commentaires et idées !</p>
+                    <h3>Soutenir PSGDLE</h3>
+                    <p>Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>.<br><br>Chaque soutien compte !</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Statistiques -->
+        <div id="statsModal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <button class="modal-close" id="closeStatsModal">&times;</button>
+                <div class="modal-body">
+                    <h2>📊 Mes Statistiques</h2>
+                    <div id="statsContent"></div>
+                </div>
+            </div>
+        </div>
+
     </section>
 
-    <!-- Modal de recherche de joueur -->
+    <section class="main">
+
+        <div class="wordle-layout">
+
+            <div class="container">
+                <div class="box">
+                    <div class="title">Devine le joueur du PSG</div>
+                    <div class="hint-buttons-container"></div>
+                    <div class="subtitle" id="subtitle">Tape n'importe quel joueur pour commencer.</div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <div class="search-inner">
+                        <input
+                            type="text"
+                            class="search-input"
+                            id="searchInput"
+                            placeholder="Devine le joueur du PSG..."
+                            aria-label="Rechercher un joueur du PSG"
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                        <button class="search-btn" type="button" aria-label="Lancer la recherche">
+                            <svg class="search-icon" viewBox="0 0 24 24" role="img">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="suggestions" class="suggestions"></div>
+                </div>
+            </div>
+
+            <div id="selectedPlayers" class="selected-players"></div>
+
+            <div class="container-wide">
+                <div class="box">
+                    <div class="title">Indicateurs de couleur</div>
+                    <div class="indicators">
+                        <div class="indicator-item">
+                            <div class="color-box blue"></div>
+                            <div class="indicator-label">Correct</div>
+                        </div>
+                        <div class="indicator-item">
+                            <div class="color-box red"></div>
+                            <div class="indicator-label">Incorrect</div>
+                        </div>
+                        <div class="indicator-item">
+                            <div class="color-box red">
+                                <svg class="arrow-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5L12 19M12 5L6 11M12 5L18 11" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="indicator-label">Supérieur</div>
+                        </div>
+                        <div class="indicator-item">
+                            <div class="color-box red">
+                                <svg class="arrow-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 19L12 5M12 19L18 13M12 19L6 13" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="indicator-label">Inférieur</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- fin .wordle-layout -->
+
+    </section>
+
+
+    <!-- ===== BOX AUTRES JEUX (réutilisable) ===== -->
+    <div class="autres-jeux-box section-autres-jeux">
+        <div class="autres-jeux-title">Tu en veux plus ?</div>
+        <div class="autres-jeux-subtitle">Joue à nos autres jeux :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/DragonBallDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/DragonBallDLE/assets/img/db.webp" alt="DragonBallDLE">
+                <div class="autre-jeu-name">DragonBallDLE</div>
+                <div class="autre-jeu-sub">Dragon Ball</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
+            </a>
+        </div>
+    </div>
+
+</div><!-- fin #section-wordle -->
+
+
+<!-- ===== SECTION JEU - MODE XI ===== -->
+<div id="section-xi" class="game-section">
+
+    <div class="game-section-logo">
+        <img src="assets/lg.png" alt="PSGDLE" class="game-section-logo-img" onclick="showHome()" title="Retour à l'accueil">
+    </div>
+
+
+    <!-- SELECTEUR DE MODE -->
+    <div class="mode-selector-wrapper">
+        <div class="mode-selector">
+            <button class="mode-tab" data-mode="wordle" onclick="switchModeTab('wordle')">
+                <span class="emoji">🎮</span>
+                <span>CLASSIQUE</span>
+            </button>
+            <button class="mode-tab active" data-mode="xi" onclick="switchModeTab('xi')">
+                <span class="emoji">⚽</span>
+                <span>LE XI</span>
+            </button>
+            <button class="mode-tab" data-mode="photo" onclick="switchModeTab('photo')">
+                <span class="emoji">📸</span>
+                <span>PHOTOMYSTERE</span>
+            </button>
+        </div>
+    </div>
+
+    <section class="mode-content active" id="xi-mode">
+
+        <div class="nav-container">
+            <div class="nav-box">
+                <button id="openStatsXIModal" class="nav-button" title="Statistiques">
+                    <div class="nav-button-icon icon-stats"></div>
+                </button>
+                <button id="openLeXIModal" class="nav-button" title="Comment jouer ?">
+                    <div class="nav-button-icon icon-but"></div>
+                </button>
+                <button id="openQAModal" class="nav-button" title="Questions/Réponses">
+                    <div class="nav-button-icon icon-retour"></div>
+                </button>
+                <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
+                    <div class="nav-button-icon icon-dons"></div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Modal Le XI -->
+        <div id="leXIModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeLeXIModal">&times;</button>
+                <div class="modal-body">
+                    <h2>⚽ Le XI – Mode de jeu #2</h2>
+                    <h3>🎯 Objectif</h3>
+                    <p>Reconstitue la composition exacte (11 titulaires) d'un match historique du PSG.<br>Une nouvelle composition est proposée chaque jour.</p>
+                    <h3>🎮 Déroulement du jeu</h3>
+                    <p><strong>1️⃣ Lancement</strong></p>
+                    <p>Un match est sélectionné. Le terrain s'affiche avec les 11 postes de la formation réelle, ainsi que le nom du match et sa date pour le contexte.</p>
+                    <p><strong>2️⃣ Placement des joueurs</strong></p>
+                    <p>Clique sur un poste vide pour ouvrir la barre de recherche. Tape un nom : des suggestions apparaissent automatiquement. Seuls les joueurs non encore placés sont proposés.</p>
+                    <p><strong>3️⃣ Validation</strong></p>
+                    <p>Une fois les 11 postes remplis, clique sur « Valider la composition ». Le système compare ta proposition avec la composition réelle :</p>
+                    <ul>
+                        <li>✅ <strong>Vert :</strong> bon joueur au bon poste</li>
+                        <li>🟠 <strong>Orange :</strong> bon joueur, mauvais poste</li>
+                        <li>❌ <strong>Rouge :</strong> joueur incorrect</li>
+                    </ul>
+                    <h3>🧩 Indices automatiques</h3>
+                    <p>À chaque tentative de validation, des indices sont révélés : Taille, Numéro, Nationalité.</p>
+                    <h3>⚙️ Règles du jeu</h3>
+                    <ul>
+                        <li>Un joueur ne peut être placé qu'une seule fois.</li>
+                        <li>La validation est possible uniquement avec 11 joueurs placés.</li>
+                        <li>Tu peux déplacer un joueur en maintenant un clic long.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Questions/Réponses XI -->
+        <div id="qaModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeQAModal">&times;</button>
+                <div class="modal-body">
+                    <h2>À propos de PSGDLE</h2>
+                    <p>PSGDLE est un jeu indépendant, créé par un passionné, et n'est ni affilié, ni soutenu par le Paris Saint-Germain.</p>
+                    <p>Le concept s'inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, tout en apportant sa touche unique dédiée aux fans du PSG.</p>
+                    <h3>Vos retours comptent !</h3>
+                    <p>Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
+                    Envoyez-nous un message en français à : <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="11727e7f6570726551616276757d743f7763">[email&#160;protected]</a></strong>. J'ai hâte de recevoir vos commentaires et idées !</p>
+                    <h3>Soutenir PSGDLE</h3>
+                    <p>Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>.<br><br>Chaque soutien compte !</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PSGDLE XI - STATS MODAL -->
+<div id="statsXIModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+        <button class="modal-close" id="closeStatsXIModal">&times;</button>
+        <div class="modal-body">
+            <h2>📊 Mes Statistiques - Mode Le XI</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-streak">-</div>
+                    <div class="stat-label">🔥 Série actuelle</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-wins">-</div>
+                    <div class="stat-label">🏆 Total victoires</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-avg">-</div>
+                    <div class="stat-label">⚽ Moy. tentatives</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-rate">-</div>
+                    <div class="stat-label">📈 Taux de réussite</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-best">-</div>
+                    <div class="stat-label">🧩 Meilleur score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-top">-</div>
+                    <div class="stat-label">🎯 Joueurs favoris</div>
+                </div>
+            </div>
+            <button id="shareStatsXIBtn" class="psgdle-xi-share-btn" style="width:100%;margin-top:15px;padding:12px;background:rgba(0,102,204,0.2);border:1px solid rgba(0,102,204,0.4);border-radius:8px;color:#fff;cursor:pointer;font-size:14px;">Partager mes stats 📤</button>
+            <button id="resetStatsXIBtn" class="reset-stats-btn">Réinitialiser les stats</button>
+        </div>
+    </div>
+</div>
+
+        <!-- Contenu Terrain XI -->
+        <div class="xi-container">
+            <div class="match-header"><!-- Rempli dynamiquement par JS --></div>
+            <div class="field-wrapper">
+                <div class="field"><!-- Généré dynamiquement par JS --></div>
+                <div class="validate-btn">
+                    <button id="validateBtn" disabled>Valider la composition (0/11)</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Modal de recherche de joueur (XI) -->
     <div id="playerSearchModal" class="search-modal">
         <div class="search-modal-content">
             <div class="search-modal-header">
                 <div class="search-modal-title">Rechercher un joueur</div>
                 <button id="closeSearchModal" class="search-modal-close">&times;</button>
             </div>
-
             <div class="search-input-wrapper">
-                <input 
-                    type="text" 
-                    id="playerSearchInput" 
+                <input
+                    type="text"
+                    id="playerSearchInput"
                     class="player-search-input"
                     placeholder="Tapez le nom d'un joueur..."
                     autocomplete="off"
                 >
             </div>
-
-            <div id="searchSuggestions" class="search-suggestions">
-                <!-- Suggestions générées par JS -->
-            </div>
+            <div id="searchSuggestions" class="search-suggestions"><!-- Suggestions générées par JS --></div>
         </div>
     </div>
 
 
-</section>
-
-
-<!-- Mode Photo Mystère -->
-<section class="mode-content" id="photo-mode">
-    
-    <div class="nav-container">
-        <div class="nav-box">
-            <button id="openStatsPhotoModal" class="nav-button" title="Statistiques">
-                <div class="nav-button-icon icon-stats"></div>
-            </button>
-
-            <button id="openPhotoModal" class="nav-button" title="Comment jouer ?">
-                <div class="nav-button-icon icon-but"></div>
-            </button>
-
-            <button id="openQAPhotoModal" class="nav-button" title="Questions/Réponses">
-                <div class="nav-button-icon icon-retour"></div>
-            </button>
-            
-            <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
-                <div class="nav-button-icon icon-dons"></div>
+    <!-- ===== BOX AUTRES JEUX (réutilisable) ===== -->
+    <div class="autres-jeux-box section-autres-jeux">
+        <div class="autres-jeux-title">Tu en veux plus ?</div>
+        <div class="autres-jeux-subtitle">Joue à nos autres jeux :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/DragonBallDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/DragonBallDLE/assets/img/db.webp" alt="DragonBallDLE">
+                <div class="autre-jeu-name">DragonBallDLE</div>
+                <div class="autre-jeu-sub">Dragon Ball</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
             </a>
         </div>
     </div>
 
-    <!-- Modal Comment Jouer Photo -->
-    <div id="photoHowToModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" id="closePhotoModal">&times;</button>
-            <div class="modal-body">
-                <h2>📸 Comment jouer au Mode Photo ?</h2>
-                
-                <p>Chaque jour, devine l'identité d'un joueur du PSG à partir de sa photo floue !</p>
-                
-                <div class="countdown-box">
-                    <strong>Prochain joueur disponible dans :</strong> <span id="countdown-photo">--:--:--</span><br>
-                    <small>Fuseau horaire : Europe (minuit UTC+2)</small>
+</div><!-- fin #section-xi -->
+
+
+<!-- ===== SECTION JEU - MODE PHOTO ===== -->
+<div id="section-photo" class="game-section">
+
+    <div class="game-section-logo">
+        <img src="assets/lg.png" alt="PSGDLE" class="game-section-logo-img" onclick="showHome()" title="Retour à l'accueil">
+    </div>
+
+
+    <!-- SELECTEUR DE MODE -->
+    <div class="mode-selector-wrapper">
+        <div class="mode-selector">
+            <button class="mode-tab" data-mode="wordle" onclick="switchModeTab('wordle')">
+                <span class="emoji">🎮</span>
+                <span>CLASSIQUE</span>
+            </button>
+            <button class="mode-tab" data-mode="xi" onclick="switchModeTab('xi')">
+                <span class="emoji">⚽</span>
+                <span>LE XI</span>
+            </button>
+            <button class="mode-tab active" data-mode="photo" onclick="switchModeTab('photo')">
+                <span class="emoji">📸</span>
+                <span>PHOTOMYSTERE</span>
+            </button>
+        </div>
+    </div>
+
+    <section class="mode-content active" id="photo-mode">
+
+        <div class="nav-container">
+            <div class="nav-box">
+                <button id="openStatsPhotoModal" class="nav-button" title="Statistiques">
+                    <div class="nav-button-icon icon-stats"></div>
+                </button>
+                <button id="openPhotoModal" class="nav-button" title="Comment jouer ?">
+                    <div class="nav-button-icon icon-but"></div>
+                </button>
+                <button id="openQAPhotoModal" class="nav-button" title="Questions/Réponses">
+                    <div class="nav-button-icon icon-retour"></div>
+                </button>
+                <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank" class="nav-button" title="Faire un don" style="text-decoration: none;">
+                    <div class="nav-button-icon icon-dons"></div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Modal Comment Jouer Photo -->
+        <div id="photoHowToModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" id="closePhotoModal">&times;</button>
+                <div class="modal-body">
+                    <h2>📸 Comment jouer au Mode Photo ?</h2>
+                    <p>Chaque jour, devine l'identité d'un joueur du PSG à partir de sa photo floue !</p>
+                    <div class="countdown-box">
+                        <strong>Prochain joueur disponible dans :</strong> <span id="countdown-photo">--:--:--</span><br>
+                        <small>Fuseau horaire : Europe (minuit UTC+2)</small>
+                    </div>
+                    <h3>🎯 Principe du jeu</h3>
+                    <ul>
+                        <li>Une photo de joueur est affichée avec un <strong>flou intense</strong></li>
+                        <li>Tu as <strong>6 tentatives</strong> pour deviner le joueur</li>
+                        <li>À chaque mauvaise réponse, la photo se <strong>défloute progressivement</strong></li>
+                        <li>Plus tu devines vite, meilleur est ton score !</li>
+                    </ul>
+                    <h3>🔍 Niveaux de flou</h3>
+                    <ul>
+                        <li><strong>Essai 1 :</strong> Flou maximum (très difficile)</li>
+                        <li><strong>Essai 2-3 :</strong> Flou important</li>
+                        <li><strong>Essai 4-5 :</strong> Flou modéré</li>
+                        <li><strong>Essai 6 :</strong> Flou léger (presque visible)</li>
+                    </ul>
+                    <h3>💡 Astuces</h3>
+                    <p>Observe attentivement :</p>
+                    <ul>
+                        <li>La couleur de la peau</li>
+                        <li>La forme du visage</li>
+                        <li>La couleur des cheveux</li>
+                        <li>Le maillot (couleur, sponsor)</li>
+                    </ul>
                 </div>
-                
-                <h3>🎯 Principe du jeu</h3>
-                <ul>
-                    <li>Une photo de joueur est affichée avec un <strong>flou intense</strong></li>
-                    <li>Tu as <strong>6 tentatives</strong> pour deviner le joueur</li>
-                    <li>À chaque mauvaise réponse, la photo se <strong>défloute progressivement</strong></li>
-                    <li>Plus tu devines vite, meilleur est ton score !</li>
-                </ul>
-                
-                <h3>🔍 Niveaux de flou</h3>
-                <ul>
-                    <li><strong>Essai 1 :</strong> Flou maximum (très difficile)</li>
-                    <li><strong>Essai 2-3 :</strong> Flou important</li>
-                    <li><strong>Essai 4-5 :</strong> Flou modéré</li>
-                    <li><strong>Essai 6 :</strong> Flou léger (presque visible)</li>
-                </ul>
-                
-                <h3>💡 Astuces</h3>
-                <p>Observe attentivement :</p>
-                <ul>
-                    <li>La couleur de la peau</li>
-                    <li>La forme du visage</li>
-                    <li>La couleur des cheveux</li>
-                    <li>Le maillot (couleur, sponsor)</li>
-                </ul>
             </div>
         </div>
-    </div>
 
-    <!-- Modal Questions/Réponses Photo -->
-    <div id="qaPhotoModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeQAPhotoModal">&times;</button>
-            <div class="modal-body">
-                <h2>À propos de PSGDLE</h2>
-                <p>PSGDLE est un jeu indépendant, créé par un passionné, et n'est ni affilié, ni soutenu par le Paris Saint-Germain.</p>
-                <p>Le concept s'inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, tout en apportant sa touche unique dédiée aux fans du PSG.</p>
-                <h3>Vos retours comptent !</h3>
-                <p>Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
-                Envoyez-nous un message en français à : <strong>Matt21Graphics@gmail.com</strong>. J'ai hâte de recevoir vos commentaires et idées !</p>
-                <h3>Soutenir PSGDLE</h3>
-                <p>Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>. &nbsp;<br><br>Chaque soutien compte !</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Statistiques Photo -->
-    <div id="statsPhotoModal" class="modal" aria-hidden="true">
-        <div class="modal-content">
-            <button class="modal-close" id="closeStatsPhotoModal">&times;</button>
-            <div class="modal-body">
-                <h2>📊 Mes Statistiques - Mode Photo</h2>
-                <div id="statsPhotoContent"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Contenu principal du mode Photo -->
-    <div class="photo-game-container">
-        <div class="container">
-            <div class="box">
-                <div class="title">Devine le joueur du PSG</div>
-                <div class="subtitle" id="photo-subtitle">Qui se cache derrière cette photo ?</div>
-                
-                <!-- Compteur de tentatives -->
-                <div class="attempts-counter">
-                    Tentative : <span id="current-attempt">0</span> / <span id="max-attempts">6</span>
+        <!-- Modal Questions/Réponses Photo -->
+        <div id="qaPhotoModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeQAPhotoModal">&times;</button>
+                <div class="modal-body">
+                    <h2>À propos de PSGDLE</h2>
+                    <p>PSGDLE est un jeu indépendant, créé par un passionné, et n'est ni affilié, ni soutenu par le Paris Saint-Germain.</p>
+                    <p>Le concept s'inspire des grands succès tels que <em>Wordle</em>, <em>Tusmo</em>, <em>Worldle</em>, <em>Cemantix</em> ou encore <em>Commander Codex</em>, tout en apportant sa touche unique dédiée aux fans du PSG.</p>
+                    <h3>Vos retours comptent !</h3>
+                    <p>Une suggestion, un bug, ou simplement envie de dire bonjour 😎 ?<br>
+                    Envoyez-nous un message en français à : <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b2d1dddcc6d3d1c6f2c2c1d5d6ded79cd4c0">[email&#160;protected]</a></strong>. J'ai hâte de recevoir vos commentaires et idées !</p>
+                    <h3>Soutenir PSGDLE</h3>
+                    <p>Si vous souhaitez contribuer au développement du jeu et nous aider à le faire grandir, vous pouvez le faire facilement <a href="https://www.paypal.com/paypalme/GRAPHMF5" target="_blank">ici</a>.<br><br>Chaque soutien compte !</p>
                 </div>
             </div>
         </div>
 
-        <!-- Zone de la photo floue -->
-        <div class="photo-blur-container">
-            <div class="blur-wrapper">
-                <img id="mystery-photo" src="" alt="Photo mystère" class="mystery-image">
+        <!-- Modal Statistiques Photo -->
+        <div id="statsPhotoModal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <button class="modal-close" id="closeStatsPhotoModal">&times;</button>
+                <div class="modal-body">
+                    <h2>📊 Mes Statistiques - Mode Photo</h2>
+                    <div id="statsPhotoContent"></div>
+                </div>
             </div>
         </div>
 
-        <!-- Barre de recherche -->
-        <div class="search-container">
-            <div class="search-wrapper">
-                <div class="search-inner">
-                    <input 
-                        type="text" 
-                        class="search-input" 
-                        id="photoSearchInput"
-                        placeholder="Entre le nom d'un joueur..."
-                        autocomplete="off"
-                        spellcheck="false"
-                    >
-                    <button class="search-btn" type="button">
-                        <svg class="search-icon" viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="8"/>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <!-- Contenu principal du mode Photo -->
+        <div class="photo-game-container">
+            <div class="container">
+                <div class="box photo-main-box psg-box">
+
+                    <!-- Header PSG -->
+                    <div class="psg-header">
+                        <svg class="psg-badge" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="18" fill="#00092A"/>
+                            <rect x="1" y="1" width="34" height="34" rx="17" stroke="#C8A850" stroke-width="1.5"/>
+                            <path d="M18 8L21 16H25L18 28L11 16H15L18 8Z" fill="none" stroke="#C8A850" stroke-width="1" stroke-linejoin="round"/>
+                            <line x1="18" y1="8" x2="18" y2="28" stroke="#C8A850" stroke-width="0.8" stroke-dasharray="2 2"/>
+                            <rect x="13" y="19" width="10" height="1.5" rx="0.75" fill="#C8A850"/>
+                            <rect x="14.5" y="23" width="7" height="1.5" rx="0.75" fill="#C8A850"/>
                         </svg>
-                    </button>
+                        <div class="psg-title-block">
+                            <div class="title psg-title">Devine le joueur du PSG</div>
+                            <div class="subtitle psg-subtitle" id="photo-subtitle">Qui se cache derrière cette photo ?</div>
+                        </div>
+                    </div>
+
+                    <!-- Photo floue -->
+                    <div class="photo-blur-container">
+                        <div class="blur-wrapper">
+                            <img id="mystery-photo" src="" alt="Photo mystère" class="mystery-image">
+                        </div>
+                        <div class="photo-vignette"></div>
+                        <div class="mystery-badge" id="mystery-badge">?</div>
+                    </div>
+
+                    <!-- Barre de tentatives PSG -->
+                    <div class="attempts-bar-psg">
+                        <span class="attempts-label-psg">Essais</span>
+                        <div class="attempts-dots" id="attempts-dots">
+                            <div class="attempt-dot"></div>
+                            <div class="attempt-dot"></div>
+                            <div class="attempt-dot"></div>
+                            <div class="attempt-dot"></div>
+                            <div class="attempt-dot"></div>
+                            <div class="attempt-dot"></div>
+                        </div>
+                        <span class="attempts-count-psg">
+                            <span id="current-attempt">0</span> / <span id="max-attempts">6</span>
+                        </span>
+                    </div>
+
+                    <!-- Footer PSG -->
+                    <div class="psg-footer">
+                        <div class="psg-tag">
+                            <div class="psg-tag-dot"></div>
+                            <span class="psg-tag-text">Paris Saint-Germain</span>
+                        </div>
+                        <span class="psg-season">Saison 2024–25</span>
+                    </div>
+
                 </div>
-                <div id="photo-suggestions" class="suggestions"></div>
             </div>
+
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <div class="search-inner">
+                        <input
+                            type="text"
+                            class="search-input"
+                            id="photoSearchInput"
+                            placeholder="Entre le nom d'un joueur..."
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                        <button class="search-btn" type="button">
+                            <svg class="search-icon" viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="photo-suggestions" class="suggestions"></div>
+                </div>
+            </div>
+
+            <!-- Historique des tentatives (rempli par JS) -->
+            <div id="photo-attempts-history" class="attempts-history"></div>
+
         </div>
 
-        <!-- Historique des tentatives -->
-        <div class="attempts-history" id="attempts-history">
-            <!-- Les tentatives s'afficheront ici -->
-        </div>
+    </section>
 
+
+    <!-- ===== BOX AUTRES JEUX (réutilisable) ===== -->
+    <div class="autres-jeux-box section-autres-jeux">
+        <div class="autres-jeux-title">Tu en veux plus ?</div>
+        <div class="autres-jeux-subtitle">Joue à nos autres jeux :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/DragonBallDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/DragonBallDLE/assets/img/db.webp" alt="DragonBallDLE">
+                <div class="autre-jeu-name">DragonBallDLE</div>
+                <div class="autre-jeu-sub">Dragon Ball</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
+            </a>
+        </div>
     </div>
 
-    
-</section>
+</div><!-- fin #section-photo -->
 
 
+<!-- ===== NAVIGATION SCRIPTS ===== -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ── Gestion de la page d'accueil et des sections ──────────────────────────
+    const STORAGE_MODE_KEY = 'psgdle_current_mode';
 
+    function showHome() {
+        document.getElementById('homepage').style.display = 'flex';
+        document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active'));
+        window.scrollTo(0, 0);
+    }
+
+    function showGameMode(mode) {
+        // Cacher la homepage
+        document.getElementById('homepage').style.display = 'none';
+        // Cacher toutes les sections
+        document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active'));
+        // Afficher la bonne section
+        const sectionId = 'section-' + mode;
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.classList.add('active');
+        }
+        // Sauvegarder
+        localStorage.setItem(STORAGE_MODE_KEY, mode);
+        window.scrollTo(0, 0);
+    }
+
+    // Permet de changer de mode via les onglets à l'intérieur d'une section
+    function switchModeTab(mode) {
+        showGameMode(mode);
+        // Met à jour l'onglet actif dans tous les sélecteurs de mode
+        document.querySelectorAll('.mode-tab').forEach(tab => {
+            if (tab.dataset.mode === mode) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+    }
+
+    // ── Restaurer l'état au chargement ────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem(STORAGE_MODE_KEY);
+        // On arrive toujours sur la homepage au chargement, pas sur le dernier mode
+        // (comportement similaire à DragonBallDLE)
+        showHome();
+    });
+
+    // ── Fermeture des modals en cliquant à l'extérieur ─────────────────────
+    window.addEventListener('click', (e) => {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
+        });
+    });
+</script>
+
+<!-- Scripts JS -->
 <script src="js/app.js"></script>
-<script src="js/switch.js"></script>
-<script src="js/ximode.js"></script>
 <script src="js/photomode.js"></script>
+<script src="js/ximode.js"></script>
 <script src="js/secretcode.js"></script>
+
 </body>
 </html>

@@ -1,145 +1,261 @@
-/* ========== SELECTEUR DE MODE ========== */
+/* ========== SELECTEUR DE MODE — PSGdle Premium ========== */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 .mode-selector-wrapper {
-    max-width: 500px;
+    max-width: 540px;
     margin: 1.5rem auto;
     padding: 0 1rem;
 }
 
+/* Fond principal : capsule sombre avec liseré lumineux */
 .mode-selector {
-    background: rgba(0, 8, 20, 0.7);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding: 6px;
+    background: rgba(0, 4, 14, 0.92);
+    backdrop-filter: blur(20px);
+    border-radius: 999px;
+    padding: 10px 14px;
     display: flex;
-    gap: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0px 0px 50px 8px rgba(0, 65, 112, 0.3);
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    /* Halo bleu PSG */
+    box-shadow:
+        0 0 0 1px rgba(0, 65, 112, 0.25),
+        0 8px 40px rgba(0, 40, 90, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
+/* Liseré rouge–or en haut, identitaire PSG */
+.mode-selector::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 15%; right: 15%;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        #E30613 30%,
+        #C8A850 70%,
+        transparent 100%
+    );
+    opacity: 0.75;
+}
+
+/* ── Séparateurs entre les tabs ── */
+.mode-tab + .mode-tab::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+}
+
+/* ── Tab général ── */
 .mode-tab {
     flex: 1;
-    padding: 14px 12px;
     border: none;
-    border-radius: 12px;
     background: transparent;
     cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Poppins', sans-serif;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px 4px 8px;
+    border-radius: 999px;
+    position: relative;
+    transition: color 0.3s ease;
+    min-width: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Icône circulaire ── */
+.mode-tab .tab-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    font-size: 1.6rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    font-family: 'Poppins', sans-serif;
-    min-width: 0;
-}
-
-.mode-tab:hover:not(.active) {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.mode-tab.active {
-    background: linear-gradient(135deg, #004170 0%, #0066b3 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 65, 112, 0.5);
-}
-
-.mode-tab .emoji {
-    font-size: 1.2em;
     flex-shrink: 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
+/* Anneau de glow autour de l'icône — invisible par défaut */
+.mode-tab .tab-icon::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid transparent;
+    transition: all 0.35s ease;
+}
+
+/* ── Label ── */
+.mode-tab .tab-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+/* ── Hover (inactif) ── */
+.mode-tab:hover:not(.active) {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.mode-tab:hover:not(.active) .tab-icon {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+}
+
+/* ── TAB ACTIF ── */
+.mode-tab.active {
+    color: #ffffff;
+}
+
+.mode-tab.active .tab-icon {
+    background: linear-gradient(145deg, #003d6b 0%, #0066b8 50%, #0055a0 100%);
+    border-color: rgba(0, 140, 255, 0.55);
+    transform: translateY(-3px) scale(1.06);
+    box-shadow:
+        0 6px 20px rgba(0, 80, 180, 0.55),
+        0 0 30px rgba(0, 120, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Anneau lumineux actif */
+.mode-tab.active .tab-icon::after {
+    border-color: rgba(0, 150, 255, 0.4);
+    box-shadow: 0 0 12px rgba(0, 150, 255, 0.3);
+}
+
+.mode-tab.active .tab-label {
+    color: #4ab3ff;
+}
+
+/* ── Indicateur point actif en bas ── */
+.mode-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #E30613, #C8A850);
+    box-shadow: 0 0 8px rgba(227, 6, 19, 0.5);
+}
+
+/* ── Badge "NOUVEAU" ── */
 .mode-tab .badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    background: #fbbf24;
-    color: #92400e;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 0.65em;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+    top: 0px;
+    right: 6px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #1a0a00;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.5);
+    border: 1px solid rgba(255,255,255,0.2);
+    white-space: nowrap;
 }
 
-/* Containers de contenu */
+/* ── Ancien .emoji maintenu pour compatibilité ── */
+.mode-tab .emoji {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    display: none; /* masqué — on utilise .tab-icon */
+}
+
+/* ── Containers de contenu ── */
 .mode-content {
     display: none;
-    animation: fadeIn 0.4s ease;
+    animation: modeFadeIn 0.4s ease;
 }
 
 .mode-content.active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes modeFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ========== RESPONSIVE ========== */
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
 
-/* Tablettes et petits écrans */
 @media (max-width: 640px) {
-    .mode-selector-wrapper {
-        padding: 0 0.5rem;
+    .mode-selector-wrapper { padding: 0 0.5rem; }
+
+    .mode-tab .tab-icon {
+        width: 46px;
+        height: 46px;
+        font-size: 1.4rem;
     }
-    
-    .mode-tab {
-        padding: 12px 8px;
-        font-size: 0.85rem;
-        gap: 4px;
-        flex-direction: column;
-    }
-    
-    .mode-tab .emoji {
-        font-size: 1.1em;
+
+    .mode-tab .tab-label {
+        font-size: 0.58rem;
+        letter-spacing: 1px;
     }
 }
 
-/* Très petits écrans */
 @media (max-width: 480px) {
     .mode-selector {
-        padding: 4px;
+        padding: 8px 10px;
         gap: 4px;
     }
-    
-    .mode-tab {
-        padding: 10px 6px;
-        font-size: 0.75rem;
-        border-radius: 10px;
+
+    .mode-tab .tab-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
     }
-    
-    .mode-tab .emoji {
-        font-size: 1em;
+
+    .mode-tab .tab-label {
+        font-size: 0.54rem;
     }
-    
+
     .mode-tab .badge {
-        padding: 2px 6px;
-        font-size: 0.6em;
-        top: -4px;
-        right: -4px;
+        font-size: 0.48rem;
+        padding: 2px 5px;
+        right: 2px;
     }
 }
 
-/* Très très petits écrans - on garde tout, juste plus petit */
 @media (max-width: 380px) {
-    .mode-tab {
-        padding: 8px 4px;
-        font-size: 0.7rem;
-        gap: 3px;
+    .mode-tab .tab-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
     }
-    
-    .mode-tab .emoji {
-        font-size: 0.9em;
+
+    .mode-tab .tab-label {
+        font-size: 0.5rem;
+        letter-spacing: 0.8px;
     }
 }

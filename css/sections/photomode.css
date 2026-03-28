@@ -1,52 +1,148 @@
 /* ========== MODE PHOTO MYSTÈRE ========== */
 
+/* Conteneur principal : colonne centrée, espacement uniforme */
 .photo-game-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
-    padding: 0 1rem;
+    gap: 16px;
+    padding: 0;
     max-width: 600px;
+    width: 100%;
     margin: 0 auto;
-    margin-top: 130px;
 }
 
-/* Compteur de tentatives */
-.attempts-counter {
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #ffffff;
-    margin-top: 1rem;
-    padding: 0.8rem;
-    background: rgba(0, 65, 112, 0.2);
-    border-radius: 12px;
-    border: 1px solid rgba(0, 120, 255, 0.3);
+.photo-game-container > .container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0;
 }
 
-#current-attempt {
-    color: #4a9eff;
-    font-size: 1.4rem;
+/* ── Box principale PSG ── */
+.photo-main-box {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 1.25rem 1.25rem 1.25rem;
+    overflow: hidden;
 }
 
-/* Container de la photo floue */
+/* Liseré rouge → or en haut (override box.css) */
+.psg-box::before {
+    background: linear-gradient(90deg,
+        transparent 0%,
+        #E30613 20%,
+        #E30613 50%,
+        #C8A850 75%,
+        transparent 100%
+    ) !important;
+}
+
+/* ── Header PSG ── */
+.psg-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.psg-badge {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+}
+
+.psg-title-block {
+    flex: 1;
+    min-width: 0;
+}
+
+.psg-title {
+    font-size: 1.05rem !important;
+    text-align: left !important;
+    margin: 0 0 2px !important;
+    padding: 0 !important;
+    letter-spacing: 0.3px;
+}
+
+.psg-subtitle {
+    font-size: 0.7rem !important;
+    color: rgba(200, 168, 80, 0.8) !important;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    text-align: left !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+}
+
+/* ── Zone photo ── */
 .photo-blur-container {
     width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
+    margin: 0;
+    padding: 0;
+    position: relative;
 }
 
 .blur-wrapper {
     position: relative;
     width: 100%;
-    padding-top: 100%; /* Ratio 1:1 */
-    background: rgba(0, 8, 20, 0.95);
-    border-radius: 16px;
-    border: 2px solid rgba(0, 120, 255, 0.3);
+    padding-top: 68%;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
     overflow: hidden;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow:
+        0 0 0 1px rgba(0, 65, 112, 0.2),
+        0 8px 40px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Grain subtil pour habiller */
+.blur-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 150px;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Vignette douce autour de l'image */
+.photo-vignette {
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background: radial-gradient(ellipse at center, transparent 35%, rgba(0, 5, 20, 0.65) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Badge "?" centré */
+.mystery-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(0, 8, 30, 0.75);
+    border: 2px solid rgba(200, 168, 80, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #C8A850;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 24px rgba(200, 168, 80, 0.25);
+    z-index: 4;
+    transition: opacity 0.4s ease;
 }
 
 .mystery-image {
@@ -57,128 +153,241 @@
     height: 100% !important;
     max-width: none !important;
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
     filter: blur(50px);
-    transition: filter 0.5s ease;
+    transition: filter 0.6s ease;
     display: block;
     box-shadow: none !important;
     cursor: default !important;
+    border-radius: 14px;
+    transform: scale(1.08);
 }
 
 /* Niveaux de flou progressifs */
 .mystery-image.blur-level-1 { filter: blur(50px); }
-.mystery-image.blur-level-2 { filter: blur(40px); }
-.mystery-image.blur-level-3 { filter: blur(30px); }
-.mystery-image.blur-level-4 { filter: blur(20px); }
-.mystery-image.blur-level-5 { filter: blur(10px); }
-.mystery-image.blur-level-6 { filter: blur(3px); }
+.mystery-image.blur-level-2 { filter: blur(38px); }
+.mystery-image.blur-level-3 { filter: blur(26px); }
+.mystery-image.blur-level-4 { filter: blur(16px); }
+.mystery-image.blur-level-5 { filter: blur(7px); }
+.mystery-image.blur-level-6 { filter: blur(2px); }
 .mystery-image.blur-level-revealed {
     filter: blur(0) !important;
-    transition: none !important; /* Désactive la transition pour éviter les conflits */
+    transform: scale(1) !important;
+    transition: filter 0.5s ease, transform 0.5s ease !important;
 }
 
+/* ── Barre de tentatives PSG ── */
+.attempts-bar-psg {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
 
+.attempts-label-psg {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.38);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    font-family: 'Poppins', sans-serif;
+}
 
+.attempts-dots {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+}
 
-/* Historique des tentatives */
+.attempt-dot {
+    flex: 1;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.attempt-dot.used {
+    background: #E30613;
+    border-color: rgba(227, 6, 19, 0.4);
+}
+
+.attempt-dot.current {
+    background: #C8A850;
+    border-color: rgba(200, 168, 80, 0.5);
+    animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+}
+
+.attempts-count-psg {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.45);
+    white-space: nowrap;
+    font-family: 'Poppins', sans-serif;
+}
+
+.attempts-count-psg span {
+    color: #4a9eff;
+    font-weight: 700;
+}
+
+/* Ancien compteur — masqué, remplacé par la barre */
+.attempts-counter {
+    display: none;
+}
+
+/* ── Footer PSG ── */
+.psg-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.psg-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(227, 6, 19, 0.08);
+    border: 1px solid rgba(227, 6, 19, 0.2);
+    border-radius: 20px;
+    padding: 4px 10px 4px 7px;
+}
+
+.psg-tag-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #E30613;
+    box-shadow: 0 0 6px rgba(227, 6, 19, 0.6);
+}
+
+.psg-tag-text {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+}
+
+.psg-season {
+    font-size: 0.62rem;
+    color: rgba(200, 168, 80, 0.5);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ── Barre de recherche ── */
+.photo-game-container > .search-container {
+    width: 100%;
+    max-width: 580px;
+}
+
+/* ── Historique des tentatives ── */
 .attempts-history {
     width: 100%;
-    max-width: 500px;
+    max-width: 580px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 8px;
+    margin: 0;
 }
 
 .attempt-item {
     background: rgba(0, 8, 20, 0.95);
     border-radius: 12px;
-    padding: 1rem 1.5rem;
+    padding: 0.85rem 1.25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 2px solid;
-    transition: all 0.3s ease;
-    animation: slideIn 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 0.75rem;
+    animation: slideIn 0.35s ease;
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .attempt-item.correct {
-    border-color: #10b981;
-    background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.2));
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    border-color: rgba(16, 185, 129, 0.5);
+    background: linear-gradient(145deg, rgba(16, 185, 129, 0.12), rgba(5, 150, 105, 0.16));
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.2);
 }
 
 .attempt-item.incorrect {
-    border-color: #E30613;
-    background: linear-gradient(145deg, rgba(227, 6, 19, 0.15), rgba(185, 5, 15, 0.2));
+    border-color: rgba(227, 6, 19, 0.35);
+    background: linear-gradient(145deg, rgba(227, 6, 19, 0.08), rgba(185, 5, 15, 0.12));
+}
+
+.attempt-number {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+    min-width: 24px;
+    flex-shrink: 0;
 }
 
 .attempt-player-name {
-    font-size: 1.1rem;
+    flex: 1;
+    font-size: 1rem;
     font-weight: 600;
     color: #ffffff;
 }
 
-.attempt-number {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
-    margin-right: auto;
-    margin-left: 1rem;
-}
-
 .attempt-status {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
-/* Box de victoire spécifique au mode Photo */
+/* ── Box victoire / défaite ── */
 .photo-victory-container {
     width: 100%;
-    max-width: 500px;
-    margin-top: 2rem;
-    animation: victorySlideIn 0.6s ease-out;
+    max-width: 580px;
+    opacity: 1 !important;
+    animation: victorySlideIn 0.5s ease-out !important;
+}
+
+@keyframes victorySlideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .photo-victory-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
 .photo-victory-image {
-    width: 200px;
-    height: 200px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #004170;
-    box-shadow: 0 8px 24px rgba(0, 65, 112, 0.5);
-    animation: photoZoom 0.5s ease-out;
+    object-position: center top;
+    border: 3px solid #004170;
+    box-shadow: 0 6px 20px rgba(0, 65, 112, 0.5);
+    animation: photoZoom 0.45s ease-out;
 }
 
 @keyframes photoZoom {
-    from {
-        transform: scale(0) rotate(-10deg);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-    }
+    from { transform: scale(0.6) rotate(-6deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);   opacity: 1; }
 }
 
 .photo-victory-text {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #ffffff;
     text-align: center;
     line-height: 1.6;
@@ -189,75 +398,27 @@
     font-weight: 700;
 }
 
-/* Responsive Mobile */
+/* ── Responsive ── */
 @media (max-width: 768px) {
-    .photo-game-container {
-        gap: 20px;
-        padding: 0 0.5rem;
-        margin-top: 130px;
-    }
-
-    .attempts-counter {
-        font-size: 1rem;
-        padding: 0.6rem;
-    }
-
-    #current-attempt {
-        font-size: 1.2rem;
-    }
-
-    .photo-blur-container {
-        max-width: 100%;
-    }
-
-    .attempt-item {
-        padding: 0.8rem 1rem;
-    }
-
-    .attempt-player-name {
-        font-size: 1rem;
-    }
-
-    .attempt-number {
-        font-size: 0.8rem;
-        margin-left: 0.5rem;
-    }
-
-    .photo-victory-image {
-        width: 150px;
-        height: 150px;
-    }
+    .photo-game-container { gap: 14px; }
+    .photo-victory-image { width: 110px; height: 110px; }
 }
 
 @media (max-width: 480px) {
-    .attempts-counter {
-        font-size: 0.9rem;
-    }
-
-    .attempt-player-name {
-        font-size: 0.9rem;
-    }
-
-    .attempt-status {
-        font-size: 1.2rem;
-    }
-
-    .photo-victory-image {
-        width: 120px;
-        height: 120px;
-    }
+    .photo-game-container { gap: 12px; }
+    .blur-wrapper { padding-top: 80%; }
+    .attempt-player-name { font-size: 0.9rem; }
+    .attempt-status { font-size: 1rem; }
+    .photo-victory-image { width: 95px; height: 95px; }
+    .photo-main-box { padding: 1rem 1rem 1rem; }
 }
 
-/* Animation de déflouage */
+/* ── Animation déflouage ── */
 @keyframes deblur {
-    from {
-        filter: blur(var(--blur-from));
-    }
-    to {
-        filter: blur(var(--blur-to));
-    }
+    from { filter: blur(var(--blur-from)); }
+    to   { filter: blur(var(--blur-to)); }
 }
 
 .mystery-image.animating {
-    animation: deblur 0.8s ease;
+    animation: deblur 0.7s ease;
 }

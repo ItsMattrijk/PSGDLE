@@ -49,11 +49,28 @@ img {
 
 .main {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    gap: 30px;
-     min-height: 100vh;
+    padding: 24px 16px 48px;
+}
+
+/* Layout colonne unique centré pour le mode Classique */
+.wordle-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 700px;
+}
+
+/* Les éléments étroits (box, search, indicateurs) se limitent à 500px */
+.wordle-layout > .container,
+.wordle-layout > .search-container,
+.wordle-layout > .container-wide {
+    width: 100%;
+    max-width: 500px;
 }
 
 @media (max-width: 768px) {
@@ -73,54 +90,4 @@ img {
   
 }
 
-@media (max-width: 1440px) {
-
-.main {
-margin-top: 80px;
-
-  }
-  
-}
-
-@media (max-width: 1024px) {
-
-.main {
-margin-top: 80px;
-
-  }
-  
-}
-
-@media (max-width: 790px) {
-
-.main {
-margin-top: 120px;
-
-  }
-  
-}
-
-@media (max-width: 390px) {
-
-.main {
-margin-top: 120px;
-
-  }
-  
-}
-
-@media (max-width: 385px) {
-
-.main {
-margin-top: 150px;
-
-  }
-  
-}
-
-@media (min-width: 438px) and (max-width: 480px) {
-  .main {
-    margin-top: 10px;
-  }
-}
-
+/* margin-top géré par .wordle-layout, pas besoin de surcharges */

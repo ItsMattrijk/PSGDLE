@@ -1,9 +1,7 @@
 .container {
             max-width: 500px;
             width: 100%;
-            margin-top: -120px;
-
-            
+            margin-top: 0;
         }
 
 /* La box principale doit pouvoir grandir avec son contenu */
@@ -22,6 +20,11 @@
     height: auto;       
     max-height: none;   
     overflow: hidden;
+}
+
+.photo-victory-container {
+    opacity: 1 !important;
+    animation: none !important;
 }
 
 /* Agrandir le container quand la box s'agrandit */
@@ -366,9 +369,7 @@
 /* Indicateurs de couleur */
 
 .container-wide{
-
-    margin-top: 50px;
-
+    margin-top: 0;
 }
 
 .indicators {
@@ -390,7 +391,7 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.3s ease;
     flex: 1;
-    min-width: 90px;
+    min-width: 0;
 }
 
 .indicator-item:hover {
@@ -455,5 +456,70 @@
     .indicator-item {
         min-width: 70px;
         padding: 0.75rem 0.25rem;
+    }
+}
+/* ===== ANIMATION COHÉRENTE POUR TOUTES LES BOXES ===== */
+/* Annule l'animation spécifique au .container et applique un fadeIn universel */
+
+/* Reset : toutes les boxes/containers démarrent invisibles */
+.box,
+.nav-container,
+.container-wide,
+.photo-blur-container,
+.attempts-history,
+.mode-selector-wrapper,
+.photo-game-container > *,
+.xi-container,
+.wordle-layout {
+    opacity: 0;
+    animation: universalFadeIn 0.55s ease forwards;
+}
+
+/* La barre de recherche ne doit PAS avoir d'animation (évite le rejeu au retour modal) */
+.search-container {
+    opacity: 1;
+    animation: none !important;
+}
+
+/* Délais en cascade pour un effet naturel */
+.mode-selector-wrapper                     { animation-delay: 0.05s; }
+.nav-container                             { animation-delay: 0.12s; }
+.container                                 { animation-delay: 0.20s; }
+.wordle-layout                             { animation-delay: 0.20s; }
+.container-wide                            { animation-delay: 0.00s; } /* géré par wordle-layout */
+.photo-blur-container                      { animation-delay: 0.28s; }
+.attempts-history                          { animation-delay: 0.36s; }
+.xi-container                              { animation-delay: 0.20s; }
+
+@keyframes universalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Désactive les anciennes animations conflictuelles */
+.container {
+    animation: universalFadeIn 0.55s ease forwards 0.20s;
+}
+
+/* ===== BOX "AUTRES JEUX" dans les sections de jeu ===== */
+.section-autres-jeux {
+    max-width: 500px;
+    width: calc(100% - 2rem);
+    margin: 40px auto 40px;
+    opacity: 0;
+    animation: universalFadeIn 0.55s ease forwards 0.5s;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .section-autres-jeux {
+        max-width: calc(100% - 2rem);
+        margin: 30px auto 30px;
     }
 }

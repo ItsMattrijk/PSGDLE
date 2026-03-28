@@ -1,5 +1,3 @@
-
-
 let joueurs = [];
 let joueursSelectionnes = [];
 let joueurDuJour = null;
@@ -241,6 +239,9 @@ function showVictoryBox() {
                             <span class="stat-value" id="countdown-timer">${getTimeUntilMidnight()}</span>
                         </div>
                     </div>
+                    <button class="next-mode-btn" onclick="switchModeTab('xi')">
+                        ⚽ Jouer au mode Le XI →
+                    </button>
                 </div>
             </div>
         </div>
@@ -815,6 +816,9 @@ function loadGameState() {
                                     <span class="stat-value" id="countdown-timer">${getTimeUntilMidnight()}</span>
                                 </div>
                             </div>
+                    <button class="next-mode-btn" onclick="switchModeTab('xi')">
+                        ⚽ Jouer au mode Le XI →
+                    </button>
                         </div>
                     </div>
                 </div>
@@ -1547,4 +1551,3 @@ function updateStatsAfterGame(attempts, won) {
     stats.lastPlayedDate = currentDate;
     saveStats(stats);
 }
-

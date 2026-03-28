@@ -1077,6 +1077,9 @@ if (elementBelow) {
                                 <span class="stat-value" id="xi-countdown-timer">${this.getTimeUntilMidnight()}</span>
                             </div>
                         </div>
+                        <button class="next-mode-btn" onclick="switchModeTab('photo')">
+                            📸 Jouer au mode PhotoMystère →
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1471,5 +1474,3 @@ Joue à PSGDLE XI !`;
     });
   }
 });
-
-

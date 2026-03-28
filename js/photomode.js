@@ -1,6 +1,3 @@
-
-
-
 // ========== PSGDLE PHOTO MYSTÈRE - SYSTÈME COMPLET ==========
 
 class PSGDLEPhotoGame {
@@ -124,6 +121,24 @@ class PSGDLEPhotoGame {
     updateAttemptsCounter() {
         document.getElementById('current-attempt').textContent = this.currentAttempt;
         document.getElementById('max-attempts').textContent = this.maxAttempts;
+
+        // Mise à jour des points PSG
+        const dots = document.querySelectorAll('.attempt-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.remove('used', 'current');
+            if (i < this.currentAttempt - 1) {
+                dot.classList.add('used');
+            } else if (i === this.currentAttempt - 1) {
+                dot.classList.add('current');
+            }
+        });
+
+        // Cacher le badge "?" dès qu'on a commencé
+        const badge = document.getElementById('mystery-badge');
+        if (badge && this.currentAttempt > 0) {
+            badge.style.opacity = '0';
+            badge.style.pointerEvents = 'none';
+        }
     }
 
     initSearchBar() {
@@ -249,7 +264,7 @@ class PSGDLEPhotoGame {
     }
 
     addAttemptToHistory(attempt) {
-        const historyDiv = document.getElementById('attempts-history');
+        const historyDiv = document.getElementById('photo-attempts-history');
         
         const attemptDiv = document.createElement('div');
         attemptDiv.className = `attempt-item ${attempt.correct ? 'correct' : 'incorrect'}`;
@@ -263,7 +278,8 @@ class PSGDLEPhotoGame {
     }
 
     clearHistory() {
-        document.getElementById('attempts-history').innerHTML = '';
+        const el = document.getElementById('photo-attempts-history');
+        if (el) el.innerHTML = '';
     }
 
     handleVictory() {
@@ -324,12 +340,15 @@ class PSGDLEPhotoGame {
                                 <span class="stat-value" id="photo-countdown-timer">${this.getTimeUntilMidnight()}</span>
                             </div>
                         </div>
+                        <button class="next-mode-btn" onclick="switchModeTab('wordle')">
+                            🎮 Jouer au mode Classique →
+                        </button>
                     </div>
                 </div>
             </div>
         `;
 
-        const historyDiv = document.getElementById('attempts-history');
+        const historyDiv = document.getElementById('photo-attempts-history');
         historyDiv.insertAdjacentHTML('afterend', victoryHTML);
 
         this.startVictoryCountdown();
@@ -357,12 +376,15 @@ class PSGDLEPhotoGame {
                                 <span class="stat-value" id="photo-countdown-timer">${this.getTimeUntilMidnight()}</span>
                             </div>
                         </div>
+                        <button class="next-mode-btn" onclick="switchModeTab('wordle')">
+                            🎮 Jouer au mode Classique →
+                        </button>
                     </div>
                 </div>
             </div>
         `;
 
-        const historyDiv = document.getElementById('attempts-history');
+        const historyDiv = document.getElementById('photo-attempts-history');
         historyDiv.insertAdjacentHTML('afterend', defeatHTML);
 
         this.startVictoryCountdown();
@@ -758,4 +780,3 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
         }
     });
 });
-
