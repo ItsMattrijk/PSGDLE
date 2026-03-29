@@ -2,7 +2,7 @@
 // À inclure après app.js, photomode.js et ximode.js dans index.html
 // <script src="js/counter.js"></script>
 
-const COUNTER_WORKSPACE = 'itsmattrijk.github.io/PSGDLE';
+const COUNTER_WORKSPACE = 'mf5s-team-3511';
 
 // ── Clé du jour pour chaque mode ──────────────────────────────────────────────
 function getTodayKey(mode) {
@@ -26,9 +26,11 @@ function getYesterdayKey(mode) {
 async function fetchCounter(mode) {
     const key = getTodayKey(mode);
     try {
-        const res = await fetch(`https://api.counterapi.dev/v1/${COUNTER_WORKSPACE}/${key}/get`);
+        const res = await fetch(`https://api.counterapi.dev/v1/${COUNTER_WORKSPACE}/${key}/up`);
         if (!res.ok) return 0;
         const data = await res.json();
+        // On redescend immédiatement pour ne pas fausser le compteur
+        await fetch(`https://api.counterapi.dev/v1/${COUNTER_WORKSPACE}/${key}/down`);
         return data.count ?? data.value ?? 0;
     } catch {
         return 0;
