@@ -1307,3 +1307,51 @@ body.modal-open .suggestions {
     transform: scale(1.05);
     box-shadow: 0 0 25px rgba(0, 255, 127, 0.5) !important;
 }
+
+/* ============================================================
+   LAYOUT MODE XI — espacement cohérent
+   ============================================================ */
+
+/* Le conteneur principal devient flex pour gérer les gaps proprement */
+.xi-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;          /* espace uniforme entre capsule, match-header, field */
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+    max-width: 700px;
+}
+
+/* Capsule hier/compteur dans XI — pas de margin propre, géré par le gap */
+.xi-container > .psgdle-info-capsule {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 !important;  /* le gap du flex parent s'en charge */
+}
+
+/* match-header — supprime son margin-bottom, le gap s'en charge */
+.xi-container > .match-header {
+    margin-bottom: 0 !important;
+}
+
+/* field-wrapper — idem */
+.xi-container > .field-wrapper {
+    margin-bottom: 0 !important;
+}
+
+/* Section XI globale : espace entre nav et xi-container */
+#section-xi .main,
+#section-xi section.main {
+    padding-top: 0;
+}
+
+#section-xi .xi-container {
+    margin-top: 0;
+}
+
+/* nav-container dans XI — harmonisé avec le reste */
+#section-xi .nav-container {
+    margin-bottom: 16px;
+}

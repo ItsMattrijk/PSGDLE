@@ -1034,6 +1034,9 @@ if (elementBelow) {
         const correctLineupIds = Object.values(this.currentMatch.lineup).flat();
         statsManager.recordGame(true, this.validationAttempts, correctLineupIds, this.playersData);
 
+        // ===== COMPTEUR GLOBAL =====
+        window.psgdleCounterRegisterWin?.('xi');
+
         
         const validateBtn = document.getElementById('validateBtn');
         validateBtn.disabled = true;
@@ -1159,6 +1162,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const xiMode = document.getElementById('xi-mode');
     if (xiMode && xiMode.classList.contains('active')) {
         xiGame = new PSGDLEXIGame();
+        window.xiGame = xiGame; // ← exposé pour counter.js
     }
 });
 
@@ -1168,6 +1172,7 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
         if (mode === 'xi' && !xiGame) {
             setTimeout(() => {
                 xiGame = new PSGDLEXIGame();
+                window.xiGame = xiGame; // ← exposé pour counter.js
             }, 100);
         }
     });

@@ -377,7 +377,7 @@
     flex-direction: row;
     gap: 1rem;
     justify-content: space-between;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .indicator-item {
@@ -440,22 +440,56 @@
 
 /* Responsive pour les indicateurs */
 @media (max-width: 480px) {
+    .indicators {
+        gap: 0.5rem;
+    }
+
     .indicator-label {
-        font-size: 0.8rem;
+        font-size: 0.72rem;
     }
 
     .color-box {
-        width: 35px;
-        height: 35px;
+        width: 32px;
+        height: 32px;
     }
 
     .arrow {
-        font-size: 30px;
+        font-size: 26px;
     }
     
     .indicator-item {
-        min-width: 70px;
-        padding: 0.75rem 0.25rem;
+        min-width: 0;
+        padding: 0.65rem 0.2rem;
+        gap: 0.5rem;
+    }
+
+    .arrow-svg {
+        width: 60px;
+        height: 38px;
+    }
+}
+
+@media (max-width: 360px) {
+    .indicators {
+        gap: 0.3rem;
+    }
+
+    .indicator-label {
+        font-size: 0.65rem;
+    }
+
+    .color-box {
+        width: 28px;
+        height: 28px;
+    }
+
+    .indicator-item {
+        padding: 0.5rem 0.15rem;
+    }
+
+    .arrow-svg {
+        width: 48px;
+        height: 32px;
     }
 }
 /* ===== ANIMATION COHÉRENTE POUR TOUTES LES BOXES ===== */
@@ -510,16 +544,112 @@
 /* ===== BOX "AUTRES JEUX" dans les sections de jeu ===== */
 .section-autres-jeux {
     max-width: 500px;
-    width: calc(100% - 2rem);
+    width: 100%;
+    box-sizing: border-box;
     margin: 40px auto 40px;
+    padding: 0 1rem;
     opacity: 0;
     animation: universalFadeIn 0.55s ease forwards 0.5s;
     display: block;
 }
 
+/* La box interne ne doit pas être coupée */
+.section-autres-jeux .box {
+    overflow: visible;
+}
+
 @media (max-width: 600px) {
     .section-autres-jeux {
-        max-width: calc(100% - 2rem);
-        margin: 30px auto 30px;
+        max-width: 100%;
+        margin: 24px auto 32px;
+        padding: 0 1rem;
     }
+}
+
+@media (max-width: 400px) {
+    .section-autres-jeux {
+        padding: 0 0.75rem;
+        margin: 20px auto 28px;
+    }
+}
+
+/* ============================================================
+   LAYOUT MODE CLASSIQUE — refonte propre (sans margins négatifs)
+   ============================================================ */
+
+/* Ordre dans .wordle-layout :
+   1. .container (box indices + titre)          ← toujours visible
+   2. .psgdle-info-capsule (hier + compteur)    ← injectée par counter.js
+   3. .search-container                         ← toujours visible
+   4. #selectedPlayers                          ← résultats
+   5. .container-wide (indicateurs couleur)     ← toujours visible
+*/
+
+/* Layout colonne : gap uniforme, tout dans le flux */
+.wordle-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 700px;
+    /* Reset : aucun margin forcé via JS ne doit subsister */
+}
+
+/* La box principale (titre + indices) — taille naturelle */
+.wordle-layout > .container {
+    width: 100%;
+    max-width: 500px;
+    /* Pas de margin-top / margin-bottom forcés : gérés par le gap du flex */
+    margin: 0 !important;
+}
+
+/* La capsule hier/compteur — même largeur max que la search */
+.wordle-layout > .psgdle-info-capsule {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 !important;
+    flex-shrink: 0;
+}
+
+/* La search bar — même largeur */
+.wordle-layout > .search-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 !important;
+}
+
+/* Zone résultats */
+.wordle-layout > .selected-players,
+.wordle-layout > #selectedPlayers {
+    width: 100%;
+}
+
+/* Box indicateurs */
+.wordle-layout > .container-wide {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 !important;
+}
+
+/* Quand les indices sont visibles, on ne change RIEN au layout —
+   ils sont déjà dans la box .container, tout reste dans le flux. */
+
+/* Réinitialise les éventuels styles inline posés par l'ancienne JS */
+.wordle-layout .container[style],
+.wordle-layout .search-container[style] {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* ── Reset inline styles posés par l'ancienne adjustMargin() ── */
+/* Ces règles !important écrasent tout style inline résiduel */
+#section-wordle .wordle-layout > .container {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+#section-wordle .wordle-layout > .search-container {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }

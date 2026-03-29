@@ -55,6 +55,9 @@ class PSGDLEPhotoGame {
             // Filtrer les joueurs avec photos
             this.playersData = this.playersData.filter(p => p.photo && p.photo.trim() !== '');
             
+            // ← exposé pour counter.js (liste filtrée avec photos uniquement)
+            window.joueursPhoto = this.playersData;
+            
             console.log('✅ Joueurs avec photos chargés:', this.playersData.length);
         } catch (error) {
             console.error('❌ Erreur chargement joueurs:', error);
@@ -293,6 +296,9 @@ class PSGDLEPhotoGame {
         
         this.updateStats(true);
         this.saveGameState();
+
+        // ===== COMPTEUR GLOBAL =====
+        window.psgdleCounterRegisterWin?.('photo');
         
         setTimeout(() => {
             this.displayVictoryBox();
@@ -767,6 +773,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const photoMode = document.getElementById('photo-mode');
     if (photoMode && photoMode.classList.contains('active')) {
         photoGame = new PSGDLEPhotoGame();
+        window.photoGame = photoGame; // ← exposé pour counter.js
     }
 });
 
@@ -776,6 +783,7 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
         if (mode === 'photo' && !photoGame) {
             setTimeout(() => {
                 photoGame = new PSGDLEPhotoGame();
+                window.photoGame = photoGame; // ← exposé pour counter.js
             }, 100);
         }
     });

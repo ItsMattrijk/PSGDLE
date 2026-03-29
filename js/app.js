@@ -21,6 +21,7 @@ async function loadPlayers() {
         const response = await fetch('js/data.json');
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         joueurs = await response.json().then(data => data.joueurs);
+        window.joueurs = joueurs; // ← exposé pour counter.js
         console.log(`${joueurs.length} joueurs chargés`);
     } catch (error) {
         console.error('Erreur lors du chargement des joueurs:', error);
@@ -281,6 +282,9 @@ setInterval(updateCountdown, 1000);
 
       // AJOUTER : enregistrer les stats UNE SEULE FOIS
 updateStatsAfterGame(joueursSelectionnes.length, true);
+
+    // ===== COMPTEUR GLOBAL =====
+    window.psgdleCounterRegisterWin?.('wordle');
 
     
 
@@ -860,62 +864,14 @@ function loadGameState() {
 }
 
 function adjustMargin() {
-    const container = document.querySelector('.container');
-    const searchContainer = document.querySelector('.search-container');
-    
-    // Vérifie si au moins un bouton d'indice est visible
+    // Utilise uniquement du CSS via classe — aucun margin négatif hacky
+    const layout = document.querySelector('.wordle-layout');
+    if (!layout) return;
     const hasVisibleHints = Object.values(hintButtons).some(hint => hint.visible);
-    
-    const width = window.innerWidth;
-    
-    // TRÈS PETIT ÉCRAN (≤ 440px) - Le plus compact
-    if (width <= 440) {
-        if (hasVisibleHints) {
-            container.style.marginTop = '-100px'; // Remonté davantage
-            container.style.marginBottom = '70px';
-            searchContainer.style.marginTop = '-70px';
-        } else {
-            container.style.marginTop = '-800px';
-            container.style.marginBottom = '0';
-            searchContainer.style.marginTop = '0';
-        }
-    }
-
-        else if (width <= 480 && width > 438) {
-        if (hasVisibleHints) {
-            container.style.marginTop = '0px';
-            container.style.marginBottom = '900px';
-            searchContainer.style.marginTop = '-90px';
-        } else {
-            container.style.marginTop = '-1000px';
-            container.style.marginBottom = '0';
-            searchContainer.style.marginTop = '0';
-        }
-    } 
-
-    // MOBILE STANDARD (441px - 800px) - Moyennement compact
-    else if (width <= 800) {
-        if (hasVisibleHints) {
-            container.style.marginTop = '-80px'; // Aussi remonté un peu plus
-            container.style.marginBottom = '90px';
-            searchContainer.style.marginTop = '-90px';
-        } else {
-            container.style.marginTop = '-1000px';
-            container.style.marginBottom = '0';
-            searchContainer.style.marginTop = '0';
-        }
-    } 
-    // DESKTOP (> 800px) - Le plus spacieux
-    else {
-        if (hasVisibleHints) {
-            container.style.marginTop = '0';
-            container.style.marginBottom = '120px';
-            searchContainer.style.marginTop = '-120px';
-        } else {
-            container.style.marginTop = '-1200px';
-            container.style.marginBottom = '0';
-            searchContainer.style.marginTop = '-10px';
-        }
+    if (hasVisibleHints) {
+        layout.classList.add('hints-visible');
+    } else {
+        layout.classList.remove('hints-visible');
     }
 }
 

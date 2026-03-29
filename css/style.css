@@ -52,7 +52,10 @@ img {
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    padding: 24px 16px 48px;
+    padding: 24px 16px 64px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 /* Layout colonne unique centré pour le mode Classique */
@@ -87,7 +90,9 @@ img {
     min-height: 100svh;
   }
 
-  
+  .main {
+    padding: 16px 12px 80px;
+  }
 }
 
 /* margin-top géré par .wordle-layout, pas besoin de surcharges */
